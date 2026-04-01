@@ -6,11 +6,11 @@ import { FileDown, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Contact', href: '#contact' },
+  { name: '소개', href: '#about' },
+  { name: '기술 스택', href: '#skills' },
+  { name: '프로젝트', href: '#projects' },
+  { name: '경력 및 학력', href: '#experience' },
+  { name: '연락처', href: '#contact' },
 ];
 
 export default function Navbar() {
@@ -36,9 +36,9 @@ export default function Navbar() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-2xl font-display font-bold text-primary"
+          className="text-2xl font-display font-bold text-primary group cursor-default"
         >
-          kkaemong<span className="text-accent">.</span>
+          진준영 포트폴리오
         </motion.div>
 
         {/* Desktop Nav */}

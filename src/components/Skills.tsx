@@ -8,13 +8,13 @@ export default function Skills() {
   const { skills } = portfolioData;
 
   const skillGroups = [
-    { name: 'Core', items: skills.core, color: 'bg-accent' },
-    { name: 'Extended', items: skills.others, color: 'bg-primary' },
-    { name: 'Tools', items: skills.tools, color: 'bg-slate-500' },
+    { name: 'Frontend', items: skills.frontend },
+    { name: 'Backend & AI (Experience)', items: skills.backendAI },
+    { name: 'Tools', items: skills.tools },
   ];
 
   return (
-    <section id="skills" className="py-24">
+    <section id="skills" className="py-24 bg-muted/30">
       <div className="section-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -23,39 +23,39 @@ export default function Skills() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-display font-bold text-primary mb-4">
-            Skills & Expertise
+            Technical Stack
           </h2>
-          <p className="text-muted-foreground">
-            사용자 중심의 경험을 만들기 위한 저의 기술 스택입니다.
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            사용자 경험을 최우선으로 생각하며, 유연한 사고로 최적의 기술 솔루션을 선택합니다.
           </p>
         </motion.div>
 
-        <div className="space-y-12 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {skillGroups.map((group, groupIdx) => (
-            <div key={group.name} className="space-y-6">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            <motion.div
+              key={group.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: groupIdx * 0.1 }}
+              className="glass-card p-8 rounded-[2.5rem] bg-white/70 backdrop-blur-md flex flex-col h-full border border-slate-200 shadow-sm hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/10 transition-all duration-500 cursor-default group"
+            >
+              <h3 className="text-lg font-display font-bold text-primary mb-8 flex items-center gap-3 transition-colors group-hover:text-accent">
+                <span className="w-1.5 h-6 rounded-full bg-primary/20 group-hover:bg-accent/40 transition-colors" />
                 {group.name}
               </h3>
-              <div className="flex flex-wrap gap-3">
-                {group.items.map((skill, i) => (
-                  <motion.div
+
+              <div className="flex flex-wrap gap-2.5 mt-auto">
+                {group.items.map((skill) => (
+                  <div
                     key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      type: 'spring', 
-                      stiffness: 100, 
-                      delay: (groupIdx * 0.1) + (i * 0.05) 
-                    }}
-                    whileHover={{ scale: 1.1, rotate: 2 }}
-                    className={`px-4 py-2 rounded-lg ${group.color} text-white text-sm font-medium shadow-sm cursor-default`}
+                    className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white/50 text-slate-700 text-sm font-semibold transition-all duration-300"
                   >
                     {skill}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

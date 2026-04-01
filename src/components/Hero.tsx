@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronRight, Globe } from 'lucide-react';
+import { ChevronRight, Github, ExternalLink } from 'lucide-react';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Hero() {
@@ -14,72 +14,76 @@ export default function Hero() {
       <div className="absolute top-1/4 -right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-1/4 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
 
-      <div className="section-container grid md:grid-cols-2 gap-12 items-center">
+      <div className="section-container grid md:grid-cols-[1.4fr_1fr] gap-12 items-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-semibold mb-6"
+            className="flex items-center gap-2 mb-6"
           >
-            Frontend Developer / Software Engineer
-          </motion.span>
-          
-          <h1 className="text-4xl md:text-6xl font-display font-bold text-primary leading-tight mb-6">
-            {hero.headline}
+            <span className="w-8 h-[2px] bg-accent" />
+            <span className="text-accent text-sm font-display font-semibold uppercase tracking-wider">
+              Frontend Developer
+            </span>
+          </motion.div>
+
+          <h1 className="text-3xl md:text-5xl font-display font-bold text-primary leading-tight mb-8">
+            {hero.headline.split(',').map((part, i) => (
+              <span key={i} className="block">
+                {part}{i === 0 ? ',' : ''}
+              </span>
+            ))}
           </h1>
-          
-          <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-xl">
+
+          <p className="text-lg md:text-xl text-slate-700 leading-relaxed max-w-2xl font-normal whitespace-pre-line mb-12">
             {hero.subTitle}
           </p>
-          
+
           <div className="flex flex-wrap gap-4">
             <a href="#projects" className="btn-primary group">
               {hero.cta.primary}
               <ChevronRight size={18} className="ml-1 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a 
-              href={hero.cta.githubUrl} 
-              target="_blank" 
+            <a
+              href={hero.cta.githubUrl}
+              target="_blank"
               rel="noopener noreferrer"
               className="btn-outline flex items-center gap-2"
             >
-              <Globe size={18} />
-              {hero.cta.secondary}
+              <Github size={18} />
+              GitHub
             </a>
           </div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.4 }}
-          className="relative"
+          className="relative group"
         >
-          {/* Hero Illustration Placeholder - Will look premium with glassmorphism */}
-          <div className="w-full aspect-square relative">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary to-accent rounded-3xl opacity-10 blur-xl animate-pulse" />
-            <div className="absolute inset-8 border border-white/20 rounded-2xl shadow-2xl glass-card flex items-center justify-center p-8">
-               <div className="w-full h-full flex flex-col justify-between">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                    <div className="w-3 h-3 rounded-full bg-green-400" />
-                  </div>
-                  <div className="space-y-4">
-                    <div className="h-4 w-3/4 bg-slate-100 rounded animate-pulse" />
-                    <div className="h-4 w-1/2 bg-slate-100 rounded animate-pulse delay-75" />
-                    <div className="h-4 w-5/6 bg-slate-100 rounded animate-pulse delay-150" />
-                  </div>
-                  <div className="text-4xl font-display font-bold text-primary/20 select-none">
-                    &lt;Code /&gt;
-                  </div>
-               </div>
+          {/* Hero Image Container */}
+          <div className="relative w-full aspect-[4/5] max-w-[340px] ml-auto">
+            {/* Solid structure (Geometric backgrounds) */}
+            <div className="absolute -inset-4 border-2 border-primary/10 rounded-2xl -z-10 transition-transform group-hover:scale-105 duration-700" />
+            <div className="absolute inset-4 bg-accent/5 rounded-2xl -z-10 translate-x-4 translate-y-4" />
+
+            {/* The Image (Flexible rendering) */}
+            <div className="w-full h-full rounded-2xl overflow-hidden glass-card shadow-2xl relative">
+              <img
+                src="/profile.jpg"
+                alt="Jin Jun-yeong"
+                className="w-full h-full object-cover filter contrast-[1.02] transition-transform duration-700 group-hover:scale-110"
+              />
+              {/* Overlay for glass look */}
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent pointer-events-none" />
             </div>
+
           </div>
         </motion.div>
       </div>

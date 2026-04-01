@@ -1,7 +1,7 @@
 export const portfolioData = {
   hero: {
-    headline: "비즈니스 가치를 이해하고, 코드로 문제를 해결하는 개발자 진준영(kkaemong) 입니다.",
-    subTitle: "경영학적 사고방식을 바탕으로 사용자의 니즈를 파악하고, React와 TypeScript를 활용해 직관적이고 안정적인 웹 서비스를 구축합니다. 사용자에게 실질적인 가치를 전달하는 프로덕트를 만드는 데 집중합니다.",
+    headline: "사고는 경계 없이 유연하게, 구조는 빈틈 없이 견고하게",
+    subTitle: "유연한 사고로 문제를 정의하고, 견고한 구조로 해결책을 제시하는 프론트엔드 개발자입니다. 비전공자로서 SSAFY를 통해 쌓은 폭폭한 기술적 이해도를 바탕으로, 사용자의 문제를 '가치 있는 경험'으로 치환하며 기획의 의도를 코드로 구현해 냅니다.",
     cta: {
       primary: "프로젝트 살펴보기",
       secondary: "GitHub 방문하기",
@@ -9,105 +9,135 @@ export const portfolioData = {
     }
   },
   about: {
-    title: "나의 경쟁력",
-    description: "경영학 전공 지식을 살려 단순한 코딩을 넘어 서비스의 목적과 사용자 경험(UX)을 깊이 고민합니다. 유연한 기술 습득력으로 웹 프론트엔드부터 Unity, AI까지 필요한 기술을 주저 없이 학습하고 적용합니다.",
+    title: "Flexible & Solid",
+    description: "비즈니스의 목적과 기술의 구현 사이의 간극을 좁히는 개발자입니다. 경영학적 관점으로 서비스의 본질을 파악하고, 공학적 설계를 통해 이를 가치 있는 사용자 경험으로 치환합니다. 필리핀에서의 글로벌한 경험과 SSAFY에서의 기술적 성장을 무기로, 어떤 환경에서도 유연하게 소통하며 견고한 프로덕트를 만듭니다.",
     points: [
       {
-        title: "비즈니스와 개발의 연결",
-        content: "경영학적 사고로 서비스의 목적과 비즈니스 가치를 분석하여 최적의 기술적 솔루션을 제안합니다."
+        title: "비즈니스적 통찰",
+        content: "프로덕트의 비즈니스 목적을 깊이 이해하고, 서비스의 성장에 실질적으로 기여할 수 있는\n 기술적 결정을 내립니다."
       },
       {
-        title: "끊임없는 성장과 증명",
-        content: "꾸준한 알고리즘 문제 해결과 자격증 취득(정보처리기사 예정, OPIc IH 목표)을 통해 실력을 검증합니다."
+        title: "구조적 설계",
+        content: "백엔드 이해도를 바탕으로 전체 데이터 흐름을 고려하며, 확장 가능하고 유지보수가 쉬운\n 프론트엔드 아키텍처를 설계합니다."
       },
       {
-        title: "유연한 기술 습득력",
-        content: "프로젝트 필요에 따라 React, Unity, AI 모델링 등 다양한 기술을 빠르게 습득하여 성과를 냅니다."
+        title: "문화적 유연성",
+        content: "다양한 문화권에서의 경험을 바탕으로 기술적, 인간적 소통의 장벽을\n 허물며 팀과 유연하게 협업합니다."
       }
     ]
   },
   skills: {
-    core: ["React", "TypeScript", "Next.js", "JavaScript", "Vue.js", "Pinia", "Zustand"],
-    others: ["Unity", "C#", "Python", "PyTorch", "Django", "Socket.IO"],
-    tools: ["Git", "GitHub", "Figma", "Burp Suite", "SQLMap"]
+    frontend: ["React", "TypeScript", "Vue.js", "JavaScript", "HTML5", "Vite", "Zustand", "Next.js"],
+    backendAI: ["Python", "Django", "DRF", "PyTorch", "HuggingFace", "LoRA"],
+    tools: ["Git", "GitHub", "Figma", "Postman", "Burp Suite"]
   },
   projects: [
     {
       id: "gaesori",
-      title: "개소리 릴레이 (Gaesori Relay)",
-      type: "Team Project (SSAFY 프론트엔드 특화)",
-      period: "2026.01 ~ 2026.02",
-      tech: ["React", "TypeScript", "Zustand", "Socket.IO", "Vite"],
-      role: "UI/UX 설계 및 프론트엔드 핵심 컴포넌트 개발",
-      description: "실시간 멀티플레이어 릴레이 스토리 게임으로, 사용자 간의 즉각적인 인터랙션과 재미를 강조한 서비스입니다.",
+      title: "개소릴레이 (Gaesori Relay)",
+      type: "SSAFY 2학기 공통 프로젝트",
+      period: "2026.01.12 ~ 2026.02.09",
+      tech: ["Vite", "Figma", "React", "TypeScript"],
+      role: "Frontend Development",
+      description: "여러 플레이어가 실시간으로 턴을 이어가며 하나의 엉뚱하고 재미있는 이야기를 완성하는 웹 기반 멀티플레이어 게임입니다.",
+      image: "/gaesorlay.png",
       highlights: [
-        "컴포넌트 재사용성을 고려한 프론트엔드 아키텍처 설계",
-        "사용자 경험 향상을 위한 인터랙티브 UI 구현 및 상태 관리 최적화",
-        "Socket.IO를 활용한 실시간 게임 동기화 로직 구현"
+        "Figma를 활용해 게임 흐름에 맞춘 직관적인 와이어프레임과 UI 구조 직접 설계 및 React 컴포넌트 구현",
+        "Zustand 및 WebSocket 연동을 고려하여 역할이 명확하고 Props 구조가 예측 가능한 독립적인 UI 컴포넌트 구축",
+        "실시간 게임 특성에 맞춘 화면 전환 흐름과 인터랙션 설계로 사용자의 게임 몰입도 향상"
       ],
-      github: "https://github.com/kkaemong"
+      github: "https://github.com/gaesorelay"
     },
     {
       id: "ssaiet",
       title: "SSAIET",
-      type: "Team Project (Fullstack)",
-      period: "2025.11 ~ 2025.12",
-      tech: ["Vue.js", "Pinia", "Django", "JWT", "Kakao Map API"],
-      role: "웹 서비스 전반 기능 구현 및 커뮤니티 로직 설계",
-      description: "점심 선택 기반 개인 맞춤 저녁 추천 및 식단 관리 서비스입니다.",
+      type: "SSAFY 1학기 최종 프로젝트",
+      period: "2025.11. ~ 2025. 12.",
+      tech: ["Python", "Django", "DRF", "Vue", "Pinia", "JWT", "SQLite"],
+      role: "Full Stack Development",
+      description: "점심 선택 기반 개인 맞춤 저녁 추천 & 식단 관리 서비스입니다.",
+      image: "/SSAIETMAIN.png",
       highlights: [
-        "Kakao Map API 연동을 통한 주변 식당 탐색 기능 구현",
-        "JWT 인증 및 권한 구조 설계를 통한 보안 강화 (IDOR 취약점 해결)",
-        "사용자 식단 데이터와 커뮤니티 상호작용을 연결하는 비즈니스 로직 구현"
+        "JWT 기반 인증 구조 구현을 통해 로그인 상태 유지 및 토큰 기반 API 인증 흐름 구성",
+        "식단 관리 및 커뮤니티 기능을 제공하는 SPA 웹 서비스 개발",
+        "식단 기록 데이터를 조회할 수 있는 캘린더 UI 개발로 월별 식단 기록 확인 기능 구현",
+        "게시글·댓글·좋아요 기능이 포함된 커뮤니티 기능 구현",
+        "Kakao Map API 연동을 통한 현재 위치 기반 주변 식당 탐색 기능 구현"
       ],
-      github: "https://github.com/kkaemong"
-    },
-    {
-      id: "jabonju",
-      title: "자본주 E.T. (Jabonju E.T.)",
-      type: "Personal Project",
-      period: "2026.03 ~ 진행 중",
-      tech: ["Unity", "C#"],
-      role: "1인 개발 (기획, 에셋, 로직 구현)",
-      description: "새로운 엔진인 Unity를 학습하여 제작한 런닝 게임입니다.",
-      highlights: [
-        "Unity 엔진을 스스로 학습하여 게임 로직 및 스크립트 구현",
-        "에셋 적용 및 트러블슈팅을 통한 주도적 학습 능력 증명",
-        "게임 기획부터 개발까지 1인 전 과정 수행"
-      ]
+      github: "https://github.com/kkaemong/Final-PJT"
     },
     {
       id: "ai-challenge",
       title: "SSAFY AI Challenge",
-      type: "AI Model Development",
-      period: "2025.10",
-      tech: ["Python", "PyTorch", "Qwen2.5-VL", "LoRA"],
-      role: "멀티모달 AI 모델 개발 참여",
-      description: "이미지 기반 4지선다형 문제 해결을 위한 멀티모달 AI 모델 개발 프로젝트입니다.",
+      type: "멀티모달 AI 모델 개발",
+      period: "2025.10.23 ~ 2025.10.27",
+      tech: ["PyTorch", "HuggingFace", "Qwen2.5-VL", "LoRa", "PEFT"],
+      role: "이미지/텍스트 동시 이해 모델 개발",
+      description: "Qwen2.5-VL 기반 모델링을 통해 이미지와 텍스트를 동시에 이해하고 문제를 해결하는 AI 프로젝트입니다.",
       highlights: [
-        "Qwen2.5-VL 모델을 기반으로 한 멀티모달 문제 해결 파이프라인 구축",
-        "모델 정확도를 기존 0.75에서 0.81까지 향상 (하이퍼파라미터 최적화)",
-        "LoRA 및 Quantization 기술을 활용한 효율적인 모델 학습 경험"
+        "이미지와 텍스트 선택지를 동시에 이해하는 멀티모달 AI 모델 개발",
+        "Qwen2.5-VL 기반 Vision-Language 모델을 활용한 4지선다 문제 해결 모델 구축",
+        "LoRA 기반 파라미터 효율 미세조정 적용",
+        "모델 성능 개선 및 검증을 통한 Accuracy 향상 (0.75 → 0.81)",
+        "Mixed Precision(bfloat16) 학습 환경 구성"
+      ],
+      github: "https://github.com/kkaemong/SSAFY-AI-Challenge"
+    },
+    {
+      id: "hacking",
+      title: "Web Hacking Project",
+      type: "K-Shield Jr 최종프로젝트",
+      period: "2023.10.25 ~ 2023.10.31",
+      tech: ["Kali Linux", "Burp Suite", "SQLMap", "OWASP Top 10"],
+      role: "웹 애플리케이션 모의 해킹 및 취약점 분석",
+      description: "공격자 입장의 취약점 분석을 통해 보안 취약점을 진단하고 대응 방안을 수립한 보안 프로젝트입니다.",
+      highlights: [
+        "웹 애플리케이션 대상 모의 해킹(Penetration Testing) 및 취약점 분석 수행",
+        "Burp Suite를 활용한 HTTP 요청/응답 분석 및 파라미터 변조 테스트 수행",
+        "SQLMap을 활용한 SQL Injection 취약점 분석 및 DB 정보 노출 가능성 검증",
+        "XSS, Directory Indexing, File Download 취약점 등 OWASP Top 10 기반 보안 취약점 진단",
+        "취약점 영향도 분석 후 보안 대응 방안 및 개선 가이드 작성"
       ]
     }
   ],
   experience: [
     {
-      title: "SSAFY (삼성청년SW아카데미)",
-      content: "소프트웨어 개발 인재 양성 과정 수료 (프론트엔드, AI, 핀테크 실무 프로젝트 수행)"
+      id: 1,
+      title: "SSAFY AI 아카데미 14기",
+      period: "2025.07 ~ 현재",
+      content: "파이썬 트랙 수료 및 프론트엔드 특화 프로젝트 수행 중"
     },
     {
-      title: "K-Shield Jr.",
-      content: "실무 중심의 정보보안 교육 과정 수료 (웹 취약점 진단 및 모의해킹 경험)"
+      id: 2,
+      title: "협성대학교 경영학 전공",
+      period: "2018.03 ~ 2024.08",
+      content: "경영 데이터 분석 및 비즈니스 프로세스 설계 학습"
     },
     {
-      title: "협성대학교",
-      content: "경영학 학사 졸업 (비즈니스적 가치와 UX에 대한 깊은 이해)"
+      id: 3,
+      title: "제 11기 K-Shield Jr (200H)",
+      period: "2023.09 ~ 2023.10",
+      content: "실무 중심의 정보보안 및 웹 취약점 분석 과정 수급"
+    },
+    {
+      id: 4,
+      title: "Philippines Residency",
+      period: "2002 ~ 2009",
+      content: "해외 거주를 통한 자유로운 영어 구사 및 문화적 유연성 확보"
     }
   ],
+  certifications: [
+    {
+      id: 1,
+      title: "정보처리기사 필기",
+      date: "2024.02",
+      issuer: "한국산업인력공단"
+    },
+  ],
   contact: {
-    email: "kkaemong@example.com",
+    email: "junemay31@naver.com",
+    blog: "https://velog.io/@junemay31/posts",
     github: "github.com/kkaemong",
-    message: "함께 일하고 싶은 동료, 비즈니스 성장에 기여하는 개발자가 되겠습니다."
+    message: "함께 성장하며 빈틈없이 견고한 서비스를 만들어나갈 동료를 기다립니다."
   }
 };

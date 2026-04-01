@@ -13,7 +13,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Jin Junyoung | Portfolio",
+  title: "진준영 포트폴리오",
   description: "비즈니스 가치를 이해하고 코드로 문제를 해결하는 프론트엔드 개발자 진준영의 포트폴리오입니다.",
 };
 
