@@ -2,81 +2,41 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Globe, Github, ExternalLink, Heart } from 'lucide-react';
+import { Mail, Github, ExternalLink, Heart } from 'lucide-react';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Footer() {
   const { contact } = portfolioData;
 
   return (
-    <footer id="contact" className="bg-primary text-white py-20 overflow-hidden relative">
-      {/* Decorative Blur */}
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl -z-0" />
-      
-      <div className="section-container relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-             <div className="flex items-center gap-2 mb-6">
-              <span className="w-8 h-[2px] bg-accent" />
-              <span className="text-accent text-sm font-display font-semibold uppercase tracking-wider">
-                Contact
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-               함께 의미 있는 <br />
-              <span className="text-accent underline decoration-white/20 underline-offset-8 italic">성장을 만들고 싶습니다.</span>
-            </h2>
-            <p className="text-primary-foreground/60 text-lg mb-8 max-w-md leading-relaxed">
-              {contact.message}
-            </p>
-            
-            <div className="flex flex-wrap gap-4">
-              <a href={`mailto:${contact.email}`} className="btn-primary bg-white text-primary hover:bg-white/90">
-                <Mail size={18} className="mr-2" />
-                이메일 보내기
-              </a>
-              <a href="https://github.com/kkaemong" target="_blank" className="btn-outline border-white text-white hover:bg-white hover:text-primary transition-all duration-300">
-                <Github size={18} className="mr-2" />
-                GitHub 방문
-              </a>
-            </div>
-          </motion.div>
+    <footer id="contact" className="py-16 px-4 bg-transparent print:hidden">
+      <div className="max-w-3xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="space-y-6"
+        >
+          <p className="text-[#94A3B8] text-lg leading-relaxed">
+            저와 함께 작업하고 싶거나, 더 많은 정보를 원하신다면 언제든지 연락주세요. <br className="hidden md:block" />
+            새로운 기회를 기다리고 있습니다!
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="p-8 glass-card border-white/10 rounded-3xl"
-          >
-             <h3 className="text-xl font-bold mb-8">연결 채널</h3>
-             <div className="space-y-6">
-                <a href={contact.blog} target="_blank" className="flex items-center gap-4 text-primary-foreground/80 hover:text-white transition-colors group">
-                   <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-accent transition-colors"><ExternalLink size={20} /></div>
-                   <div>
-                      <div className="text-xs uppercase tracking-widest opacity-50 mb-1">Blog</div>
-                      <div className="text-lg font-bold">Personal Velog</div>
-                   </div>
-                </a>
-                <div className="flex items-center gap-4 text-primary-foreground/80 hover:text-white transition-colors group">
-                   <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-accent transition-colors"><Mail size={20} /></div>
-                   <div>
-                      <div className="text-xs uppercase tracking-widest opacity-50 mb-1">Email</div>
-                      <div className="text-lg font-bold">{contact.email}</div>
-                   </div>
-                </div>
-             </div>
-          </motion.div>
-        </div>
+          <div className="flex justify-center">
+            <a
+              href={`mailto:${contact.email}`}
+              className="group flex items-center gap-3 px-8 py-3 rounded-2xl border border-white/5 bg-white/5 text-accent font-medium transition-all duration-500 hover:bg-accent hover:border-accent/30 hover:shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:-translate-y-1 active:scale-95"
+            >
+              <div className="w-8 h-8 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent group-hover:text-primary transition-all duration-500">
+                <Mail size={16} />
+              </div>
+              <span className="text-lg group-hover:text-primary font-bold transition-colors duration-500">이메일 보내기</span>
+            </a>
+          </div>
+        </motion.div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-primary-foreground/40 font-display">
-           <p>© 2026 Jin Junyoung. All rights reserved.</p>
-           <p className="flex items-center gap-2">
-             사고는 <span className="text-white italic">유연하게</span>, 구조는 <span className="text-white italic">견고하게</span> <Heart size={14} className="text-accent animate-pulse" />
-           </p>
+        <div className="mt-16 pt-8 border-t border-white/5 text-center text-[10px] uppercase tracking-widest text-slate-600 font-display">
+          <p>© 2026 Jin Junyoung. All rights reserved.</p>
         </div>
       </div>
     </footer>

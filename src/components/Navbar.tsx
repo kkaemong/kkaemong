@@ -28,7 +28,7 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4 print:hidden',
         isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm py-3' : 'bg-transparent'
       )}
     >
@@ -56,6 +56,7 @@ export default function Navbar() {
             </motion.a>
           ))}
           <motion.button
+            onClick={() => window.print()}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: 1.05 }}
@@ -98,7 +99,13 @@ export default function Navbar() {
                   {item.name}
                 </a>
               ))}
-              <button className="btn-primary w-full flex items-center justify-center gap-2">
+              <button 
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setTimeout(() => window.print(), 300);
+                }}
+                className="btn-primary w-full flex items-center justify-center gap-2"
+              >
                 <FileDown size={18} />
                 CV Download
               </button>
