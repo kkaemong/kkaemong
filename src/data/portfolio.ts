@@ -83,14 +83,14 @@ export const portfolioData = {
       period: "2026.01.12 ~ 2026.02.09",
       tech: ["Vite", "Figma", "React", "TypeScript"],
       role: "Frontend",
-      description: "여러 플레이어가 실시간으로 턴을 이어가며 하나의 엉뚱하고 재미있는 이야기를 완성하는 웹 기반 멀티플레이어 게임입니다.",
+      description: "웹소켓 & AI를 활용한 릴레이 스토리텔링 게임",
       image: "/gaesorlay.png",
       highlights: [
         "Figma를 활용해 게임 흐름에 맞춘 직관적인 와이어프레임과 UI 구조 직접 설계 및 React 컴포넌트 구현",
         "Zustand 및 WebSocket 연동을 고려하여 역할이 명확하고 Props 구조가 예측 가능한 독립적인 UI 컴포넌트 구축",
         "실시간 게임 특성에 맞춘 화면 전환 흐름과 인터랙션 설계로 사용자의 게임 몰입도 향상"
       ],
-      github: "https://github.com/gaesorelay",
+      github: "https://github.com/gaesorelay/frontend",
       teamSize: "6명"
     },
     {
@@ -100,7 +100,7 @@ export const portfolioData = {
       period: "2025.11. ~ 2025. 12.",
       tech: ["Python", "Django", "DRF", "Vue", "Pinia", "JWT", "SQLite"],
       role: "Full Stack",
-      description: "점심 선택 기반 개인 맞춤 저녁 추천 & 식단 관리 서비스입니다.",
+      description: "Django와 Vue.js를 활용한 사용자 맞춤형 식단 관리 및 커뮤니티 플랫폼",
       image: "/SSAIETMAIN.png",
       highlights: [
         "JWT 기반 인증 구조 구현을 통해 로그인 상태 유지 및 토큰 기반 API 인증 흐름 구성",
@@ -119,7 +119,8 @@ export const portfolioData = {
       period: "2025.10.23 ~ 2025.10.27",
       tech: ["PyTorch", "HuggingFace", "Qwen2.5-VL", "LoRa", "PEFT"],
       role: "이미지/텍스트 동시 이해 모델 개발",
-      description: "Qwen2.5-VL 기반 모델링을 통해 이미지와 텍스트를 동시에 이해하고 문제를 해결하는 AI 프로젝트입니다.",
+      description: "Qwen2.5-VL 기반 모델링을 통해 이미지와 텍스트를 동시에 이해하고 문제를 해결하는 AI 프로젝트",
+      image: "/AIchallange.png",
       highlights: [
         "이미지와 텍스트 선택지를 동시에 이해하는 멀티모달 AI 모델 개발",
         "Qwen2.5-VL 기반 Vision-Language 모델을 활용한 4지선다 문제 해결 모델 구축",
@@ -137,7 +138,8 @@ export const portfolioData = {
       period: "2023.10.25 ~ 2023.10.31",
       tech: ["Kali Linux", "Burp Suite", "SQLMap", "OWASP Top 10"],
       role: "웹 애플리케이션 모의 해킹 및 취약점 분석",
-      description: "공격자 입장의 취약점 분석을 통해 보안 취약점을 진단하고 대응 방안을 수립한 보안 프로젝트입니다.",
+      description: "공격자 입장의 취약점 분석을 통해 보안 취약점을 진단하고 대응 방안을 수립한 보안 프로젝트",
+      image: "/kshield.png",
       highlights: [
         "웹 애플리케이션 대상 모의 해킹(Penetration Testing) 및 취약점 분석 수행",
         "Burp Suite를 활용한 HTTP 요청/응답 분석 및 파라미터 변조 테스트 수행",
