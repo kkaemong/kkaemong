@@ -6,23 +6,23 @@
 
 <table width="100%">
   <tr>
-    <!-- 1층 좌측: 전체 사용 언어 donut 위젯 (화이트 배경 & 딥블루/블랙 조화) -->
+    <!-- 1층 좌측: 전체 사용 언어 donut 위젯 -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://github-readme-stats-git.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript&cache_seconds=0&nocache=true&v=12" width="100%" alt="Top Languages" />
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=Java,Kotlin,Go,C%2B%2B,C,HTML,CSS,JavaScript&cache_seconds=1800" width="100%" alt="Top Languages" />
     </td>
-    <!-- 1층 우측: 전체 깃허브 기여 stats 위젯 (화이트 배경 & 딥블루/블랙 조화) -->
+    <!-- 1층 우측: 전체 깃허브 기여 stats 위젯 -->
     <td width="58%" align="center" valign="middle">
-      <img src="https://github-readme-stats-git.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&icon_color=0000cc&cache_seconds=0&nocache=true&v=12" width="100%" alt="GitHub Stats" />
+      <img src="https://github-readme-stats.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&icon_color=0000cc&cache_seconds=1800" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
   <tr>
-    <!-- 2층 좌측: 준영님의 'algorithm' 레포 전용 Python 100% donut 위젯 (타이틀 제거로 미니멀 도넛 링 극대화!) -->
+    <!-- 2층 좌측: 준영님의 'algorithm' 레포 전용 Python 100% donut 위젯 -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://github-readme-stats-git.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,C%23,c%23,csharp,typescript,vue,shaderlab,hlsl,shell,dockerfile&hide_title=true&cache_seconds=0&nocache=true&v=12" width="100%" alt="Algorithm Languages" />
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=Java,Kotlin,Go,C%2B%2B,C,HTML,CSS,JavaScript,C%23,TypeScript,Vue,ShaderLab,HLSL,Shell,Dockerfile&hide_title=true&cache_seconds=1800" width="100%" alt="Algorithm Languages" />
     </td>
-    <!-- 2층 우측: 준영님의 성실한 잔디 기록을 증명해 주는 연속 커밋 스트릭(Streak) 카드! (Camo 캐시 프록시 완전 폭쇄!) -->
+    <!-- 2층 우측: 연속 커밋 스트릭(Streak) 카드! -->
     <td width="58%" align="center" valign="middle">
-      <img src="https://github-readme-streak-stats-git.vercel.app/?user=kkaemong&theme=tokyonight&background=ffffff&ring=0000cc&fire=0000cc&currStreakNum=000000&sideNums=000000&sideLabels=000000&currStreakLabel=0000cc&hide_border=true&cache_seconds=0&nocache=true&v=12" width="100%" alt="Commit Streak" />
+      <img src="https://streak-stats.demolab.com/?user=kkaemong&theme=tokyonight&background=ffffff&ring=0000cc&fire=0000cc&currStreakNum=000000&sideNums=000000&sideLabels=000000&currStreakLabel=0000cc&hide_border=true&cache_seconds=0&nocache=true" width="100%" alt="Commit Streak" />
     </td>
   </tr>
 </table>
@@ -75,7 +75,7 @@
 | ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&logo=kalilinux&logoColor=white) | |
 | **OWASP Top 10 기반 웹 모의 해킹** (최종)<br>• Burp Suite 프록시 패킷 변조 우회 검증<br>• SQLMap 활용 DB 자동화 취약점 공격 실증<br>• XSS & Directory Indexing 방어 전략 수립 | |
 
-
+---
 
 ## 🎓 Education & Credentials
 - **🏫 SSAFY AI 아카데미 14기** | Python 트랙 과정을 통한 CS 기본기 학습 및 웹/게임 클라이언트 부문 프로젝트 수행 (2025.07 ~ 현재)
