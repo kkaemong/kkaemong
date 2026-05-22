@@ -6,6 +6,12 @@
   <p>SSAFY 특화 프로젝트에서 Unity WebGL 60fps 고정 최적화 및 실시간 소켓 동기화 루프를 설계하며,<br>단순히 작동하는 코드가 아닌 '실제 구동 성능'을 최적화하는 것에 깊이 몰입합니다.</p>
 </div>
 
+<br/>
+
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=compact&langs_count=6&theme=tokyonight" alt="Most Used Languages" />
+</div>
+
 ---
 
 ## 🛠 Tech Stack
