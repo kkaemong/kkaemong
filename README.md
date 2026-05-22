@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=JIN%20JUN%20YOUNG&fontSize=70&theme=tokyonight" width="100%" alt="JIN JUN YOUNG header" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=JIN%20JUN%20YOUNG&fontSize=70&theme=tokyonight" width="100%" alt="JIN JUNE YOUNG header" />
 </div>
 
 <br/>
@@ -79,3 +79,4 @@
 * 📧 Email: **junemay31@naver.com**
 * 📝 Blog: **[Velog](https://velog.io/@junemay31/posts)**
 * 💻 GitHub: **[github.com/kkaemong](https://github.com/kkaemong)**
+* 📋 portfolio: **https://portpolio-ruddy-beta.vercel.app/**
