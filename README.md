@@ -6,13 +6,23 @@
 
 <table width="100%">
   <tr>
-    <!-- 좌측 1열: 준영님의 정예 사용 언어 donut 위젯 (42% 너비로 슬림하고 예쁘게 조화) -->
+    <!-- 1층 좌측: 전체 사용 언어 donut 위젯 (42% 너비로 조밀하고 예쁘게 조화) -->
     <td width="42%" align="center" valign="middle">
       <img src="https://githubreadme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript&cache_seconds=1800&v=3" width="100%" alt="Top Languages" />
     </td>
-    <!-- 우측 2열: 준영님의 전체 깃허브 기여 stats 위젯 (58% 너비로 시원시원하고 거대하게 확장!) -->
+    <!-- 1층 우측: 전체 깃허브 기여 stats 위젯 (58% 너비로 시원시원하고 거대하게 확장!) -->
     <td width="58%" align="center" valign="middle">
       <img src="https://githubreadme-stats.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&icon_color=0000cc&cache_seconds=1800&v=3" width="100%" alt="GitHub Stats" />
+    </td>
+  </tr>
+  <tr>
+    <!-- 2층 좌측: 준영님의 'algorithm' 레포 전용 Python 100% donut 위젯 (정밀 실시간 연동!) -->
+    <td width="42%" align="center" valign="middle">
+      <img src="https://githubreadme-stats.vercel.app/api/top-langs/?username=kkaemong&repo=algorithm&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&cache_seconds=1800&v=3" width="100%" alt="Algorithm Languages" />
+    </td>
+    <!-- 2층 우측: 준영님의 성실한 잔디 기록을 증명해 주는 연속 커밋 스트릭(Streak) 카드! -->
+    <td width="58%" align="center" valign="middle">
+      <img src="https://github-readme-streak-stats.herokuapp.com/?user=kkaemong&theme=tokyonight&background=ffffff&ring=0000cc&fire=0000cc&currStreakNum=000000&sideNums=000000&sideLabels=000000&currStreakLabel=0000cc&hide_border=true" width="100%" alt="Commit Streak" />
     </td>
   </tr>
 </table>
@@ -23,14 +33,14 @@
 
 ## 🛠 Tech Stack
 
-### 🐍 Core Engine & Language
+### 🎮 Game Client Development
+![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
+![Unity](https://img.shields.io/badge/Unity-222C37?style=for-the-badge&logo=unity&logoColor=white)
+
+### 🌐 Web Full-Stack Development
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![DRF](https://img.shields.io/badge/Django%20REST%20Framework-EE4C2C?style=for-the-badge&logo=django&logoColor=white)
-
-### 🎮 WebGL & Real-time Client
-![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
-![Unity](https://img.shields.io/badge/Unity-222C37?style=for-the-badge&logo=unity&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Zustand](https://img.shields.io/badge/Zustand-orange?style=for-the-badge&logo=react&logoColor=white)
