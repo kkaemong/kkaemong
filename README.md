@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=JIN%20JUN%20YOUNG&fontSize=70&theme=tokyonight" width="100%" alt="JIN JUNE YOUNG header" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=JIN%20JUNE%20YOUNG&fontSize=70&theme=tokyonight" width="100%" alt="JIN JUNE YOUNG header" />
 </div>
 
 <br/>
