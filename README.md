@@ -18,7 +18,7 @@
   <tr>
     <!-- 2층 좌측: 준영님의 'algorithm' 레포 전용 Python 100% donut 위젯 (정밀 실시간 연동!) -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://githubreadme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,csharp,typescript,vue,shaderlab,hlsl,shell,dockerfile&cache_seconds=1800&v=4" width="100%" alt="Algorithm Languages" />
+      <img src="https://githubreadme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,C%23,c%23,csharp,typescript,vue,shaderlab,hlsl,shell,dockerfile&cache_seconds=1800&v=5" width="100%" alt="Algorithm Languages" />
     </td>
     <!-- 2층 우측: 준영님의 성실한 잔디 기록을 증명해 주는 연속 커밋 스트릭(Streak) 카드! -->
     <td width="58%" align="center" valign="middle">
