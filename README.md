@@ -1,2 +1,2 @@
 # portpolio
-포폴용입니다잉
+포폴용 READ.ME
