@@ -113,6 +113,22 @@ export const portfolioData = {
       teamSize: "2명"
     },
     {
+      id: "jabonju",
+      title: "자본주 E.T. (Jabonju E.T.)",
+      type: "Team Project (SSAFY 핀테크 특화)",
+      period: "2026.02.16 ~ 2026.04.03",
+      tech: ["Unity WebGL", "C#", "Spring Boot", "AWS EC2", "PostgreSQL"],
+      role: "Unity 클라이언트 리드 (게임 코어 로직 & 통신 모듈 설계)",
+      description: "시대별 경제 격변을 헤쳐나가는 풀스택 2D 러너 금융 학습 게임입니다. (SSAFY 핀테크 트랙 우수상 2위 수상)",
+      highlights: [
+        "Rigidbody2D와 Raycast를 혼합한 매끄러운 1/2단 물리 점프 시스템 구현",
+        "APIManager.cs 커스텀 HTTP 통신 모듈 단독 설계로 REST API 완벽 연동",
+        "퀴즈 모달, 가변 사운드 피치, 카메라 셰이크 등 디테일한 게임 연출 구현",
+        "SSAFY 공통 프로젝트 2기 핀테크 트랙 🥈 우수상(2위) 수상"
+      ],
+      github: "https://github.com/kkaemong/zabonzooET"
+    },
+    {
       id: "ai-challenge",
       title: "SSAFY AI Challenge",
       type: "멀티모달 AI 모델 개발",
