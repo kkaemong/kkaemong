@@ -4,30 +4,20 @@
 
 <br/>
 
-<div align="center">
-  <h2>💡 사고는 유연하게, 구조는 견고하게</h2>
-  <p>Python을 주무기로 다져진 깊이 있는 CS/알고리즘 기본기 위에 C#, Unity 게임 클라이언트 구현력을 얹은 소프트웨어 엔지니어 <b>진준영</b>입니다.</p>
-  <p>SSAFY 특화 프로젝트에서 Unity WebGL 60fps 고정 최적화 및 실시간 소켓 동기화 루프를 설계하며,<br>단순히 작동하는 코드가 아닌 '실제 구동 성능'을 최적화하는 것에 깊이 몰입합니다.</p>
-</div>
-
-<br/>
-
----
-
-## 🧮 Core Engine & Git Activity Stats
-
 <table width="100%">
   <tr>
-    <!-- 좌측 2열: 준영님의 정예 사용 언어 donut 위젯 (화이트 배경 & 딥블루/블랙 조화) -->
-    <td width="50%" align="center" valign="middle">
+    <!-- 좌측 1열: 준영님의 정예 사용 언어 donut 위젯 (42% 너비로 슬림하고 예쁘게 조화) -->
+    <td width="42%" align="center" valign="middle">
       <img src="https://githubreadme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript&cache_seconds=1800&v=3" width="100%" alt="Top Languages" />
     </td>
-    <!-- 우측 2열: 준영님의 전체 깃허브 기여 stats 위젯 (화이트 배경 & 딥블루/블랙 조화) -->
-    <td width="50%" align="center" valign="middle">
+    <!-- 우측 2열: 준영님의 전체 깃허브 기여 stats 위젯 (58% 너비로 시원시원하고 거대하게 확장!) -->
+    <td width="58%" align="center" valign="middle">
       <img src="https://githubreadme-stats.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&icon_color=0000cc&cache_seconds=1800&v=3" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
 </table>
+
+<br/>
 
 ---
 
