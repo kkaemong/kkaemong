@@ -55,18 +55,18 @@
 
 ## 🚀 Projects & Key Outcomes
 
-| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/jabonju.png" width="100%" alt="zabonzooET cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/gaesorlay.png" width="100%" alt="gaesorelay cover" /> |
+| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/jabonju.png?v=1" width="100%" alt="zabonzooET cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/gaesorlay.png?v=1" width="100%" alt="gaesorelay cover" /> |
 | :--- | :--- |
 | **🎮 [자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)** | **💬 [개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)** |
 | ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white) ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) |
 | **금융 학습 WebGL 2D 러너 게임** (SSAFY 우수상)<br>• WebGL 객체 풀링 최적화로 60fps 고정<br>• FixedUpdate 물리 점프 지터링 감쇠<br>• UnityWebRequest REST API 실시간 연동 | **실시간 릴레이 스토리 웹 게임** (SSAFY 공통)<br>• Zustand 전역 타이머 & 턴 상태 격리<br>• React.memo/useCallback 렌더링 렉 차단<br>• TypeScript 엄격한 Props 패킷 데이터 설계 |
 | | |
-| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/SSAIETMAIN.png" width="100%" alt="SSAIET cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/AIchallange.png" width="100%" alt="AI Challenge cover" /> |
+| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/SSAIETMAIN.png?v=1" width="100%" alt="SSAIET cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/AIchallange.png?v=1" width="100%" alt="AI Challenge cover" /> |
 | **🍳 [SSAIET (식단 관리 SPA)](https://github.com/kkaemong/Final-PJT)** | **🧠 [SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** |
 | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) |
 | **개인 맞춤형 식단 추천 SPA** (SSAFY 최종)<br>• DRF 백엔드 API 단독 데이터 모델링 설계<br>• select_related/prefetch ORM 조인 최적화<br>• DB N+1 쿼리 오버헤드 60% 절감 해소 | **멀티모달 Vision-Language AI**<br>• Qwen2.5-VL 기반 추론 정확도 6%p 향상<br>• PEFT(LoRA) 기법 활용 GPU 한계 극복<br>• bfloat16 mixed-precision 학습 가속화 |
 | | |
-| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/kshield.png" width="100%" alt="Web Hacking cover" /> | |
+| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/kshield.png?v=1" width="100%" alt="Web Hacking cover" /> | |
 | **🛡️ Web Hacking Project (K-Shield Jr)** | |
 | ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&logo=kalilinux&logoColor=white) | |
 | **OWASP Top 10 기반 웹 모의 해킹** (최종)<br>• Burp Suite 프록시 패킷 변조 우회 검증<br>• SQLMap 활용 DB 자동화 취약점 공격 실증<br>• XSS & Directory Indexing 방어 전략 수립 | |
