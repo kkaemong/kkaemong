@@ -34,48 +34,46 @@
 
 ---
 
-## 📊 Project & PS Language Mapping
-
-| 도메인 / 구분 | 프로젝트 및 대상 (Target) | 🛠️ 주력 언어 (Core Language) | 💡 주요 기술 및 환경 (Tech Stack) |
-| :--- | :--- | :---: | :--- |
-| **🎮 Game & WebGL** | **[자본주 E.T.](https://github.com/kkaemong/zabonzooET)** (금융 보드게임) | **`C#`** | Unity, WebGL Build, Object Pooling, Custom Physics |
-| **💬 Web & Real-time** | **[개소릴레이](https://github.com/gaesorelay/frontend)** (실시간 스토리 게임) | **`TypeScript`** | React, Zustand, WebSocket, CSS Hardware Acceleration |
-| **🍳 Full Stack Web** | **[SSAIET](https://github.com/kkaemong/Final-PJT)** (개인 맞춤형 식단 SPA) | **`Python`** / `JavaScript` | Vue.js, Django, DRF, SQLite, Kakao Map API |
-| **🧠 Deep Learning** | **[SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** (V-L AI) | **`Python`** | PyTorch, HuggingFace, Qwen2.5-VL, PEFT/LoRA |
-| **🛡️ Web Security** | **Web Hacking Project** (K-Shield Jr) | `SQL` / `Shell Script` | Burp Suite, SQLMap, Kali Linux, OWASP Top 10 |
-| **🧮 PS & Algorithm** | **SSAFY 알고리즘 및 CS 학습** | **`Python` (Level 85%)** | 백준 Gold / SWEA A형 알고리즘 문제 해결 및 자료구조 구현 |
-
----
-
 ## 🚀 Projects & Key Outcomes
 
 * **🎮 [자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)**
-  * **WebGL 기반 2D 러너 금융 학습 게임 클라이언트 개발** (`C#` / `Unity` / `Spring Boot` / `AWS`)
+  * ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=c-sharp&logoColor=white) **Core Language** ➡️ ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazonwebservices&logoColor=white) **Eco Stack**
+  * **WebGL 기반 2D 러너 금융 학습 게임 클라이언트 개발**
   * 🏆 **SSAFY 특화 프로젝트 핀테크 트랙 우수상 (2위) 수상**
   * 💡 *단일 스레드 WebGL 빌드 환경에서 객체 풀링(Object Pooling) 시스템 설계로 GC 메모리 최적화 및 60fps 고정*
   * 💡 *FixedUpdate 물리 주기 기반의 2D 점프 컨트롤러 구현 및 Raycast 지면 감지 지터링 감쇠 최적화*
   * 💡 *C# `UnityWebRequest` 기반 커스텀 REST API 통신 모듈(APIManager.cs) 설계로 백엔드 퀴즈 실시간 동기화*
 
 * **💬 [개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)**
-  * **실시간 멀티플레이 릴레이 스토리 웹 게임 서비스** (`React` / `TypeScript` / `Zustand` / `Vite` / `WebSocket`)
+  * ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) **Core Language** ➡️ ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) ![Zustand](https://img.shields.io/badge/Zustand-orange?style=flat-square&logo=react&logoColor=white) ![WebSocket](https://img.shields.io/badge/WebSocket-010101?style=flat-square&logo=socketdotio&logoColor=white) **Eco Stack**
+  * **실시간 멀티플레이 릴레이 스토리 웹 게임 서비스**
   * 💡 *Zustand를 활용해 전역 게임 타이머 및 턴 전환 상태 머신을 메모리 상에서 완벽히 격리*
   * 💡 *소켓 패킷 폭증 시 뷰 렌더링 렉을 방지하기 위해 React.memo 및 useCallback 기반 렌더링 스코프 정밀 최적화*
   * 💡 *TypeScript 기반의 엄격한 데이터 패킷 Props 모델링 설계로 실시간 런타임 안정성 보장*
 
 * **🍳 [SSAIET (개인 맞춤형 식단 관리)](https://github.com/kkaemong/Final-PJT)**
-  * **사용자 맞춤형 점심 기반 저녁 추천 및 커뮤니티 플랫폼** (`Vue.js` / `Django` / `DRF` / `SQLite`)
+  * ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) **Core Language** ➡️ ![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white) ![DRF](https://img.shields.io/badge/DRF-EE4C2C?style=flat-square&logo=django&logoColor=white) **Eco Stack**
+  * **사용자 맞춤형 점심 기반 저녁 추천 및 커뮤니티 플랫폼**
   * 💡 *Django REST Framework(DRF) API 서버 단독 데이터 모델링 설계 및 RESTful 규격 정비*
   * 💡 *Django ORM의 `select_related` 및 `prefetch_related` 캐싱 조인 최적화를 통한 N+1 쿼리 해소 및 응답 지연 해결*
 
 * **🧠 [SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)**
-  * **4지선다형 Vision-Language 문제 해결 멀티모달 AI 모델 구축** (`PyTorch` / `Hugging Face` / `Qwen2.5-VL` / `LoRA`)
+  * ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) **Core Language** ➡️ ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black) ![PEFT/LoRA](https://img.shields.io/badge/PEFT%20/%20LoRA-purple?style=flat-square&logo=pytorch&logoColor=white) **Eco Stack**
+  * **4지선다형 Vision-Language 문제 해결 멀티모달 AI 모델 구축**
   * 💡 *Qwen2.5-VL 이미지-텍스트 복합 추론 파이프라인 설계로 **최종 추론 정확도(Accuracy) 6%p 향상** 달성*
   * 💡 *PEFT(LoRA) 기법 가중치 어댑터 세팅 및 bfloat16 정밀도 가속 최적화로 1대 GPU 극도의 한계 인프라 극복*
 
 * **🛡️ Web Hacking Project (K-Shield Jr)**
-  * **OWASP Top 10 기반 웹 애플리케이션 모의 해킹 및 취약점 분석** (`Burp Suite` / `SQLMap` / `Kali Linux`)
+  * ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) **Core Language** ➡️ ![BurpSuite](https://img.shields.io/badge/Burp_Suite-orange?style=flat-square&logo=portswigger&logoColor=white) ![SQLMap](https://img.shields.io/badge/SQLMap-red?style=flat-square&logo=python&logoColor=white) ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&logo=kalilinux&logoColor=white) **Eco Stack**
+  * **OWASP Top 10 기반 웹 애플리케이션 모의 해킹 및 취약점 분석**
   * 💡 *Burp Suite 프록시 패킷 변조 및 실시간 세션 변조 우회 모의 해킹 공격 시나리오 실증*
   * 💡 *SQLMap을 활용한 데이터베이스 자동 점검 검증 및 XSS, Directory Indexing 대응 방어 가이드라인 수립*
+
+* **🧮 PS & Algorithm**
+  * ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) **Core Language** ➡️ ![Baekjoon](https://img.shields.io/badge/Baekjoon-blue?style=flat-square&logo=java&logoColor=white) ![SWEA](https://img.shields.io/badge/SWEA-sky?style=flat-square&logo=c&logoColor=white) **Platform**
+  * **SSAFY 알고리즘 및 CS 학습 (Level 85%)**
+  * 💡 *백준 Gold 및 SWEA A형 등 고난도 알고리즘 문제 해결 및 핵심 자료구조 구현*
+
 
 ---
 
