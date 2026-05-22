@@ -4,63 +4,94 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { portfolioData } from '@/data/portfolio';
 
-// Custom Radial Progress Component for a more premium feel
-const SkillBadge = ({ name, level, icon, index }: { name: string; level: number; icon: string; index: number }) => {
+// Compact SkillBadge Component for Horizontal Layout
+const SkillBadge = ({ name, level, icon, description, index }: { name: string; level: number; icon: string; description?: string; index: number }) => {
+  const blocks = 5;
+  const activeBlocks = Math.round(level / 20);
+
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, scale: 0.8 },
+        hidden: { opacity: 0, scale: 0.98 },
         show: { opacity: 1, scale: 1 }
       }}
-      whileHover={{ y: -5, scale: 1.02 }}
-      className="relative flex flex-col items-center p-4 print:p-2 rounded-3xl bg-slate-50/50 border border-slate-100/50 hover:bg-white hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 group/badge cursor-default overflow-hidden"
+      whileHover={{ y: -2, scale: 1.01 }}
+      className="relative flex items-start gap-4 p-5 print:p-3 rounded-2xl bg-white/70 border border-slate-200/50 hover:bg-white hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 group/badge overflow-hidden"
     >
-      {/* Percentage Glow Background */}
-      <div className="absolute inset-0 bg-blue-500/0 group-hover/badge:bg-blue-500/[0.03] transition-colors" />
+      <div className="absolute inset-0 bg-blue-500/0 group-hover/badge:bg-blue-500/[0.02] transition-colors" />
 
-      {/* Icon with Floating Effect */}
-      <div className="relative mb-3 print:mb-1 flex items-center justify-center">
-        <div className="absolute inset-0 bg-blue-400/20 blur-xl rounded-full opacity-0 group-hover/badge:opacity-100 transition-opacity print:hidden" />
-        <div className="w-10 h-10 print:w-6 print:h-6 flex items-center justify-center bg-white rounded-2xl print:rounded-lg shadow-sm border border-slate-50 z-10 group-hover/badge:border-blue-200/50 transition-colors">
-          <img
-            src={`https://cdn.simpleicons.org/${icon}`}
-            alt={name}
-            className="w-6 h-6 print:w-4 print:h-4 object-contain filter grayscale group-hover/badge:grayscale-0 transition-all duration-500"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = 'https://cdn.simpleicons.org/codefactor';
-            }}
-          />
-        </div>
+      {/* Icon with robust multi-tiered fallback */}
+      <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-100 z-10 group-hover/badge:border-blue-200/50 transition-colors">
+        <img
+          src={
+            icon === 'csharp'
+              ? 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg'
+              : icon === 'unity'
+              ? 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/unity/unity-original.svg'
+              : `https://cdn.simpleicons.org/${icon}`
+          }
+          alt={name}
+          className="w-6 h-6 object-contain filter grayscale group-hover/badge:grayscale-0 transition-all duration-500"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            if (target.src.includes('cdn.simpleicons.org')) {
+              target.src = `https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${icon}.svg`;
+            } else if (target.src.includes('simple-icons@latest') && !target.src.includes('codefactor')) {
+              const deviconSlug = icon === 'csharp' ? 'csharp' : icon === 'unity' ? 'unity' : icon;
+              target.src = `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${deviconSlug}/${deviconSlug}-original.svg`;
+            } else {
+              target.src = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/codefactor.svg';
+            }
+          }}
+        />
       </div>
 
-      <span className="text-sm print:text-[10px] font-display font-bold text-slate-700 mb-1 truncate max-w-full z-10">{name}</span>
-      <span className="text-sm print:text-[10px] font-mono font-black text-blue-600 z-10">
-        {level}%
-      </span>
-
-      {/* Decorative Corner Accent */}
-      <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-bl-3xl opacity-0 group-hover/badge:opacity-100 -translate-y-2 translate-x-2 group-hover/badge:translate-y-0 group-hover/badge:translate-x-0 transition-all" />
+      <div className="flex flex-col flex-1 w-full z-10 min-w-0">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-[1.05rem] font-bold text-slate-800 truncate pr-2">{name}</span>
+          
+          {/* 5 Level Blocks */}
+          <div className="flex gap-1 flex-shrink-0">
+            {[...Array(blocks)].map((_, i) => (
+              <div 
+                key={i} 
+                className={`w-4 h-4 sm:w-5 sm:h-5 rounded-[4px] transition-colors duration-500 ${
+                  i < activeBlocks 
+                    ? 'bg-blue-400 group-hover/badge:bg-blue-500 shadow-sm' 
+                    : 'bg-slate-200 group-hover/badge:bg-slate-300/50'
+                }`} 
+              />
+            ))}
+          </div>
+        </div>
+        
+        {description && (
+          <p className="text-sm text-slate-600 leading-relaxed font-medium break-keep mt-1">
+            {description}
+          </p>
+        )}
+      </div>
     </motion.div>
   );
 };
 
 export default function Skills() {
   const { skills } = portfolioData;
+  const s = skills as any; // Type override since we changed the data structure
 
   return (
-    <section id="skills" className="py-24 print:py-8 bg-slate-50/50 print:bg-white relative overflow-hidden">
-      {/* Abstract Background Shapes */}
+    <section id="skills" className="py-20 bg-white relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none print:hidden">
         <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-blue-100/30 rounded-full blur-[120px]" />
         <div className="absolute bottom-1/4 -left-20 w-[500px] h-[500px] bg-sky-100/30 rounded-full blur-[120px]" />
       </div>
 
-      <div className="section-container print:py-0">
+      <div className="section-container max-w-7xl mx-auto print:max-w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-20 print:mb-6"
+          className="text-center mb-16 print:mb-8"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 mb-6">
             <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
@@ -68,134 +99,129 @@ export default function Skills() {
               Technical Stack
             </span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-display font-bold text-primary mb-6 tracking-tight">
-            <span className="text-black">기술 영역</span>
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-primary mb-4 tracking-tight">
+            <span className="text-black">Best Skills</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto font-medium text-lg leading-relaxed">
-            유연한 사고를 바탕으로 최적의 솔루션을 구현해냅니다.
+          <p className="text-muted-foreground font-medium text-lg">
+            실제 프로젝트에 투입되어 활용해 본 기술들입니다.
           </p>
         </motion.div>
 
-        {/* Categories Grid - Using Bento Style for the outer groups and badges inside */}
-        <div className="grid lg:grid-cols-12 print:grid-cols-3 gap-8 print:gap-4 items-start max-w-7xl mx-auto">
-          {/* Frontend Category - Priority 1 */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-12 xl:col-span-7 print:col-span-1 print:col-span-full glass-card p-10 print:p-4 rounded-[3.5rem] print:rounded-xl bg-white/95 backdrop-blur-2xl border border-slate-200/60 print:border-slate-300 shadow-2xl print:shadow-none relative overflow-hidden group"
-          >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-sky-400" />
-
-            <div className="flex items-center justify-between mb-12">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
-                  <span className="font-display font-black text-xl">01</span>
-                </div>
-                <h3 className="text-3xl font-display font-black text-primary">Frontend</h3>
-              </div>
-              <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">{skills.frontend.length} Core Skills</span>
-            </div>
-
+        {/* 2-Column Grid Layout for Horizontal View */}
+        <div className="flex flex-col gap-10 print:gap-6">
+          
+          {/* 1. Core Category */}
+          {s.core && (
             <motion.div
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4"
-              initial="hidden"
-              whileInView="show"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              variants={{
-                show: { transition: { staggerChildren: 0.1 } }
-              }}
+              className="glass-card p-6 md:p-8 rounded-[2rem] bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-lg relative print:shadow-none print:border-slate-300"
             >
-              {skills.frontend.map((skill, i) => (
-                <SkillBadge key={skill.name} {...skill} index={i} />
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Backend & AI Category */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-6 xl:col-span-5 print:col-span-1 print:col-span-full glass-card p-10 print:p-4 rounded-[3.5rem] print:rounded-xl bg-white/95 backdrop-blur-2xl border border-slate-200/60 print:border-slate-300 shadow-xl print:shadow-none relative group h-full"
-          >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-blue-400 opacity-50 group-hover:opacity-100 transition-opacity" />
-
-            <div className="flex items-center gap-4 mb-12">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-500 group-hover:rotate-12 transition-transform">
-                <span className="font-display font-black text-xl">02</span>
-              </div>
-              <h3 className="text-2xl font-display font-black text-primary">Backend & AI</h3>
-            </div>
-
-            <motion.div
-              className="grid grid-cols-2 sm:grid-cols-3 gap-4"
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={{
-                show: { transition: { staggerChildren: 0.1 } }
-              }}
-            >
-              {skills.backendAI.map((skill, i) => (
-                <SkillBadge key={skill.name} {...skill} index={i} />
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Tools Category */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-6 xl:col-span-12 print:col-span-1 print:col-span-full glass-card p-10 print:p-4 rounded-[3.5rem] print:rounded-xl bg-white/95 backdrop-blur-2xl border border-slate-200/60 print:border-slate-300 shadow-xl print:shadow-none relative group overflow-hidden"
-          >
-            <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-slate-200 via-blue-200 to-slate-200" />
-
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500 transition-all group-hover:bg-primary group-hover:text-white">
-                  <span className="font-display font-black text-xl">03</span>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500">
+                  <span className="font-display font-black text-lg">01</span>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-display font-black text-primary">Expert Tools</h3>
-                  <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest mt-1">Workflow Optimization</p>
-                </div>
+                <h3 className="text-2xl font-display font-black text-primary">Core Strength</h3>
               </div>
-
               <motion.div
-                className="flex flex-wrap gap-4 md:basis-2/3"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true }}
-                variants={{
-                  show: { transition: { staggerChildren: 0.05 } }
-                }}
+                variants={{ show: { transition: { staggerChildren: 0.05 } } }}
               >
-                {skills.tools.map((skill) => (
-                  <motion.div
-                    key={skill.name}
-                    variants={{
-                      hidden: { opacity: 0, scale: 0.9 },
-                      show: { opacity: 1, scale: 1 }
-                    }}
-                    whileHover={{ scale: 1.1, backgroundColor: '#f8fafc' }}
-                    className="flex items-center gap-3 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100/50 hover:shadow-lg hover:shadow-primary/5 transition-all cursor-default group/tool"
-                  >
-                    <img
-                      src={`https://cdn.simpleicons.org/${skill.icon}`}
-                      alt={skill.name}
-                      className="w-5 h-5 filter grayscale group-hover/tool:grayscale-0 transition-all opacity-60 group-hover/tool:opacity-100"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://cdn.simpleicons.org/codefactor';
-                      }}
-                    />
-                    <span className="font-display font-bold text-slate-600 group-hover/tool:text-primary transition-colors">{skill.name}</span>
-                  </motion.div>
+                {s.core.map((skill: any, i: number) => (
+                  <SkillBadge key={skill.name} {...skill} index={i} />
                 ))}
               </motion.div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
+
+          {/* 2. Project Experience */}
+          {s.project && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="glass-card p-6 md:p-8 rounded-[2rem] bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-lg relative print:shadow-none print:border-slate-300"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-500">
+                  <span className="font-display font-black text-lg">02</span>
+                </div>
+                <h3 className="text-2xl font-display font-black text-primary">Project Experience</h3>
+              </div>
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+              >
+                {s.project.map((skill: any, i: number) => (
+                  <SkillBadge key={skill.name} {...skill} index={i} />
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* 3. Familiar / Basic */}
+          {s.basic && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="glass-card p-6 md:p-8 rounded-[2rem] bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-lg relative print:shadow-none print:border-slate-300"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500">
+                  <span className="font-display font-black text-lg">03</span>
+                </div>
+                <h3 className="text-2xl font-display font-black text-primary">Familiar</h3>
+              </div>
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+              >
+                {s.basic.map((skill: any, i: number) => (
+                  <SkillBadge key={skill.name} {...skill} index={i} />
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* 4. Tools Category */}
+          {s.tools && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="glass-card p-6 md:p-8 rounded-[2rem] bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-lg relative print:shadow-none print:border-slate-300"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+                  <span className="font-display font-black text-lg">04</span>
+                </div>
+                <h3 className="text-2xl font-display font-black text-primary">Tools & DevOps</h3>
+              </div>
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+              >
+                {s.tools.map((skill: any, i: number) => (
+                  <SkillBadge key={skill.name} {...skill} index={i} />
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
+
         </div>
       </div>
     </section>

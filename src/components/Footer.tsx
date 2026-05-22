@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Github, ExternalLink, Heart } from 'lucide-react';
+import { Mail, ExternalLink, Heart } from 'lucide-react';
+import { GithubIcon as Github } from './GithubIcon';
 import { portfolioData } from '@/data/portfolio';
 
 export default function Footer() {

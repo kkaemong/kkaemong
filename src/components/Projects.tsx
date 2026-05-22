@@ -11,7 +11,7 @@ export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <section id="projects" className="py-24 print:py-8 bg-white">
+    <section id="projects" className="py-24 print:py-8 bg-slate-50 border-y border-slate-200/60 relative overflow-hidden">
       <div className="section-container">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 print:mb-8 gap-6">
           <motion.div
@@ -118,9 +118,19 @@ export default function Projects() {
                     )}
                   </div>
 
-                  <p className="text-slate-600 text-lg print:text-sm leading-relaxed font-medium mb-8 print:mb-4">
+                  <p className="text-slate-600 text-lg print:text-sm leading-relaxed font-medium mb-4 print:mb-2">
                     {project.description}
                   </p>
+
+                  {/* Key Result Highlight Badge */}
+                  {project.keyResult && (
+                    <div className="mb-8 print:mb-4 bg-gradient-to-r from-accent/[0.06] to-transparent border-l-4 border-accent rounded-r-2xl px-5 py-4">
+                      <div className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-1.5">Key Outcome (핵심 성과)</div>
+                      <p className="text-primary font-bold text-[15px] leading-relaxed break-keep">
+                        {project.keyResult}
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex flex-wrap gap-3">
                     {project.tech.map(t => (

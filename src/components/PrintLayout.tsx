@@ -40,18 +40,22 @@ export default function PrintLayout() {
         <h3 className="text-lg font-black uppercase tracking-widest text-slate-400 mb-4 pb-1 border-b border-slate-200">
           Tech Stack
         </h3>
-        <div className="space-y-3 test-sm">
+        <div className="space-y-3 text-sm">
           <div className="flex items-start">
-            <span className="font-bold w-32 shrink-0">Frontend</span>
-            <span className="text-slate-700">{skills.frontend.map(s => s.name).join(', ')}</span>
+            <span className="font-bold w-32 shrink-0">Core</span>
+            <span className="text-slate-700">{(skills as any).core?.map((s: any) => s.name).join(', ')}</span>
           </div>
           <div className="flex items-start">
-            <span className="font-bold w-32 shrink-0">Backend & AI</span>
-            <span className="text-slate-700">{skills.backendAI.map(s => s.name).join(', ')}</span>
+            <span className="font-bold w-32 shrink-0">Project</span>
+            <span className="text-slate-700">{(skills as any).project?.map((s: any) => s.name).join(', ')}</span>
+          </div>
+          <div className="flex items-start">
+            <span className="font-bold w-32 shrink-0">Basic</span>
+            <span className="text-slate-700">{(skills as any).basic?.map((s: any) => s.name).join(', ')}</span>
           </div>
           <div className="flex items-start">
             <span className="font-bold w-32 shrink-0">Tools</span>
-            <span className="text-slate-700">{skills.tools.map(s => s.name).join(', ')}</span>
+            <span className="text-slate-700">{(skills as any).tools?.map((s: any) => s.name).join(', ')}</span>
           </div>
         </div>
       </section>

@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Github, ArrowUpRight } from 'lucide-react';
+import { X, ArrowUpRight, TrendingUp, Zap, CheckCircle2 } from 'lucide-react';
+import { GithubIcon as Github } from './GithubIcon';
 import { type Project } from '@/data/portfolio';
 
 interface ModalProps {
@@ -98,7 +99,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                   </h1>
                   
                   {/* Clean Horizontal Specs */}
-                  <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 text-slate-500 font-medium text-base">
+                  <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 text-slate-500 font-medium text-base mb-8">
                     {project.role && (
                       <div className="flex flex-col items-center">
                         <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Role</span>
@@ -116,6 +117,15 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                       </div>
                     )}
                   </div>
+
+                  {/* Elevating Tech Stack higher up under specifications */}
+                  <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto pt-6 border-t border-slate-100/80">
+                    {project.tech.map((t: string) => (
+                      <span key={t} className="px-4 py-2 bg-[#f5f5f7] rounded-full text-xs font-bold text-slate-700 tracking-wide">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </motion.div>
 
                 {/* Massive Description */}
@@ -128,37 +138,89 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                 {/* Tech & Highlights - Vertical Flow */}
                 <motion.div variants={itemVariants} className="space-y-8 max-w-4xl mx-auto w-full">
                   
-                  {/* Tech Stack (Single horizontal line) */}
-                  <div className="flex flex-col items-center justify-center pt-4 pb-8 border-b border-slate-100">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">
-                      Tech Stack
-                    </h3>
-                    <div className="flex flex-wrap justify-center gap-3">
-                      {project.tech.map((t: string) => (
-                        <span key={t} className="px-5 py-2.5 bg-[#f5f5f7] rounded-full text-xs font-bold text-slate-700 tracking-wide">
-                          {t}
-                        </span>
-                      ))}
+                  {/* PSR Section (Problem → Solution → Result) */}
+                  {(project.challenge || project.solution || project.keyResult) && (
+                    <div className="pb-8 border-b border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 text-center">
+                        Challenge &amp; Outcome
+                      </h3>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Problem Card */}
+                          {project.challenge && (
+                            <div className="bg-slate-50/80 hover:bg-slate-50 rounded-[1.5rem] p-6 border border-slate-100/80 transition-colors flex flex-col justify-between">
+                              <div className="space-y-4">
+                                <div className="flex items-center gap-2.5">
+                                  <span className="w-1.5 h-6 bg-orange-400 rounded-full" />
+                                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">Problem (도전 과제)</span>
+                                </div>
+                                <ul className="space-y-2.5">
+                                  {project.challenge.map((item, idx) => (
+                                    <li key={idx} className="flex items-start gap-2 text-slate-700 text-[14px] leading-relaxed font-medium break-keep">
+                                      <span className="shrink-0 text-orange-400 mt-2 w-1.5 h-1.5 rounded-full bg-orange-400" />
+                                      <span>{item}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Solution Card */}
+                          {project.solution && (
+                            <div className="bg-slate-50/80 hover:bg-slate-50 rounded-[1.5rem] p-6 border border-slate-100/80 transition-colors flex flex-col justify-between">
+                              <div className="space-y-4">
+                                <div className="flex items-center gap-2.5">
+                                  <span className="w-1.5 h-6 bg-blue-400 rounded-full" />
+                                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">Solution (해결 방안)</span>
+                                </div>
+                                <ul className="space-y-2.5">
+                                  {project.solution.map((item, idx) => (
+                                    <li key={idx} className="flex items-start gap-2 text-slate-700 text-[14px] leading-relaxed font-medium break-keep">
+                                      <span className="shrink-0 text-blue-400 mt-2 w-1.5 h-1.5 rounded-full bg-blue-400" />
+                                      <span>{item}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Result Spotlight Banner */}
+                        {project.keyResult && (
+                          <div className="bg-gradient-to-r from-accent/[0.08] to-accent/[0.02] border border-accent/25 rounded-[1.5rem] p-7 md:p-8 flex flex-col md:flex-row md:items-center gap-5 shadow-[0_10px_30px_rgba(20,184,166,0.02)]">
+                            <div className="shrink-0 w-12 h-12 rounded-2xl bg-accent/15 flex items-center justify-center">
+                              <CheckCircle2 size={24} className="text-accent" />
+                            </div>
+                            <div className="space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Key Outcome (핵심 성과)</div>
+                              <p className="text-primary font-bold text-lg md:text-xl leading-relaxed break-keep">
+                                {project.keyResult}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  {/* Highlights Card (Full width horizontally) */}
-                  <div className="bg-[#f5f5f7] rounded-[2rem] p-8 md:p-14">
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-10 text-center">
-                      Key Highlights
-                    </h3>
-                    <ul className="space-y-6">
-                      {project.highlights.map((highlight: string, i: number) => (
-                        <li key={i} className="flex gap-5 items-start">
-                          <span className="text-accent font-bold text-lg mt-0.5 opacity-70">―</span>
-                          <span className="text-slate-700 text-lg leading-relaxed font-medium transition-colors break-keep">
-                            {highlight}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
+                  {/* Restored and Refined Key Highlights Card */}
+                  {project.highlights && project.highlights.length > 0 && (
+                    <div className="bg-slate-50/50 hover:bg-slate-50/80 transition-colors rounded-[2.5rem] p-8 md:p-12 border border-slate-100/80 mt-10 shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
+                      <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-8 text-center">
+                        Key Highlights (주요 수행 항목)
+                      </h3>
+                      <ul className="space-y-5">
+                        {project.highlights.map((highlight: string, i: number) => (
+                          <li key={i} className="flex gap-4 items-start text-slate-700 text-[15px] leading-relaxed font-medium break-keep">
+                            <span className="shrink-0 text-accent font-bold mt-1">✓</span>
+                            <span>{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </motion.div>
 
                 {/* GitHub Pill Button */}
