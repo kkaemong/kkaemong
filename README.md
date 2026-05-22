@@ -34,6 +34,19 @@
 
 ---
 
+## 📊 Project & PS Language Mapping
+
+| 도메인 / 구분 | 프로젝트 및 대상 (Target) | 🛠️ 주력 언어 (Core Language) | 💡 주요 기술 및 환경 (Tech Stack) |
+| :--- | :--- | :---: | :--- |
+| **🎮 Game & WebGL** | **[자본주 E.T.](https://github.com/kkaemong/zabonzooET)** (금융 보드게임) | **`C#`** | Unity, WebGL Build, Object Pooling, Custom Physics |
+| **💬 Web & Real-time** | **[개소릴레이](https://github.com/gaesorelay/frontend)** (실시간 스토리 게임) | **`TypeScript`** | React, Zustand, WebSocket, CSS Hardware Acceleration |
+| **🍳 Full Stack Web** | **[SSAIET](https://github.com/kkaemong/Final-PJT)** (개인 맞춤형 식단 SPA) | **`Python`** / `JavaScript` | Vue.js, Django, DRF, SQLite, Kakao Map API |
+| **🧠 Deep Learning** | **[SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** (V-L AI) | **`Python`** | PyTorch, HuggingFace, Qwen2.5-VL, PEFT/LoRA |
+| **🛡️ Web Security** | **Web Hacking Project** (K-Shield Jr) | `SQL` / `Shell Script` | Burp Suite, SQLMap, Kali Linux, OWASP Top 10 |
+| **🧮 PS & Algorithm** | **SSAFY 알고리즘 및 CS 학습** | **`Python` (Level 85%)** | 백준 Gold / SWEA A형 알고리즘 문제 해결 및 자료구조 구현 |
+
+---
+
 ## 🚀 Projects & Key Outcomes
 
 * **🎮 [자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)**
