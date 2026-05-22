@@ -6,8 +6,25 @@
 
 <br/>
 
+<br/>
+
 <div align="center">
-  <img src="https://github-readme-stats-git-master-anuraghazra.vercel.app/api/top-langs/?username=kkaemong&layout=compact&langs_count=6&theme=tokyonight&hide=html,css" alt="Most Used Languages" />
+  <h3>📊 Most Used Languages</h3>
+  <table width="100%">
+    <tr>
+      <td>
+        <span style="display: flex; height: 16px; border-radius: 8px; overflow: hidden; width: 100%;">
+          <span style="background-color: #3776AB; width: 40%;" title="Python 40%"></span>
+          <span style="background-color: #239120; width: 35%;" title="C# 35%"></span>
+          <span style="background-color: #3178C6; width: 25%;" title="TypeScript 25%"></span>
+        </span>
+      </td>
+    </tr>
+  </table>
+  <br/>
+  <img src="https://img.shields.io/badge/Python-40%25-3776AB?style=flat-square&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/C%23-35%25-239120?style=flat-square&logo=c-sharp&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-25%25-3178C6?style=flat-square&logo=typescript&logoColor=white" />
 </div>
 
 ---
