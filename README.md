@@ -6,22 +6,35 @@
 
 <br/>
 
-<br/>
+---
 
-<div align="center">
-  <h3>📊 Most Used Languages</h3>
-  <table width="100%">
-    <tr height="14">
-      <td width="40%" bgcolor="#3776AB" style="border-radius: 4px 0 0 4px;"></td>
-      <td width="35%" bgcolor="#239120"></td>
-      <td width="25%" bgcolor="#3178C6" style="border-radius: 0 4px 4px 0;"></td>
-    </tr>
-  </table>
-  <br/>
-  <img src="https://img.shields.io/badge/Python-40%25-3776AB?style=flat-square&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/C%23-35%25-239120?style=flat-square&logo=csharp&logoColor=white" />
-  <img src="https://img.shields.io/badge/TypeScript-25%25-3178C6?style=flat-square&logo=typescript&logoColor=white" />
-</div>
+## 🧮 Core Engine & Algorithm Solving
+
+<table width="100%">
+  <tr>
+    <!-- 좌측 2열: 캐시 최적화로 엑박 0.00% 보장하는 실물 도넛 차트 -->
+    <td width="48%" align="center" valign="middle">
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&theme=tokyonight&hide=html,css,javascript&cache_seconds=1800" width="100%" alt="kkaemong's Core Languages" />
+    </td>
+    <!-- 우측 2열: 파이썬 알고리즘 강점 및 C# 코어 프로그래밍 요약 -->
+    <td width="52%" valign="top" style="padding-left: 15px;">
+      <h3>🐍 Python 기반 알고리즘 & CS 정복</h3>
+      <ul>
+        <li><strong>백준 Gold / SWEA A형 핵심 고난도 문제 정복</strong></li>
+        <li>💡 BFS/DFS 그래프 탐색, 복잡 시뮬레이션 물리 최적화 구현</li>
+        <li>💡 시간/공간 복잡도 최소화를 통한 고효율 컴퓨팅 리소스 설계</li>
+      </ul>
+      <br/>
+      <h3>🎮 C# / TypeScript 코어 프로그래밍</h3>
+      <ul>
+        <li><strong>C# & Unity Engine 실무 튜닝</strong></li>
+        <li>💡 WebGL 객체 풀링 최적화 기반 60fps 고정 렉 원천 해결</li>
+        <li><strong>TypeScript & React 웹 아키텍처</strong></li>
+        <li>💡 Zustand 전역 상태 및 안정적인 RESTful API 설계 완비</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -69,21 +82,7 @@
 | ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&logo=kalilinux&logoColor=white) | |
 | **OWASP Top 10 기반 웹 모의 해킹** (최종)<br>• Burp Suite 프록시 패킷 변조 우회 검증<br>• SQLMap 활용 DB 자동화 취약점 공격 실증<br>• XSS & Directory Indexing 방어 전략 수립 | |
 
----
 
-## 🧮 Algorithm & CS Problem Solving
-
-<div align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Baekjoon-0078D7?style=for-the-badge&logo=github&logoColor=white" />
-  <img src="https://img.shields.io/badge/SWEA-03C75A?style=for-the-badge&logo=naver&logoColor=white" />
-</div>
-
-* **파이썬(Python) 기반 고난도 문제 풀이 및 핵심 CS 자료구조 직접 구현**
-* 💡 **백준 Gold 및 SWEA A형** 등 고난도 알고리즘 문제 해결 및 핵심 자료구조 구현
-* 💡 알고리즘을 통한 시간/공간 복잡도 최소화 및 최적의 컴퓨팅 리소스 설계 능력 확보
-
----
 
 ## 🎓 Education & Credentials
 - **🏫 SSAFY AI 아카데미 14기** | Python 트랙 과정을 통한 CS 기본기 학습 및 웹/게임 클라이언트 부문 프로젝트 수행 (2025.07 ~ 현재)
