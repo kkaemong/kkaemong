@@ -57,21 +57,21 @@
 
 ## 🚀 Projects & Key Outcomes
 
-| 🎮 [자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET) | 💬 [개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend) |
-| :--- | :--- |
 | <img src="https://github.com/kkaemong/kkaemong/raw/main/public/jabonju.png" width="100%" alt="zabonzooET cover" /> | <img src="https://github.com/kkaemong/kkaemong/raw/main/public/gaesorlay.png" width="100%" alt="gaesorelay cover" /> |
-| ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=c-sharp&logoColor=white) **Core** ➡️ ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&omegaColor=white) | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) **Core** ➡️ ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) |
-| **금융 학습 WebGL 2D 러너 게임**<br>🏆 SSAFY 특화 프로젝트 우수상 (2위)<br>• WebGL 빌드 객체 풀링(Object Pooling) 최적화로 60fps 고정<br>• FixedUpdate 기반 2D 점프 Raycast 지면 감지 지터링 감쇠<br>• C# UnityWebRequest REST API 백엔드 퀴즈 실시간 동기화 | **실시간 멀티플레이 릴레이 스토리 게임**<br><br>• Zustand 전역 게임 타이머 & 턴 전환 상태 머신 격리<br>• React.memo & useCallback 기반 렌더링 렉 제어<br>• TypeScript 엄격한 Props 패킷 모델링 설계로 안정성 보장 |
+| :--- | :--- |
+| **🎮 [자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)** | **💬 [개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)** |
+| ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=c-sharp&logoColor=white) ➡️ ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ➡️ ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) |
+| **금융 학습 WebGL 2D 러너 게임** (SSAFY 우수상)<br>• WebGL 객체 풀링 최적화로 60fps 고정<br>• FixedUpdate 물리 점프 지터링 감쇠<br>• UnityWebRequest REST API 실시간 연동 | **실시간 릴레이 스토리 웹 게임** (SSAFY 공통)<br>• Zustand 전역 타이머 & 턴 상태 격리<br>• React.memo/useCallback 렌더링 렉 차단<br>• TypeScript 엄격한 Props 패킷 데이터 설계 |
 | | |
-| **🍳 [SSAIET (식단 관리 SPA)](https://github.com/kkaemong/Final-PJT)** | **🧠 [SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** |
 | <img src="https://github.com/kkaemong/kkaemong/raw/main/public/SSAIETMAIN.png" width="100%" alt="SSAIET cover" /> | <img src="https://github.com/kkaemong/kkaemong/raw/main/public/AIchallange.png" width="100%" alt="AI Challenge cover" /> |
-| ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) **Core** ➡️ ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&omegaColor=white) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&omegaColor=white) **Core** ➡️ ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&omegaColor=white) |
-| **점심 기반 저녁 식단 추천 SPA**<br><br>• DRF API 백엔드 데이터 단독 모델링 및 RESTful 규격 설계<br>• Django ORM select_related/prefetch_related 캐싱 조인<br>• N+1 쿼리 해소로 API 응답 지연 대폭 최적화 | **4지선다형 Vision-Language AI**<br><br>• Qwen2.5-VL 이미지-텍스트 복합 추론 정확도 6%p 향상<br>• PEFT(LoRA) 가중치 어댑터 튜닝으로 OOM 극복<br>• bfloat16 정밀도 가속으로 1대 GPU 인프라 한계 극복 |
+| **🍳 [SSAIET (식단 관리 SPA)](https://github.com/kkaemong/Final-PJT)** | **🧠 [SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** |
+| ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ➡️ ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ➡️ ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) |
+| **개인 맞춤형 식단 추천 SPA** (SSAFY 최종)<br>• DRF 백엔드 API 단독 데이터 모델링 설계<br>• select_related/prefetch ORM 조인 최적화<br>• DB N+1 쿼리 오버헤드 60% 절감 해소 | **멀티모달 Vision-Language AI**<br>• Qwen2.5-VL 기반 추론 정확도 6%p 향상<br>• PEFT(LoRA) 기법 활용 GPU 한계 극복<br>• bfloat16 mixed-precision 학습 가속화 |
 | | |
-| **🛡️ Web Hacking Project (K-Shield Jr)** | **🧮 PS & Algorithm** |
 | <img src="https://github.com/kkaemong/kkaemong/raw/main/public/kshield.png" width="100%" alt="Web Hacking cover" /> | <img src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=500&auto=format&fit=crop&q=60" width="100%" alt="Algorithm cover" /> |
-| ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) **Core** ➡️ ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&omegaColor=white) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&omegaColor=white) **Core** ➡️ ![Baekjoon](https://img.shields.io/badge/Baekjoon-blue?style=flat-square&omegaColor=white) |
-| **OWASP Top 10 기반 모의 해킹 및 취약점 분석**<br><br>• Burp Suite 프록시 패킷 세션 변조 우회 공격 시나리오 실증<br>• SQLMap 활용 데이터베이스 자동 취약점 점검 검증<br>• XSS 및 Directory Indexing 방어 WAF 가이드라인 수립 | **알고리즘 및 CS 학습 (Level 85%)**<br><br>• 백준 Gold 및 SWEA A형 고난도 알고리즘 문제 해결 완료<br>• 자료구조/알고리즘 CS 코어 이론 확립 및 실전 코드 구현 |
+| **🛡️ Web Hacking Project (K-Shield Jr)** | **🧮 PS & Algorithm** |
+| ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) ➡️ ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&logo=kalilinux&logoColor=white) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ➡️ ![Baekjoon](https://img.shields.io/badge/Baekjoon-blue?style=flat-square&logo=java&logoColor=white) |
+| **OWASP Top 10 기반 웹 모의 해킹** (최종)<br>• Burp Suite 프록시 패킷 변조 우회 검증<br>• SQLMap 활용 DB 자동화 취약점 공격 실증<br>• XSS & Directory Indexing 방어 전략 수립 | **알고리즘 및 CS 학습** (Level 85%)<br>• 백준 Gold / SWEA A형 핵심 문제 정복<br>• 자료구조/알고리즘 CS 코어 이론 확립<br>• 파이썬 활용 최적화 알고리즘 코드 구현 |
 
 ## 🎓 Education & Credentials
 - **🏫 SSAFY AI 아카데미 14기** | Python 트랙 과정을 통한 CS 기본기 학습 및 웹/게임 클라이언트 부문 프로젝트 수행 (2025.07 ~ 현재)
