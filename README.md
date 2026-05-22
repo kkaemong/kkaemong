@@ -1,10 +1,7 @@
 # 👨‍💻 진준영 (kkaemong) - Software Engineer
 
 <div align="center">
-  <img src="https://capsule-render.vercel.app/render?type=waving&color=0f172a&height=200&section=header&text=JIN%20JUN%20YEONG&fontSize=60&animation=fadeIn&fontColor=ffffff" alt="Header Banner" />
-</div>
-
-<div align="center">
+  <h1>👋 안녕하세요, 진준영입니다</h1>
   <h2>💡 사고는 유연하게, 구조는 견고하게</h2>
   <p>단순한 코드 작성을 넘어 비즈니스의 비전과 사용자 가치를 정밀하게 코드로 이식하는 융합형 소프트웨어 엔지니어 <b>진준영</b>입니다.</p>
   <p>비전공자로서 SSAFY를 거쳐 다져진 탄탄한 CS 및 알고리즘 깊이를 바탕으로 기획의 의도를 가장 견고하고 효율적인 아키텍처로 구현하며,<br>프레임 병목 해결과 메모리 누수 방지 등 눈에 보이지 않는 '실제 구동 성능'까지 집요하게 튜닝하며 개발의 가치를 더합니다.</p>
