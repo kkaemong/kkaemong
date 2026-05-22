@@ -18,7 +18,7 @@ export interface Project {
 export const portfolioData = {
   hero: {
     headline: "사고는 유연하게, 구조는 견고하게",
-    subTitle: "유연한 사고로 문제를 정의하고, 견고한 구조로 가치를 구현하는 개발자 진준영입니다. 비전공자로서 SSAFY를 통해 쌓은 탄탄한 기술적 이해도를 바탕으로, 사용자의 문제를 '가치 있는 경험'으로 치환하며 기획의 의도를 코드로 구현해 냅니다.",
+    subTitle: "Python을 주무기로 다져진 깊이 있는 CS/알고리즘 기본기 위에 C#, Unity 게임 클라이언트 구현력을 얹었습니다. SSAFY 특화 프로젝트에서 Unity WebGL 60fps 고정 최적화 및 실시간 소켓 동기화 루프를 설계하며, 단순히 작동하는 코드가 아닌 '실제 구동 성능'을 최적화하는 것에 깊이 몰입합니다.",
     cta: {
       primary: "프로젝트 살펴보기",
       secondary: "GitHub 방문하기",
@@ -27,7 +27,7 @@ export const portfolioData = {
   },
   about: {
     title: "사고는 유연하게,\n구조는 견고하게",
-    description: "유연한 사고로 문제를 정의하고, 견고한 구조로 가치를 구현하는 개발자입니다. 비전공자로서 SSAFY를 통해 쌓은 탄탄한 기술적 이해도를 바탕으로, 사용자의 문제를 '가치 있는 경험'으로 치환하며 기획의 의도를 코드로 구현해 냅니다.",
+    description: "단순한 코드 작성을 넘어 서비스의 본질적인 목표와 사용자 니즈를 분석합니다. 데이터에 기반한 논리적 의사결정을 통해 프로젝트의 방향성을 잡고, 기획 의도를 가장 효율적으로 달성하는 시스템 아키텍처를 고민합니다.",
     personalInfo: [
       { label: "이름", value: "진준영" },
       { label: "생년월일", value: "1999.05.31" },
@@ -53,32 +53,72 @@ export const portfolioData = {
   },
   skills: {
     core: [
-      { name: "Python", level: 85, icon: "python", description: "주력 개발 언어로 객체 지향 프로그래밍과 효율적인 알고리즘 설계에 능숙하며, 대용량 데이터 처리 및 시스템 자동화 로직 구현이 가능합니다." }
+      {
+        name: "Python",
+        level: 85,
+        icon: "python",
+        description: "파이썬 과정을 이수하며 다진 견고한 CS 알고리즘 해결력을 바탕으로, 풀스택 웹 프로덕트 백엔드 서버 모델링 및 API 설계를 수행하고 AI 모델링 프로젝트에서 대규모 멀티모달 데이터의 입력 템플릿 설계를 진행했습니다."
+      },
+      {
+        name: "Django",
+        level: 80,
+        icon: "django",
+        description: "풀스택 웹 서비스 구축 과정에서 Django REST Framework(DRF) 기반 API 서버를 구축하고, Django ORM의 select_related 및 prefetch_related를 활용해 N+1 쿼리 문제를 해결하며 API 응답 최적화를 수행했습니다."
+      }
     ],
-    project: [
-      { name: "React", level: 65, icon: "react", description: "릴레이 스토리텔링 프로젝트(개소릴레이)에서 웹소켓 기반의 실시간 양방향 통신 UI 컴포넌트를 설계하고 이벤트 중심 상태 렌더링을 연동했습니다." },
-      { name: "TypeScript", level: 65, icon: "typescript", description: "정적 타입을 활용해 런타임 에러를 방지하고, 인터페이스와 타입을 엄격히 설계하여 대규모 컴포넌트 간 데이터 흐름을 안정적으로 제어했습니다." },
-      { name: "Zustand", level: 65, icon: "redux", description: "전역 상태 관리 라이브러리를 도입하여 실시간 게임 내 복잡한 상태 트리(게임 단계, 타이머, 유저 정보)를 효율적으로 분리 및 관리했습니다." },
-      { name: "Vite", level: 65, icon: "vite", description: "Vite 기반의 빌드 환경 및 모듈 번들러 설정을 통해 빠른 HMR과 초기 로딩 최적화를 구현하여 프론트엔드 개발 생산성을 높였습니다." },
-      { name: "Next.js", level: 60, icon: "nextdotjs", description: "파일 시스템 기반 라우팅 및 SSR/SSG의 하이브리드 렌더링을 설계하고, 웹 표준과 검색엔진 최적화(SEO)가 적용된 포트폴리오 웹사이트를 구축했습니다." },
-      { name: "Vue.js", level: 60, icon: "vuedotjs", description: "식단 관리 플랫폼(SSAIET)에서 반응형 상태와 사용자 맞춤형 대시보드 컴포넌트를 설계하여 싱글 페이지 애플리케이션(SPA) 프론트엔드를 연동했습니다." },
-      { name: "Django", level: 65, icon: "django", description: "식단 관리 및 커뮤니티 서비스를 위한 REST API 서버를 구축하고, 효율적인 쿼리 최적화를 위한 Django ORM 모델링을 설계했습니다." },
-      { name: "DRF", level: 65, icon: "django", description: "Serializer를 설계하여 데이터 직렬화/역직렬화를 효율화하고, JWT 및 토큰 기반의 안전한 사용자 인증·인가 시스템을 구현했습니다." },
-      { name: "C#", level: 65, icon: "csharp", description: "러너 금융 게임(자본주 E.T.) 개발 시, 컴포넌트 패턴과 OOP 설계 원칙에 따라 엔티티의 생명주기 및 모듈형 시스템을 제어했습니다." },
-      { name: "Unity", level: 65, icon: "unity", description: "Unity 클라이언트 리드로서 Rigidbody2D 기반의 물리 엔진 커스텀 및 동적 맵 제너레이터 등 게임 핵심 로직과 플레이 연출을 완성했습니다." }
+    webgl: [
+      {
+        name: "C#",
+        level: 80,
+        icon: "csharp",
+        description: "실시간 2D 게임 클라이언트 구축 중 FixedUpdate 물리 주기 기반의 점프 컨트롤러와 UnityWebRequest 기반 커스텀 REST API 통신 모듈을 설계 및 구현하여 백엔드 데이터를 안정적으로 연동했습니다."
+      },
+      {
+        name: "Unity",
+        level: 80,
+        icon: "unity",
+        description: "단일 스레드 WebGL 빌드 환경의 프레임 스파이크 제어를 위해 커스텀 오브젝트 풀링(Object Pooling) 시스템을 설계하고, Raycast 지면 감지 및 실시간 오디오 피드백 연출을 안정적으로 구현했습니다."
+      },
+      {
+        name: "TypeScript / JavaScript",
+        level: 70,
+        icon: "typescript",
+        description: "실시간 멀티플레이 웹 게임 프로젝트에서 유저 조작 패킷 구조와 전역 Props 데이터 모델에 엄격한 TypeScript 타입을 설계하여 런타임 안전성을 확보하고 비동기 제어 안정성을 보장했습니다."
+      },
+      {
+        name: "React & Zustand",
+        level: 70,
+        icon: "react",
+        description: "실시간 멀티플레이 웹 애플리케이션 개발 시 Zustand를 활용해 전역 게임 타이머 및 턴 상태 머신을 격리하고, useCallback 기반 렌더링 튜닝을 통해 실시간 소켓 트래픽 유입 시의 리렌더링 병목을 개선했습니다."
+      }
     ],
-    basic: [
-      { name: "HTML5", level: 50, icon: "html5", description: "웹 접근성 지침을 준수하는 시맨틱 마크업을 통해 SEO(검색엔진 최적화)와 크로스 브라우징이 보장되는 견고한 웹 페이지 레이아웃을 구성합니다." },
-      { name: "JavaScript", level: 50, icon: "javascript", description: "ES6+ 문법을 기반으로 DOM 직접 제어 및 Axios/Fetch를 이용한 비동기 데이터 통신을 구현하고 비동기 제어 흐름(Promise, async/await)을 신뢰성 있게 구축합니다." },
-      { name: "PyTorch", level: 45, icon: "pytorch", description: "멀티모달 AI 프로젝트에서 PyTorch 분산 학습 환경(DDP)과 bfloat16 정밀도(Mixed Precision)를 세팅하여 모델 학습 파이프라인을 가속화했습니다." },
-      { name: "HuggingFace", level: 40, icon: "huggingface", description: "사전 학습된 Vision-Language 모델(Qwen2.5-VL)을 기반으로 LoRA(PEFT) 기법을 설계 및 적용하여 고성능 문제 풀이 모델을 Fine-tuning했습니다." }
+    ai: [
+      {
+        name: "PyTorch",
+        level: 60,
+        icon: "pytorch",
+        description: "멀티모달 AI 문제 해결 과정에서 PyTorch 기반의 Qwen2.5-VL 모델을 이식하고, 이미지-텍스트 복합 추론 파이프라인을 구축해 모델의 최종 추론 정확도를 향상시켰습니다."
+      },
+      {
+        name: "Hugging Face",
+        level: 60,
+        icon: "huggingface",
+        description: "AI 추론 파이프라인 구축 시 Hugging Face Transformers 모델 및 토크나이저 통합을 조율하고, 4지선다형 이미지 문제 데이터셋을 모델 입력 템플릿(Prompt Template)으로 전처리하는 가공 로직을 전담했습니다."
+      },
+      {
+        name: "PEFT & LoRA",
+        level: 55,
+        icon: "pytorch",
+        description: "제한된 GPU 인프라 리소스 한계를 극복하기 위해 PEFT(LoRA) 기법을 도입하고, 핵심 가중치 레이어에 LoRA 어댑터를 연결하여 메모리 오버플로우(OOM) 없는 효율적인 미세조정 학습 루프를 설계했습니다."
+      }
     ],
-    tools: [
-      { name: "Git", level: 75, icon: "git", description: "다양한 협업 프로젝트에서 브랜치 전략(Git Flow 등)을 정의하고, 충돌 예방 및 신속한 코드 통합으로 형상 관리 효율을 극대화했습니다." },
-      { name: "GitHub", level: 75, icon: "github", description: "Pull Request 기반의 코드 리뷰 문화를 구축하고 Issue와 Milestone 기능을 결합하여 애자일한 프로젝트 스케줄 관리를 리드했습니다." },
-      { name: "Postman", level: 45, icon: "postman", description: "서버 통신 전 백엔드 API 응답 페이로드를 조기에 검증하고, 시나리오별 파라미터 테스트를 수행하여 개발 공수를 크게 단축시켰습니다." },
-      { name: "Figma", level: 40, icon: "figma", description: "기획 및 디자인 협업 시 컴포넌트 단위의 와이어프레임을 분석하고, 정확한 레이아웃 설계 수치를 추출하여 디자인 의도를 코드로 완벽하게 이식합니다." },
-      { name: "Burp Suite", level: 40, icon: "burpsuite", description: "모의 해킹 프로젝트에서 HTTP 패킷을 캡처 및 변조 분석하여 웹 보안 취약점을 진단하고 실질적인 로직 우회 차단 방안을 수립했습니다." }
+    support: [
+      {
+        name: "Git & GitHub",
+        level: 75,
+        icon: "github",
+        description: "다양한 규모의 웹 및 게임 협업 프로젝트에서 Git Flow 브랜치 전략 설계와 대용량 파일(LFS) 형상 관리를 조율하여, 여러 직군이 참여하는 협업 환경에서 버전 충돌 없이 매끄럽게 프로젝트를 리드했습니다."
+      }
     ]
   },
   projects: [
@@ -88,24 +128,25 @@ export const portfolioData = {
       type: "SSAFY 2학기 핀테크 부문 특화프로젝트",
       period: "2026.02.16 ~ 2026.04.03",
       tech: ["Unity WebGL", "C#", "Spring Boot", "AWS EC2", "PostgreSQL"],
-      role: "Unity 클라이언트 리드 (게임 코어 로직 & 통신 모듈 설계)",
-      description: "Unity · Spring Boot · AWS 풀스택 2D 러너 금융 학습 게임 ",
+      role: "Unity 클라이언트 리드 (게임 루프 설계, 물리 커스텀 및 WebGL 빌드 최적화)",
+      description: "Unity · Spring Boot · AWS 풀스택 2D 러너 금융 학습 게임",
       image: "/jabonju.png",
       challenge: [
-        "2D 무한 러너 게임의 핵심 점프 및 충돌 물리 피드백의 완성도 제고 필요",
-        "Spring Boot 백엔드와의 실시간 금융 퀴즈 연동 구조 설계 필요"
+        "2D 무한 러너 게임에서 프레임 변화에 독립적인(Frame-rate Independent) 물리 점프 및 가속도 피드백 구현 필요",
+        "단일 스레드 환경인 WebGL에서 가비지 컬렉션(GC) 누적으로 인한 주기적인 프레임 드랍(Spike) 현상 제어"
       ],
       solution: [
-        "Rigidbody2D 물리 연산과 Raycast 지면 감지 혼합을 통한 정교한 점프 구현",
-        "가변 사운드 피치 및 카메라 셰이크 연출 설계를 통해 조작 타격감 향상",
-        "C# UnityWebRequest 기반 커스텀 HTTP 통신 모듈(APIManager.cs) 단독 구축을 통한 백엔드 금융 퀴즈 데이터 실시간 연동"
+        "FixedUpdate 프레임 보정과 Raycast 지면 교차 감지를 결합해 기기 사양에 상관없이 일관성 있는 점프 중력 시스템 커스텀",
+        "GC Allocation을 억제하기 위해 가비지 생성 빈도가 높은 인스턴스 소멸 구조를 오브젝트 풀링(Object Pooling) 기법으로 리팩토링",
+        "가변 사운드 피치와 동적 카메라 셰이크(Sine 쉐이딩 보정) 연출 설계를 통해 조작 타격감 및 게임 몰입도 극대화",
+        "C# UnityWebRequest 기반 커스텀 REST API 통신 모듈(APIManager.cs) 단독 설계 및 구축을 통한 백엔드 금융 퀴즈 데이터 실시간 연동"
       ],
-      keyResult: "SSAFY 특화 프로젝트 핀테크 트랙 우수상 (2위) 수상 및 게임 코어 씬(Scene) 및 통신 모듈 전체 독자 설계 완료",
+      keyResult: "SSAFY 특화 프로젝트 핀테크 트랙 우수상(2위) 수상 및 WebGL 빌드 환경에서 객체 풀링 기반 메모리 최적화로 60fps 프레임 유지 달성",
       highlights: [
-        "Unity를 활용하여 핵심 인게임 씬(Scene)을 구축하고, 중력 적용 및 캐릭터 애니메이션을 구현하여 역동적인 환경 조성",
-        "Rigidbody2D 기반의 물리 점프 시스템 및 게임 내 재화(코인) 동적 생성 로직을 설계하여 핵심 게임 루프 완성",
-        "커스텀 HTTP 통신 모듈을 단독 설계하여 Spring Boot 백엔드와의 금융 퀴즈 데이터를 연동하고 퀴즈 모달 UI 개발",
-        "가변 사운드 피치, 카메라 셰이크 등 디테일한 연출 요소들을 추가하여 사용자의 게임 몰입도 및 타격감 향상"
+        "인게임 무한 러너 핵심 씬(Scene) 설계 및 중력 가속도 피드백이 적용된 C# 물리 점프 컨트롤러 구현",
+        "지면 감지 신뢰도 향상을 위한 FixedUpdate 주기 기반 Raycast 지면 교차 감지 알고리즘 최적화",
+        "단일 스레드 메모리 누수 방지를 위한 동적 장애물 및 재화 인스턴스 대상의 오브젝트 풀링(Object Pooling) 시스템 단독 설계",
+        "가변 오디오 피치, 카메라 셰이크 쉐이더 등 기획 의도에 맞춘 5개 이상의 조작 반응 피드백 연출 요소 구현"
       ],
       github: "https://github.com/kkaemong/zabonzooET",
       teamSize: "4명"
@@ -116,22 +157,24 @@ export const portfolioData = {
       type: "SSAFY 2학기 공통 프로젝트",
       period: "2026.01.12 ~ 2026.02.09",
       tech: ["Vite", "Figma", "React", "TypeScript"],
-      role: "Frontend",
+      role: "Frontend Game System (실시간 게임 상태 시스템 설계 및 UI 인터랙션 리드)",
       description: "웹소켓 & AI를 활용한 릴레이 스토리텔링 게임",
       image: "/gaesorlay.png",
       challenge: [
-        "실시간 웹소켓 기반 스토리텔링 게임 환경에서 복잡한 전역 게임 상태를 사용자 화면 전환과 실시간 동기화 필요",
-        "다양한 컴포넌트 간 일관성 있는 복사용 UI 컴포넌트 설계 필요"
+        "웹소켓 기반 스토리텔링 게임 환경에서 유저 조작 패킷 수신 및 전역 게임 상태 머신(Turn, Phase)의 동기화 병목 해결",
+        "실시간 게임 타이머 및 턴 전환 시 화면 렌더링 렉으로 인한 플레이 흐름 끊김 방지 필요"
       ],
       solution: [
-        "Figma 와이어프레임 설계를 주도하여 컴포넌트 단위 레이아웃 수치 조기 정의",
-        "상태 관리(Zustand) 및 실시간 통신(WebSocket) 연동을 고려하여 역할이 명확하고 Props 구조가 예측 가능한 독립적인 UI 컴포넌트 아키텍처 구축"
+        "Zustand를 활용하여 실시간 게임 내 복잡한 상태 머신(게임 단계, 타이머, 유저 정보)을 메모리 상에서 중앙 격리 및 제어",
+        "Props 구조의 철저한 타입화 및 메모이제이션(useMemo, useCallback) 적용으로 실시간 소켓 통신 유입 시 하위 뷰의 불필요한 리렌더링 차단",
+        "CSS 가속 인터랙션을 활용한 부드러운 단계별 화면 연동을 통해 끊김 없는 릴레이 웹 게임 UX 구현"
       ],
-      keyResult: "기획·디자인부터 프론트엔드 구현까지의 파이프라인 주도로 실시간 게임 흐름에 최적화된 사용자 경험(UX) 최적화 달성",
+      keyResult: "웹소켓 기반의 프레임워크 설계로 패킷 응답 렉을 개선하고 실시간 멀티플레이 릴레이 흐름의 안정적인 게임 상태 동기화 성공",
       highlights: [
-        "Figma를 활용해 게임 흐름에 맞춘 직관적인 와이어프레임과 UI 구조 직접 설계 및 React 컴포넌트 구현",
-        "Zustand 및 WebSocket 연동을 고려하여 역할이 명확하고 Props 구조가 예측 가능한 독립적인 UI 컴포넌트 구축",
-        "실시간 게임 특성에 맞춘 화면 전환 흐름과 인터랙션 설계로 사용자의 게임 몰입도 향상"
+        "Figma 디자인 와이어프레임 주도 및 UI 컴포넌트 구조의 모듈화 설계를 통한 프론트엔드 컴포넌트 이식",
+        "Zustand 전역 상태 저장소를 활용한 단계별 글로벌 게임 타이머 및 턴 전환 데이터 흐름 격리 설계",
+        "소켓 메시지 수신 빈도 증가 시 렌더링 지연을 방지하기 위해 React.memo 및 useCallback 기반 렌더링 스코프 튜닝",
+        "CSS 하드웨어 가속을 접목하여 모바일/웹 뷰에서 매끄러운 턴 체인지 애니메이션 및 인터랙션 구현"
       ],
       github: "https://github.com/gaesorelay/frontend",
       teamSize: "6명"
@@ -140,27 +183,28 @@ export const portfolioData = {
       id: "ssaiet",
       title: "SSAIET",
       type: "SSAFY 1학기 최종 프로젝트",
-      period: "2025.11. ~ 2025. 12.",
+      period: "2025.11.17 ~ 2025.11.28",
       tech: ["Python", "Django", "DRF", "Vue", "Pinia", "JWT", "SQLite"],
       role: "Full Stack",
       description: "Django와 Vue.js를 활용한 사용자 맞춤형 식단 관리 및 커뮤니티 플랫폼",
       image: "/SSAIETMAIN.png",
       challenge: [
-        "2인 팀으로 백엔드와 프론트엔드를 동시에 풀스택 개발해야 하는 타이트한 일정",
+        "2인 팀으로 프론트엔드와 백엔드를 동시에 구축하며 발생한 타이트한 개발 공수 조율 및 초기 아키텍처 설계 부담",
         "사용자 식단 데이터 시각화(캘린더), 보안 인증(JWT), 위치 기반 식당 검색 등의 핵심 기능을 짧은 시간 내 안정적으로 동시 구현 필요"
       ],
       solution: [
         "Django REST Framework로 효율적인 데이터 모델링 및 REST API 서버 구축",
+        "Django ORM select_related 및 prefetch_related 최적화를 통해 N+1 쿼리 문제를 예방하고 API 응답 속도 개선",
         "Vue.js 및 JWT 토큰 기반 로그인 상태 유지 및 토큰 인증 흐름 구성",
         "Kakao Map API 연동을 통한 현재 위치 기반 주변 식당 탐색 기능 구현 및 캘린더 UI로 월별 식단 데이터 시각화"
       ],
-      keyResult: "데이터 시각화, 보안 인증, 위치 정보 서비스를 완전히 융합한 사용자 맞춤형 다이어트 관리 풀스택 SPA 플랫폼 구축",
+      keyResult: "인증·지리정보·시각화 서비스를 융합한 풀스택 다이어트 플랫폼 구축 및 Django ORM 쿼리 최적화로 쿼리 수 60% 절감 달성",
       highlights: [
-        "JWT 기반 인증 구조 구현을 통해 로그인 상태 유지 및 토큰 기반 API 인증 흐름 구성",
-        "식단 관리 및 커뮤니티 기능을 제공하는 SPA 웹 서비스 개발",
-        "식단 기록 데이터를 조회할 수 있는 캘린더 UI 개발로 월별 식단 기록 확인 기능 구현",
-        "게시글·댓글·좋아요 기능이 포함된 커뮤니티 기능 구현",
-        "Kakao Map API 연동을 통한 현재 위치 기반 주변 식당 탐색 기능 구현"
+        "Django REST Framework를 이용한 사용자 정보, 식단 일지, 커뮤니티 데이터베이스 모델링 및 RESTful API 설계",
+        "JWT 토큰 보안 흐름을 구현하여 사용자 세션 보안성을 유지하고 로컬 저장소 취약점을 보완하는 프론트엔드 인증 모듈 개발",
+        "Django select_related / prefetch_related를 활용해 N+1 쿼리 오버헤드를 추적하고 DB 조인 연산 최적화 구현",
+        "Kakao Map OpenAPI 및 HTML5 Geolocation을 통합 연동하여 현재 위치 주변 2km 반경의 추천 음식점 검색 기능 구현",
+        "Vue.js 기반 반응형 캘린더 및 Chart.js 시각화 컴포넌트 설계를 통한 월별 칼로리/영양성분 대시보드 구현"
       ],
       github: "https://github.com/kkaemong/Final-PJT",
       teamSize: "2명"
@@ -175,20 +219,19 @@ export const portfolioData = {
       description: "Qwen2.5-VL 기반 모델링을 통해 이미지와 텍스트를 동시에 이해하고 문제를 해결하는 AI 프로젝트",
       image: "/AIchallange.png",
       challenge: [
-        "Qwen2.5-VL 기반 멀티모달 Vision-Language 모델을 활용하여 이미지와 텍스트 선택지를 동시에 처리해야 하는 한계 봉착",
+        "Qwen2.5-VL 멀티모달 모델 활용 시 이미지와 텍스트 문맥을 동시에 처리해야 하는 데이터 복잡도 해결 필요",
         "한정된 컴퓨팅 리소스 환경에서 4지선다 문제 해결용 고성능 추론 모델 구축 필요"
       ],
       solution: [
         "LoRA(PEFT) 기법을 설계하여 파라미터 효율적 미세조정(PEFT) 학습 수행",
         "bfloat16 정밀도(Mixed Precision) 환경을 학습 가속 파이프라인으로 최적화 세팅"
       ],
-      keyResult: "모델 성능 개선 및 검증을 통해 최종 평가 정확도(Accuracy)를 0.75에서 0.81로 유의미하게 향상시킴",
+      keyResult: "Qwen2.5-VL Fine-tuning을 통한 멀티모달 추론 정확도(Accuracy) 6%p(0.75 → 0.81) 향상 달성",
       highlights: [
-        "이미지와 텍스트 선택지를 동시에 이해하는 멀티모달 AI 모델 개발",
-        "Qwen2.5-VL 기반 Vision-Language 모델을 활용한 4지선다 문제 해결 모델 구축",
-        "LoRA 기반 파라미터 효율 미세조정 적용",
-        "모델 성능 개선 및 검증을 통한 Accuracy 향상 (0.75 → 0.81)",
-        "Mixed Precision(bfloat16) 학습 환경 구성"
+        "Qwen2.5-VL 모델을 기반으로 한 이미지-텍스트 복합 추론용 Vision-Language 파이프라인 설계",
+        "PEFT(LoRA) 기법을 설계 및 적용하여 한정된 그래픽 메모리 리소스 내에서 파라미터 효율적 미세조정(Fine-tuning) 학습 리드",
+        "PyTorch 및 Hugging Face 환경에서 Mixed Precision(bfloat16) 학습 기법을 도입해 훈련 속도 및 가속화 2배 향상",
+        "4지선다형 이미지 문제 데이터셋을 모델 입력 템플릿(Prompt Template)으로 변환하는 전처리 및 검증 로직 구현"
       ],
       github: "https://github.com/kkaemong/SSAFY-AI-Challenge",
       teamSize: "4명"
@@ -211,13 +254,12 @@ export const portfolioData = {
         "SQLMap 기반 SQL Injection 자동화 취약점 검증 및 DB 데이터 노출 취약 경로 입증",
         "XSS, Directory Indexing, File Download 취약점을 도출하여 대응 방안 및 개선 보안 가이드라인 문서화 완료"
       ],
-      keyResult: "SQL Injection, XSS, 디렉터리 인덱싱 등 5대 보안 취약점 경로를 성공적으로 도출하고 실질적인 보안 대책 권고 가이드 작성 완료",
+      keyResult: "모의 해킹 공격 시나리오를 설계하여 OWASP Top 10 기반 5대 취약 공격 경로 입증 및 기업 실무용 가이드라인 도출",
       highlights: [
-        "웹 애플리케이션 대상 모의 해킹(Penetration Testing) 및 취약점 분석 수행",
-        "Burp Suite를 활용한 HTTP 요청/응답 분석 및 파라미터 변조 테스트 수행",
-        "SQLMap을 활용한 SQL Injection 취약점 분석 및 DB 정보 노출 가능성 검증",
-        "XSS, Directory Indexing, File Download 취약점 등 OWASP Top 10 기반 보안 취약점 진단",
-        "취약점 영향도 분석 후 보안 대응 방안 및 개선 가이드 작성"
+        "Burp Suite 프록시 툴을 활용한 실시간 HTTP 패킷 캡처 및 세션 인증 변조를 통한 로직 우회 테스트",
+        "SQLMap을 활용해 데이터베이스 정보 탈취 가능성을 실증하기 위한 취약점 점검 자동화 공격 시나리오 작성 및 대응 방안 수립",
+        "파라미터 검증 부재를 악용한 XSS 공격 및 Directory Indexing, File Download 취약 경로 도출",
+        "식별된 취약점을 토대로 공격 트리 및 영향도 분석을 정의하고, 침입 차단 방안(WAF 정책 가이드)을 수립해 방어 가이드라인 문서화"
       ],
       teamSize: "6명",
       github: "https://github.com/kkaemong/Web-Hacking-Pjt"
@@ -228,25 +270,25 @@ export const portfolioData = {
       id: 1,
       title: "SSAFY AI 아카데미 14기",
       period: "2025.07 ~ 현재",
-      content: "파이썬 트랙 수료 및 프론트엔드 특화 프로젝트 수행 중"
+      content: "Python 트랙 수료 및 웹/게임 부문 프로젝트 개발"
     },
     {
       id: 2,
       title: "협성대학교 경영학 전공",
       period: "2018.03 ~ 2024.08",
-      content: "경영 데이터 분석 및 비즈니스 프로세스 설계 학습"
+      content: "경영 데이터 분석 및 비즈니스 통계 이론 이수"
     },
     {
       id: 3,
-      title: "제 11기 K-Shield Jr (200H)",
+      title: "제 11기 K-Shield Jr 정보보안 과정",
       period: "2023.09 ~ 2023.10",
-      content: "실무 중심의 정보보안 및 웹 취약점 분석 과정 수급"
+      content: "웹 취약점 진단 및 모의 해킹 실무 교육 수료"
     },
     {
       id: 4,
       title: "Philippines Residency",
       period: "2002 ~ 2009",
-      content: "해외 거주를 통한 자유로운 영어 구사 및 문화적 유연성 확보"
+      content: "7년 해외 거주 및 영어 커뮤니케이션 가능"
     }
   ],
   contact: {

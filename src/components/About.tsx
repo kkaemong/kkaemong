@@ -32,12 +32,12 @@ export default function About() {
             <h2 className="text-3xl md:text-5xl print:text-3xl font-display font-extrabold text-primary mb-8 print:mb-4 leading-tight whitespace-pre-line tracking-tight">
               {about.title}
             </h2>
-            <p className="text-lg md:text-xl print:text-base text-slate-700 leading-relaxed font-semibold whitespace-pre-line max-w-4xl break-keep">
+            <p className="text-lg md:text-xl print:text-base text-slate-800 leading-relaxed font-semibold whitespace-pre-line max-w-4xl break-keep">
               {about.description}
             </p>
           </motion.div>
         </div>
-
+ 
         {/* 3 Core Value Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-8 print:gap-4">
           {about.points.map((point, i) => {
@@ -55,7 +55,7 @@ export default function About() {
                   <Icon className="w-8 h-8 print:w-5 print:h-5" />
                 </div>
                 <h3 className="text-2xl print:text-lg font-bold text-primary mb-4 print:mb-2 group-hover:text-accent transition-colors">{point.title}</h3>
-                <p className="text-slate-600 leading-relaxed text-lg print:text-sm font-medium whitespace-pre-line break-keep">
+                <p className="text-slate-800 leading-relaxed text-lg print:text-sm font-semibold whitespace-pre-line break-keep">
                   {point.content}
                 </p>
               </motion.div>

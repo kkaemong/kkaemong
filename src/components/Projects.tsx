@@ -118,7 +118,7 @@ export default function Projects() {
                     )}
                   </div>
 
-                  <p className="text-slate-600 text-lg print:text-sm leading-relaxed font-medium mb-4 print:mb-2">
+                  <p className="text-slate-800 text-lg print:text-sm leading-relaxed font-semibold mb-4 print:mb-2">
                     {project.description}
                   </p>
 
@@ -134,7 +134,7 @@ export default function Projects() {
 
                   <div className="flex flex-wrap gap-3">
                     {project.tech.map(t => (
-                      <span key={t} className="text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-xl transition-colors">
+                      <span key={t} className="text-[11px] font-bold text-slate-700 uppercase tracking-wider bg-slate-100/70 border border-slate-200/60 px-3 py-1.5 rounded-xl transition-colors">
                         {t}
                       </span>
                     ))}

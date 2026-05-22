@@ -39,7 +39,7 @@ export default function Experience() {
           </p>
         </motion.div>
 
-        <div className="max-w-5xl mx-auto space-y-10 print:space-y-4">
+        <div className="max-w-5xl mx-auto space-y-8 print:space-y-4">
           {experience.map((item, i) => (
             <motion.div
               key={item.id}
@@ -47,22 +47,27 @@ export default function Experience() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group flex flex-col md:flex-row md:items-center gap-12 print:gap-4 p-12 print:p-4 print:pb-6 rounded-[2rem] print:rounded-none bg-white border border-slate-100 print:border-0 print:border-b shadow-sm print:shadow-none hover:shadow-xl hover:border-accent/20 transition-all duration-500"
+              className="group flex flex-col md:flex-row md:items-center gap-6 md:gap-8 print:gap-4 p-8 md:p-10 print:p-4 print:pb-6 rounded-[2.5rem] print:rounded-none bg-white border border-slate-100 print:border-0 print:border-b shadow-sm print:shadow-none hover:shadow-xl hover:border-accent/20 transition-all duration-500"
             >
-              <div className="flex items-center gap-8 print:gap-4 md:w-[35%] print:w-[30%]">
+              {/* Left Column (Logo & Title) */}
+              <div className="flex items-center gap-6 print:gap-4 md:w-[38%] print:w-[30%] shrink-0">
                 <div className="w-14 h-14 rounded-2xl bg-accent/5 text-accent flex items-center justify-center shrink-0 group-hover:bg-accent group-hover:text-white group-hover:rotate-6 transition-all duration-500">
                   {getIcon(item.id)}
                 </div>
                 <div>
-                  <span className="text-accent text-xs font-bold font-display uppercase tracking-wider bg-accent/5 px-2 py-1 rounded mb-2 inline-block">
+                  <span className="text-accent text-[11px] font-bold font-display uppercase tracking-wider bg-accent/5 px-2.5 py-1 rounded-md mb-2 inline-block leading-none">
                     {item.period}
                   </span>
-                  <h3 className="text-base font-bold text-primary transition-colors group-hover:text-accent">{item.title}</h3>
+                  <h3 className="text-lg font-bold text-primary transition-colors group-hover:text-accent leading-snug break-keep md:whitespace-nowrap">{item.title}</h3>
                 </div>
               </div>
-
-              <div className="md:flex-1 md:border-l-[1.5px] print:border-0 md:pl-12 print:pl-4 border-slate-100">
-                <p className="text-slate-600 leading-relaxed font-medium whitespace-pre-line">
+ 
+              {/* Middle Vertical Divider Line (Elegant & Perfectly Centered) */}
+              <div className="hidden md:block w-[1.5px] h-10 bg-slate-200/80 self-center" />
+ 
+              {/* Right Column (Content - Vertically Centered with Left Column) */}
+              <div className="flex-grow md:pl-6 print:pl-4 self-stretch flex items-center">
+                <p className="text-slate-800 leading-relaxed font-semibold whitespace-pre-line text-[15px] sm:text-base">
                   {item.content}
                 </p>
               </div>

@@ -66,7 +66,7 @@ const SkillBadge = ({ name, level, icon, description, index }: { name: string; l
         </div>
         
         {description && (
-          <p className="text-sm text-slate-600 leading-relaxed font-medium break-keep mt-1">
+          <p className="text-sm text-slate-800 leading-relaxed font-semibold break-keep mt-1">
             {description}
           </p>
         )}
@@ -107,10 +107,10 @@ export default function Skills() {
           </p>
         </motion.div>
 
-        {/* 2-Column Grid Layout for Horizontal View */}
+        {/* 4-Column Category Layout for Sleek Game Developer Branding */}
         <div className="flex flex-col gap-10 print:gap-6">
           
-          {/* 1. Core Category */}
+          {/* 1. Core Engine & Language */}
           {s.core && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -122,7 +122,7 @@ export default function Skills() {
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500">
                   <span className="font-display font-black text-lg">01</span>
                 </div>
-                <h3 className="text-2xl font-display font-black text-primary">Core Strength</h3>
+                <h3 className="text-2xl font-display font-black text-primary">Core Engine & Language</h3>
               </div>
               <motion.div
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
@@ -138,8 +138,8 @@ export default function Skills() {
             </motion.div>
           )}
 
-          {/* 2. Project Experience */}
-          {s.project && (
+          {/* 2. WebGL & Real-time Client */}
+          {s.webgl && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -150,7 +150,7 @@ export default function Skills() {
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-500">
                   <span className="font-display font-black text-lg">02</span>
                 </div>
-                <h3 className="text-2xl font-display font-black text-primary">Project Experience</h3>
+                <h3 className="text-2xl font-display font-black text-primary">WebGL & Real-time Client</h3>
               </div>
               <motion.div
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
@@ -159,15 +159,15 @@ export default function Skills() {
                 viewport={{ once: true }}
                 variants={{ show: { transition: { staggerChildren: 0.05 } } }}
               >
-                {s.project.map((skill: any, i: number) => (
+                {s.webgl.map((skill: any, i: number) => (
                   <SkillBadge key={skill.name} {...skill} index={i} />
                 ))}
               </motion.div>
             </motion.div>
           )}
 
-          {/* 3. Familiar / Basic */}
-          {s.basic && (
+          {/* 3. AI & Deep Learning */}
+          {s.ai && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -178,7 +178,7 @@ export default function Skills() {
                 <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500">
                   <span className="font-display font-black text-lg">03</span>
                 </div>
-                <h3 className="text-2xl font-display font-black text-primary">Familiar</h3>
+                <h3 className="text-2xl font-display font-black text-primary">AI & Deep Learning</h3>
               </div>
               <motion.div
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
@@ -187,15 +187,15 @@ export default function Skills() {
                 viewport={{ once: true }}
                 variants={{ show: { transition: { staggerChildren: 0.05 } } }}
               >
-                {s.basic.map((skill: any, i: number) => (
+                {s.ai.map((skill: any, i: number) => (
                   <SkillBadge key={skill.name} {...skill} index={i} />
                 ))}
               </motion.div>
             </motion.div>
           )}
 
-          {/* 4. Tools Category */}
-          {s.tools && (
+          {/* 4. Support & Collaboration */}
+          {s.support && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -206,7 +206,7 @@ export default function Skills() {
                 <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
                   <span className="font-display font-black text-lg">04</span>
                 </div>
-                <h3 className="text-2xl font-display font-black text-primary">Tools & DevOps</h3>
+                <h3 className="text-2xl font-display font-black text-primary">Support & Collaboration</h3>
               </div>
               <motion.div
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
@@ -215,7 +215,7 @@ export default function Skills() {
                 viewport={{ once: true }}
                 variants={{ show: { transition: { staggerChildren: 0.05 } } }}
               >
-                {s.tools.map((skill: any, i: number) => (
+                {s.support.map((skill: any, i: number) => (
                   <SkillBadge key={skill.name} {...skill} index={i} />
                 ))}
               </motion.div>
