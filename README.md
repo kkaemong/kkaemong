@@ -8,10 +8,9 @@
 
 <br/>
 
-### 📊 Most Used Languages
-- **Python** (40%) ![Python Progress](https://geps.dev/progress/40?dangerColor=3776AB&warningColor=3776AB&successColor=3776AB)
-- **C#** (35%) ![C# Progress](https://geps.dev/progress/35?dangerColor=239120&warningColor=239120&successColor=239120)
-- **TypeScript** (25%) ![TypeScript Progress](https://geps.dev/progress/25?dangerColor=3178C6&warningColor=3178C6&successColor=3178C6)
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=compact&langs_count=6&theme=tokyonight&hide=html,css" alt="Most Used Languages" />
+</div>
 
 ---
 
