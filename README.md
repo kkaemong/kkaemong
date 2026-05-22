@@ -1,4 +1,10 @@
 <div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=JIN%20JUN%20YOUNG&fontSize=70&theme=tokyonight" width="100%" alt="JIN JUN YOUNG header" />
+</div>
+
+<br/>
+
+<div align="center">
   <h2>💡 사고는 유연하게, 구조는 견고하게</h2>
   <p>Python을 주무기로 다져진 깊이 있는 CS/알고리즘 기본기 위에 C#, Unity 게임 클라이언트 구현력을 얹은 소프트웨어 엔지니어 <b>진준영</b>입니다.</p>
   <p>SSAFY 특화 프로젝트에서 Unity WebGL 60fps 고정 최적화 및 실시간 소켓 동기화 루프를 설계하며,<br>단순히 작동하는 코드가 아닌 '실제 구동 성능'을 최적화하는 것에 깊이 몰입합니다.</p>
@@ -8,19 +14,17 @@
 
 ---
 
-## 🧮 Core Engine & Algorithm Solving
+## 🧮 Core Engine & Git Activity Stats
 
 <table width="100%">
   <tr>
-    <!-- 좌측 열: 프로젝트 주무기 언어 (C#, TypeScript) 공식 도넛 위젯 -->
+    <!-- 좌측 2열: 준영님의 정예 사용 언어 compact 위젯 (Java/Kotlin 숨김 처리 완벽!) -->
     <td width="50%" align="center" valign="middle">
-      <h4>🎮 Project Development Languages</h4>
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&theme=tokyonight&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,python&layout=donut&cache_seconds=1800" width="100%" alt="Project Languages" />
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=compact&theme=tokyonight&hide=java,kotlin,go,c%2B%2B,c,html,css&cache_seconds=1800" width="100%" alt="Top Languages" />
     </td>
-    <!-- 우측 열: 알고리즘 주무기 언어 (Python) 공식 도넛 위젯 -->
+    <!-- 우측 2열: 준영님의 전체 깃허브 기여 stats 위젯 (아이콘 탑재 완료!) -->
     <td width="50%" align="center" valign="middle">
-      <h4>🧮 Algorithm Solving Languages</h4>
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&theme=tokyonight&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,csharp,typescript&layout=donut&cache_seconds=1800" width="100%" alt="Algorithm Languages" />
+      <img src="https://github-readme-stats.vercel.app/api?username=kkaemong&show_icons=true&theme=tokyonight&cache_seconds=1800" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
 </table>
