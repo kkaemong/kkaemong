@@ -18,13 +18,13 @@
 
 <table width="100%">
   <tr>
-    <!-- 좌측 2열: 준영님의 정예 사용 언어 compact 위젯 (Java/Kotlin 숨김 처리 완벽!) -->
+    <!-- 좌측 2열: 준영님의 정예 사용 언어 compact 위젯 (배경 딥블랙 일체화 & 높이 맞춤) -->
     <td width="50%" align="center" valign="middle">
-      <img src="https://githubreadme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=compact&theme=tokyonight&hide=java,kotlin,go,c%2B%2B,c,html,css&cache_seconds=1800&v=1" width="100%" alt="Top Languages" />
+      <img src="https://githubreadme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=compact&bg_color=0d1117&hide_border=true&title_color=38bdf8&text_color=ffffff&hide=java,kotlin,go,c%2B%2B,c,html,css&cache_seconds=1800&v=2" width="100%" alt="Top Languages" />
     </td>
-    <!-- 우측 2열: 준영님의 전체 깃허브 기여 stats 위젯 (아이콘 탑재 완료!) -->
+    <!-- 우측 2열: 준영님의 전체 깃허브 기여 stats 위젯 (배경 딥블랙 일체화 & 높이 칼매칭) -->
     <td width="50%" align="center" valign="middle">
-      <img src="https://githubreadme-stats.vercel.app/api?username=kkaemong&show_icons=true&theme=tokyonight&cache_seconds=1800&v=1" width="100%" alt="GitHub Stats" />
+      <img src="https://githubreadme-stats.vercel.app/api?username=kkaemong&show_icons=true&bg_color=0d1117&hide_border=true&title_color=38bdf8&text_color=ffffff&icon_color=38bdf8&hide=issues,prs,contribs&cache_seconds=1800&v=2" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
 </table>
