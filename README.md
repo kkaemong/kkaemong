@@ -12,26 +12,15 @@
 
 <table width="100%">
   <tr>
-    <!-- 좌측 2열: 준영님의 진짜 포트폴리오 황금비(Python 40%, C# 35%, TS 25%)를 칼같이 렌더링하는 커스텀 도넛 차트 -->
-    <td width="48%" align="center" valign="middle">
-      <img src="https://quickchart.io/chart?bkg=%230f172a&c={type:'doughnut',data:{labels:['Python%20(40%25)','C%23%20(35%25)','TypeScript%20(25%25)'],datasets:[{data:[40,35,25],backgroundColor:['%233776AB','%23239120','%233178C6'],borderWidth:2,borderColor:'%230f172a'}]},options:{legend:{position:'bottom',labels:{fontColor:'%23ffffff',fontSize:13}}}}" width="100%" alt="kkaemong's Core Languages" />
+    <!-- 좌측 열: 프로젝트 주무기 언어 (C#, TypeScript) 공식 도넛 위젯 -->
+    <td width="50%" align="center" valign="middle">
+      <h4>🎮 Project Development Languages</h4>
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&theme=tokyonight&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,python&layout=donut&cache_seconds=1800" width="100%" alt="Project Languages" />
     </td>
-    <!-- 우측 2열: 파이썬 알고리즘 강점 및 C# 코어 프로그래밍 요약 -->
-    <td width="52%" valign="top" style="padding-left: 15px;">
-      <h3>🐍 Python 기반 알고리즘 & CS 정복</h3>
-      <ul>
-        <li><strong>백준 Gold / SWEA A형 핵심 고난도 문제 정복</strong></li>
-        <li>💡 BFS/DFS 그래프 탐색, 복잡 시뮬레이션 물리 최적화 구현</li>
-        <li>💡 시간/공간 복잡도 최소화를 통한 고효율 컴퓨팅 리소스 설계</li>
-      </ul>
-      <br/>
-      <h3>🎮 C# / TypeScript 코어 프로그래밍</h3>
-      <ul>
-        <li><strong>C# & Unity Engine 실무 튜닝</strong></li>
-        <li>💡 WebGL 객체 풀링 최적화 기반 60fps 고정 렉 원천 해결</li>
-        <li><strong>TypeScript & React 웹 아키텍처</strong></li>
-        <li>💡 Zustand 전역 상태 및 안정적인 RESTful API 설계 완비</li>
-      </ul>
+    <!-- 우측 열: 알고리즘 주무기 언어 (Python) 공식 도넛 위젯 -->
+    <td width="50%" align="center" valign="middle">
+      <h4>🧮 Algorithm Solving Languages</h4>
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&theme=tokyonight&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,csharp,typescript&layout=donut&cache_seconds=1800" width="100%" alt="Algorithm Languages" />
     </td>
   </tr>
 </table>
