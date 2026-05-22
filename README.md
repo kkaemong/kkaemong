@@ -12,9 +12,9 @@
 
 <table width="100%">
   <tr>
-    <!-- 좌측 2열: 캐시 최적화로 엑박 0.00% 보장하는 실물 도넛 차트 -->
+    <!-- 좌측 2열: 준영님의 진짜 포트폴리오 황금비(Python 40%, C# 35%, TS 25%)를 칼같이 렌더링하는 커스텀 도넛 차트 -->
     <td width="48%" align="center" valign="middle">
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&theme=tokyonight&hide=html,css,javascript&cache_seconds=1800" width="100%" alt="kkaemong's Core Languages" />
+      <img src="https://quickchart.io/chart?bkg=%230f172a&c={type:'doughnut',data:{labels:['Python%20(40%25)','C%23%20(35%25)','TypeScript%20(25%25)'],datasets:[{data:[40,35,25],backgroundColor:['%233776AB','%23239120','%233178C6'],borderWidth:2,borderColor:'%230f172a'}]},options:{legend:{position:'bottom',labels:{fontColor:'%23ffffff',fontSize:13}}}}" width="100%" alt="kkaemong's Core Languages" />
     </td>
     <!-- 우측 2열: 파이썬 알고리즘 강점 및 C# 코어 프로그래밍 요약 -->
     <td width="52%" valign="top" style="padding-left: 15px;">
