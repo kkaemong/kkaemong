@@ -1,7 +1,7 @@
 # 👨‍💻 진준영 (kkaemong) - Software Engineer
 
 <div align="center">
-  <img src="https://capsule-render.vercel.app/render?type=waving&color=0f172a&height=200&section=header&text=JIN%20JUN%20YEONG&fontSize=60&animation=fadeIn&fontColor=ffffff" alt="Header Banner" />
+  <img src="https://capsule-render.vercel.app/render?type=waving&color=0f172a&height=200&section=header&text=JIN%20JUN%20YEONG&fontSize=60&animation=fadeIn&fontColor=ffffff"
 </div>
 
 <div align="center">
