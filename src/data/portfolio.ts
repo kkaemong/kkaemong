@@ -57,13 +57,13 @@ export const portfolioData = {
         name: "Python",
         level: 85,
         icon: "python",
-        description: "주력 언어로 알고리즘 문제 풀이, Django 백엔드 설계, AI 데이터 전처리 등 다양한 도메인에서 능숙하게 활용할 수 있습니다."
+        description: "가장 자신 있는 주력 언어입니다. 알고리즘, 백엔드, AI 전처리 등 폭넓게 활용할 수 있습니다."
       },
       {
         name: "Django",
         level: 80,
         icon: "django",
-        description: "DRF를 활용한 RESTful API 서버 구축이 가능하며, ORM 최적화(N+1 쿼리 해결 등)를 통해 응답 속도를 개선한 경험이 있습니다."
+        description: "DRF 기반 RESTful API 구축 및 ORM 쿼리 최적화(N+1 해결)를 능숙하게 수행할 수 있습니다."
       }
     ],
     webgl: [
@@ -71,25 +71,25 @@ export const portfolioData = {
         name: "C#",
         level: 80,
         icon: "csharp",
-        description: "Unity 클라이언트 스크립팅 주력 언어로, 물리 제어 및 백엔드 실시간 통신 모듈을 직접 구현할 수 있습니다."
+        description: "Unity의 주력 스크립팅 언어로, 핵심 게임 로직과 백엔드 통신 모듈을 직접 설계할 수 있습니다."
       },
       {
         name: "Unity",
         level: 80,
         icon: "unity",
-        description: "WebGL 타겟의 2D 게임 클라이언트를 구축하며, 객체 풀링(Object Pooling)을 통한 60fps 프레임 최적화 경험이 있습니다."
+        description: "WebGL 타겟의 2D 게임 개발과 객체 풀링(Object Pooling) 최적화 경험이 있습니다."
       },
       {
         name: "TypeScript / JavaScript",
         level: 70,
         icon: "typescript",
-        description: "React 환경에서 UI 컴포넌트를 구성하고, 엄격한 Props 타입 설계를 통해 런타임 에러를 방지할 수 있습니다."
+        description: "엄격한 타입 설계를 통해 런타임 에러가 없는 안전한 React UI 컴포넌트를 개발할 수 있습니다."
       },
       {
         name: "React & UI Design",
         level: 70,
         icon: "react",
-        description: "Figma로 기획한 디자인 톤앤매너를 모바일/웹 반응형 React 컴포넌트로 깔끔하게 모듈화하여 이식할 수 있습니다."
+        description: "Figma 디자인 톤앤매너를 완벽하게 이해하고 모바일/웹 반응형 프론트엔드로 이식할 수 있습니다."
       }
     ],
     ai: [
@@ -97,19 +97,19 @@ export const portfolioData = {
         name: "PyTorch",
         level: 60,
         icon: "pytorch",
-        description: "오픈소스 멀티모달(Vision-Language) 모델을 이식하여 텍스트-이미지 복합 추론 파이프라인을 구축하는 프로젝트를 수행했습니다."
+        description: "멀티모달 AI 모델을 불러와 텍스트-이미지 추론 파이프라인을 구축하는 프로젝트를 수행했습니다."
       },
       {
         name: "Hugging Face",
         level: 60,
         icon: "huggingface",
-        description: "Transformers 라이브러리를 활용해 모델과 토크나이저를 통합하고, 커스텀 데이터셋을 전처리하는 로직을 수행했습니다."
+        description: "Transformers 모델 통합 및 커스텀 이미지 데이터셋 전처리 로직을 수행했습니다."
       },
       {
         name: "PEFT & LoRA",
         level: 55,
         icon: "pytorch",
-        description: "제한된 GPU 환경에서 LoRA 기법을 도입하여 파라미터 효율적인 모델 미세조정(Fine-tuning) 학습을 수행했습니다."
+        description: "LoRA 기법을 도입하여 GPU 리소스 한계를 넘는 파라미터 효율적인 미세조정(Fine-tuning)을 수행했습니다."
       }
     ],
     support: [
@@ -117,7 +117,7 @@ export const portfolioData = {
         name: "Git & GitHub",
         level: 75,
         icon: "github",
-        description: "Git Flow 브랜치 전략과 대용량 파일(LFS) 관리를 통해 여러 직군과 버전 충돌 없이 매끄럽게 협업할 수 있습니다."
+        description: "Git Flow 전략을 기반으로 여러 직군과 버전 충돌 없이 안전하고 체계적인 협업이 가능합니다."
       }
     ]
   },
