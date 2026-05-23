@@ -8,17 +8,17 @@
   <tr>
     <!-- 1층 좌측: 전체 사용 언어 donut 위젯 -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=html,css,jupyter%20notebook&cache_seconds=86400" width="100%" alt="Top Languages" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=html,css,jupyter%20notebook&cache_seconds=86400" width="100%" alt="Top Languages" />
     </td>
     <!-- 1층 우측: 전체 깃허브 기여 stats 위젯 -->
     <td width="58%" align="center" valign="middle">
-      <img src="https://github-readme-stats.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&icon_color=0000cc&cache_seconds=86400" width="100%" alt="GitHub Stats" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&icon_color=0000cc&cache_seconds=86400" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
   <tr>
     <!-- 2층 좌측: 준영님의 'algorithm' 레포 전용 Python 100% donut 위젯 -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,c%23,typescript,vue,shaderlab,hlsl,shell,dockerfile,jupyter%20notebook&hide_title=true&cache_seconds=86400" width="100%" alt="Algorithm Languages" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,c%23,typescript,vue,shaderlab,hlsl,shell,dockerfile,jupyter%20notebook&hide_title=true&cache_seconds=86400" width="100%" alt="Algorithm Languages" />
     </td>
     <!-- 2층 우측: 준영님의 성실한 잔디 기록을 증명해 주는 연속 커밋 스트릭(Streak) 카드! -->
     <td width="58%" align="center" valign="middle">
