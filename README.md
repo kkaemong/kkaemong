@@ -31,58 +31,58 @@
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
-### 🎮 Game Client Development
+### Game Client Development
 ![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)
 ![Unity](https://img.shields.io/badge/Unity-222C37?style=for-the-badge&logo=unity&logoColor=white)
 
-### 🌐 Web Full-Stack Development
+### Web Full-Stack Development
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![DRF](https://img.shields.io/badge/Django%20REST%20Framework-EE4C2C?style=for-the-badge&logo=django&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 
-### 🧠 AI & Deep Learning
+### AI & Deep Learning
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 ![PEFT / LoRA](https://img.shields.io/badge/PEFT%20/%20LoRA-purple?style=for-the-badge&logo=pytorch&logoColor=white)
 
-### 🔧 Collaboration & Support
+### Collaboration & Support
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 
 ---
 
-## 🚀 Projects & Key Outcomes
+## Projects
 
 | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/jabonju.png?v=1" width="100%" alt="zabonzooET cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/gaesorlay.png?v=1" width="100%" alt="gaesorelay cover" /> |
-| :--- | :--- |
-| **🎮 [자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)** | **💬 [개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)** |
+| :---: | :---: |
+| **[자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)** | **[개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)** |
 | ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white) ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) |
 | | |
 | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/SSAIETMAIN.png?v=1" width="100%" alt="SSAIET cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/AIchallange.png?v=1" width="100%" alt="AI Challenge cover" /> |
-| **🍳 [SSAIET](https://github.com/kkaemong/Final-PJT)** | **🧠 [SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** |
+| **[SSAIET](https://github.com/kkaemong/Final-PJT)** | **[SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** |
 | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) |
 | | |
 | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/kshield.png?v=1" width="100%" alt="Web Hacking cover" /> | |
-| **🛡️ Web Hacking Project (K-Shield Jr)** | |
+| **[Web Hacking Project (K-Shield Jr)](https://github.com/kkaemong/Web-Hacking-Pjt)** | |
 | ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&logo=kalilinux&logoColor=white) | |
 
 ---
 
-## 🎓 Education & Credentials
-- **🏫 SSAFY AI 아카데미 14기** | Python 트랙 과정을 통한 CS 기본기 학습 및 웹/게임 클라이언트 부문 프로젝트 수행 (2025.07 ~ 현재)
-- **🏫 협성대학교 경영학 전공** | 경영 데이터 분석 및 비즈니스 통계 이론 이수 (2018.03 ~ 2024.08)
-- **🛡️ 과학기술정보통신부 제 11기 K-Shield Jr** | 실무 중심의 정보보안 및 웹 취약점 진단 과정 200시간 수료 (2023.09 ~ 2023.10)
-- **🌴 Philippines Residency** | 7년 해외 거주를 통한 자연스러운 영어 회화 및 글로벌 커뮤니케이션 역량 확보 (2002 ~ 2009)
+## Education & Credentials
+- **SSAFY AI 아카데미 14기** | Python 트랙 과정을 통한 CS 기본기 학습 및 웹/게임 클라이언트 부문 프로젝트 수행 (2025.07 ~ 현재)
+- **협성대학교 경영학 전공** | 경영 데이터 분석 및 비즈니스 통계 이론 이수 (2018.03 ~ 2024.08)
+- **과학기술정보통신부 제 11기 K-Shield Jr** | 실무 중심의 정보보안 및 웹 취약점 진단 과정 200시간 수료 (2023.09 ~ 2023.10)
+- **Philippines Residency** | 7년 해외 거주를 통한 자연스러운 영어 회화 및 글로벌 커뮤니케이션 역량 확보 (2002 ~ 2009)
 
 ---
 
-## 📫 Contact
-* 📧 Email: **junemay31@naver.com**
-* 📝 Blog: **[Velog](https://velog.io/@junemay31/posts)**
-* 💻 GitHub: **[github.com/kkaemong](https://github.com/kkaemong)**
-* 📋 portfolio: **https://portpolio-ruddy-beta.vercel.app/**
+## Contact
+* Email: **junemay31@naver.com**
+* Blog: **[Velog](https://velog.io/@junemay31/posts)**
+* GitHub: **[github.com/kkaemong](https://github.com/kkaemong)**
+* Portfolio: **https://portpolio-ruddy-beta.vercel.app/**
