@@ -143,9 +143,10 @@ export const portfolioData = {
       ],
       keyResult: "SSAFY 특화 프로젝트 핀테크 트랙 우수상(2위) 수상 및 WebGL 빌드 환경에서 객체 풀링 기반 메모리 최적화로 60fps 프레임 유지 달성",
       highlights: [
-        "WebGL 객체 풀링 최적화로 60fps 고정",
-        "FixedUpdate 물리 점프 지터링 감쇠",
-        "UnityWebRequest REST API 실시간 연동"
+        "인게임 무한 러너 핵심 씬(Scene) 설계 및 중력 가속도 피드백이 적용된 C# 물리 점프 컨트롤러 구현",
+        "지면 감지 신뢰도 향상을 위한 FixedUpdate 주기 기반 Raycast 지면 교차 감지 알고리즘 최적화",
+        "단일 스레드 메모리 누수 방지를 위한 동적 장애물 및 재화 인스턴스 대상의 오브젝트 풀링(Object Pooling) 시스템 단독 설계",
+        "가변 오디오 피치, 카메라 셰이크 쉐이더 등 기획 의도에 맞춘 5개 이상의 조작 반응 피드백 연출 요소 구현"
       ],
       github: "https://github.com/kkaemong/zabonzooET",
       teamSize: "4명"
@@ -170,9 +171,10 @@ export const portfolioData = {
       ],
       keyResult: "웹소켓 기반의 프레임워크 설계로 패킷 응답 렉을 개선하고 실시간 멀티플레이 릴레이 흐름의 안정적인 게임 상태 동기화 성공",
       highlights: [
-        "Zustand 전역 타이머 & 턴 상태 격리",
-        "React.memo/useCallback 렌더링 렉 차단",
-        "TypeScript 엄격한 Props 패킷 데이터 설계"
+        "Figma 디자인 와이어프레임 주도 및 UI 컴포넌트 구조의 모듈화 설계를 통한 프론트엔드 컴포넌트 이식",
+        "Zustand 전역 상태 저장소를 활용한 단계별 글로벌 게임 타이머 및 턴 전환 데이터 흐름 격리 설계",
+        "소켓 메시지 수신 빈도 증가 시 렌더링 지연을 방지하기 위해 React.memo 및 useCallback 기반 렌더링 스코프 튜닝",
+        "CSS 하드웨어 가속을 접목하여 모바일/웹 뷰에서 매끄러운 턴 체인지 애니메이션 및 인터랙션 구현"
       ],
       github: "https://github.com/gaesorelay/frontend",
       teamSize: "6명"
@@ -198,9 +200,11 @@ export const portfolioData = {
       ],
       keyResult: "인증·지리정보·시각화 서비스를 융합한 풀스택 다이어트 플랫폼 구축 및 Django ORM 쿼리 최적화로 쿼리 수 60% 절감 달성",
       highlights: [
-        "DRF 백엔드 API 단독 데이터 모델링 설계",
-        "select_related/prefetch ORM 조인 최적화",
-        "DB N+1 쿼리 오버헤드 60% 절감 해소"
+        "Django REST Framework를 이용한 사용자 정보, 식단 일지, 커뮤니티 데이터베이스 모델링 및 RESTful API 설계",
+        "JWT 토큰 보안 흐름을 구현하여 사용자 세션 보안성을 유지하고 로컬 저장소 취약점을 보완하는 프론트엔드 인증 모듈 개발",
+        "Django select_related / prefetch_related를 활용해 N+1 쿼리 오버헤드를 추적하고 DB 조인 연산 최적화 구현",
+        "Kakao Map OpenAPI 및 HTML5 Geolocation을 통합 연동하여 현재 위치 주변 2km 반경의 추천 음식점 검색 기능 구현",
+        "Vue.js 기반 반응형 캘린더 및 Chart.js 시각화 컴포넌트 설계를 통한 월별 칼로리/영양성분 대시보드 구현"
       ],
       github: "https://github.com/kkaemong/Final-PJT",
       teamSize: "2명"
@@ -224,9 +228,10 @@ export const portfolioData = {
       ],
       keyResult: "Qwen2.5-VL Fine-tuning을 통한 멀티모달 추론 정확도(Accuracy) 6%p(0.75 → 0.81) 향상 달성",
       highlights: [
-        "Qwen2.5-VL 기반 추론 정확도 6%p 향상",
-        "PEFT(LoRA) 기법 활용 GPU 한계 극복",
-        "bfloat16 mixed-precision 학습 가속화"
+        "Qwen2.5-VL 모델을 기반으로 한 이미지-텍스트 복합 추론용 Vision-Language 파이프라인 설계",
+        "PEFT(LoRA) 기법을 설계 및 적용하여 한정된 그래픽 메모리 리소스 내에서 파라미터 효율적 미세조정(Fine-tuning) 학습 리드",
+        "PyTorch 및 Hugging Face 환경에서 Mixed Precision(bfloat16) 학습 기법을 도입해 훈련 속도 및 가속화 2배 향상",
+        "4지선다형 이미지 문제 데이터셋을 모델 입력 템플릿(Prompt Template)으로 변환하는 전처리 및 검증 로직 구현"
       ],
       github: "https://github.com/kkaemong/SSAFY-AI-Challenge",
       teamSize: "4명"
@@ -251,9 +256,10 @@ export const portfolioData = {
       ],
       keyResult: "모의 해킹 공격 시나리오를 설계하여 OWASP Top 10 기반 5대 취약 공격 경로 입증 및 기업 실무용 가이드라인 도출",
       highlights: [
-        "Burp Suite 프록시 패킷 변조 우회 검증",
-        "SQLMap 활용 DB 자동화 취약점 공격 실증",
-        "XSS & Directory Indexing 방어 전략 수립"
+        "Burp Suite 프록시 툴을 활용한 실시간 HTTP 패킷 캡처 및 세션 인증 변조를 통한 로직 우회 테스트",
+        "SQLMap을 활용해 데이터베이스 정보 탈취 가능성을 실증하기 위한 취약점 점검 자동화 공격 시나리오 작성 및 대응 방안 수립",
+        "파라미터 검증 부재를 악용한 XSS 공격 및 Directory Indexing, File Download 취약 경로 도출",
+        "식별된 취약점을 토대로 공격 트리 및 영향도 분석을 정의하고, 침입 차단 방안(WAF 정책 가이드)을 수립해 방어 가이드라인 문서화"
       ],
       teamSize: "6명",
       github: "https://github.com/kkaemong/Web-Hacking-Pjt"
