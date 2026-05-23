@@ -63,7 +63,7 @@ export const portfolioData = {
         name: "Django",
         level: 80,
         icon: "django",
-        description: "DRF 기반 RESTful API 구축 및 ORM 쿼리 최적화(N+1 해결)를 능숙하게 수행할 수 있습니다."
+        description: "SSAIET 프로젝트에서 DRF 시리얼라이저(Serializer)를 직접 설계하여 데이터를 직렬화하고 RESTful API를 구축한 경험이 있습니다."
       }
     ],
     webgl: [
@@ -83,31 +83,31 @@ export const portfolioData = {
         name: "TypeScript / JavaScript",
         level: 70,
         icon: "typescript",
-        description: "엄격한 타입 설계를 통해 런타임 에러가 없는 안전한 React UI 컴포넌트를 개발할 수 있습니다."
+        description: "엄격한 타입(Type/Interface) 설계를 바탕으로 버그 없이 완성도 높은 깔끔한 웹 UI 컴포넌트를 제작할 수 있습니다."
       },
       {
         name: "React & UI Design",
         level: 70,
         icon: "react",
-        description: "Figma 디자인 톤앤매너를 완벽하게 이해하고 모바일/웹 반응형 프론트엔드로 이식할 수 있습니다."
+        description: "Figma의 디자인 톤앤매너를 정확하게 파악하고, 모듈화된 컴포넌트로 세련되고 반응성이 뛰어난 프론트엔드 UI를 구축할 수 있습니다."
       }
     ],
     ai: [
       {
         name: "PyTorch",
-        level: 60,
+        level: 40,
         icon: "pytorch",
         description: "멀티모달 AI 모델을 불러와 텍스트-이미지 추론 파이프라인을 구축하는 프로젝트를 수행했습니다."
       },
       {
         name: "Hugging Face",
-        level: 60,
+        level: 40,
         icon: "huggingface",
         description: "Transformers 모델 통합 및 커스텀 이미지 데이터셋 전처리 로직을 수행했습니다."
       },
       {
         name: "PEFT & LoRA",
-        level: 55,
+        level: 40,
         icon: "pytorch",
         description: "LoRA 기법을 도입하여 GPU 리소스 한계를 넘는 파라미터 효율적인 미세조정(Fine-tuning)을 수행했습니다."
       }
