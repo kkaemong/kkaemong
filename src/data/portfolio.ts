@@ -63,7 +63,7 @@ export const portfolioData = {
         name: "Django",
         level: 80,
         icon: "django",
-        description: "SSAIET 프로젝트에서 DRF 시리얼라이저(Serializer)를 직접 설계하여 데이터를 직렬화하고 RESTful API를 구축한 경험이 있습니다."
+        description: "DRF 시리얼라이저(Serializer)를 직접 설계하여 RESTful API 백엔드를 구축할 수 있습니다."
       }
     ],
     webgl: [
@@ -83,13 +83,13 @@ export const portfolioData = {
         name: "TypeScript / JavaScript",
         level: 70,
         icon: "typescript",
-        description: "엄격한 타입(Type/Interface) 설계를 바탕으로 버그 없이 완성도 높은 깔끔한 웹 UI 컴포넌트를 제작할 수 있습니다."
+        description: "엄격한 타입 설계를 바탕으로 에러 없이 안정적인 웹 UI 컴포넌트를 개발할 수 있습니다."
       },
       {
         name: "React & UI Design",
         level: 70,
         icon: "react",
-        description: "Figma의 디자인 톤앤매너를 정확하게 파악하고, 모듈화된 컴포넌트로 세련되고 반응성이 뛰어난 프론트엔드 UI를 구축할 수 있습니다."
+        description: "Figma 톤앤매너를 완벽하게 이해하고 세련된 웹 반응형 프론트엔드 UI를 구축할 수 있습니다."
       }
     ],
     ai: [
