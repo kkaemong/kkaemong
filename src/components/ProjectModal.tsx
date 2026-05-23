@@ -188,37 +188,27 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                         </div>
 
                         {/* Result Spotlight Banner */}
-                        {project.keyResult && (
-                          <div className="bg-gradient-to-r from-accent/[0.08] to-accent/[0.02] border border-accent/25 rounded-[1.5rem] p-7 md:p-8 flex flex-col md:flex-row md:items-center gap-5 shadow-[0_10px_30px_rgba(20,184,166,0.02)]">
-                            <div className="shrink-0 w-12 h-12 rounded-2xl bg-accent/15 flex items-center justify-center">
+                        {project.keyResult && project.keyResult.length > 0 && (
+                          <div className="bg-gradient-to-r from-accent/[0.08] to-accent/[0.02] border border-accent/25 rounded-[1.5rem] p-7 md:p-8 flex flex-col md:flex-row md:items-start gap-5 shadow-[0_10px_30px_rgba(20,184,166,0.02)]">
+                            <div className="shrink-0 w-12 h-12 rounded-2xl bg-accent/15 flex items-center justify-center mt-1">
                               <CheckCircle2 size={24} className="text-accent" />
                             </div>
-                            <div className="space-y-1">
+                            <div className="space-y-3 flex-1">
                               <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">Key Outcome (핵심 성과)</div>
-                              <p className="text-primary font-bold text-lg md:text-xl leading-relaxed break-keep">
-                                {project.keyResult}
-                              </p>
+                              <ul className="space-y-2">
+                                {project.keyResult.map((result: string, idx: number) => (
+                                  <li key={idx} className="flex gap-2.5 items-start">
+                                    <span className="shrink-0 text-accent font-bold mt-0.5">✓</span>
+                                    <span className="text-primary font-bold text-[15px] leading-relaxed break-keep">
+                                      {result}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
                           </div>
                         )}
                       </div>
-                    </div>
-                  )}
-
-                  {/* Restored and Refined Key Highlights Card */}
-                  {project.highlights && project.highlights.length > 0 && (
-                    <div className="bg-slate-50/50 hover:bg-slate-50/80 transition-colors rounded-[2.5rem] p-8 md:p-12 border border-slate-100/80 mt-10 shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
-                      <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-8 text-center">
-                        Key Highlights (주요 수행 항목)
-                      </h3>
-                      <ul className="space-y-5">
-                        {project.highlights.map((highlight: string, i: number) => (
-                          <li key={i} className="flex gap-4 items-start text-slate-700 text-[15px] leading-relaxed font-medium break-keep">
-                            <span className="shrink-0 text-accent font-bold mt-1">✓</span>
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
                     </div>
                   )}
                 </motion.div>

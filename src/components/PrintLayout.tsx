@@ -84,11 +84,13 @@ export default function PrintLayout() {
                 <span className="text-xs text-slate-700">{project.tech.join(', ')}</span>
               </div>
               
-              <ul className="list-disc list-inside space-y-1 text-sm text-slate-800">
-                {project.highlights.map((h, i) => (
-                  <li key={i} className="leading-snug">{h}</li>
-                ))}
-              </ul>
+              {project.keyResult && project.keyResult.length > 0 && (
+                <ul className="list-disc list-inside space-y-1 text-sm text-slate-800">
+                  {project.keyResult.map((result, i) => (
+                    <li key={i} className="leading-snug">{result}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>

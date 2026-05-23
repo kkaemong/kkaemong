@@ -7,12 +7,11 @@ export interface Project {
   role?: string;
   description: string;
   image?: string;
-  highlights: string[];
   github?: string;
   teamSize?: string;
   challenge?: string[];   // 직면한 문제/도전 리스트
   solution?: string[];    // 해결 방법 리스트
-  keyResult?: string;   // 핵심 성과 한 줄 (수치 포함)
+  keyResult?: string[];   // 핵심 성과 리스트
 }
 
 export const portfolioData = {
@@ -128,7 +127,7 @@ export const portfolioData = {
       type: "SSAFY 2학기 핀테크 부문 특화프로젝트",
       period: "2026.02.16 ~ 2026.04.03",
       tech: ["Unity WebGL", "C#", "Spring Boot", "AWS EC2", "PostgreSQL"],
-      role: "Unity 클라이언트 리드 (게임 루프 설계, 물리 커스텀 및 WebGL 빌드 최적화)",
+      role: "Unity 클라이언트 개발",
       description: "Unity · Spring Boot · AWS 풀스택 2D 러너 금융 학습 게임",
       image: "/jabonju.png",
       challenge: [
@@ -141,12 +140,11 @@ export const portfolioData = {
         "가변 사운드 피치와 동적 카메라 셰이크(Sine 쉐이딩 보정) 연출 설계를 통해 조작 타격감 및 게임 몰입도 극대화",
         "C# UnityWebRequest 기반 커스텀 REST API 통신 모듈(APIManager.cs) 단독 설계 및 구축을 통한 백엔드 금융 퀴즈 데이터 실시간 연동"
       ],
-      keyResult: "SSAFY 특화 프로젝트 핀테크 트랙 우수상(2위) 수상 및 WebGL 빌드 환경에서 객체 풀링 기반 메모리 최적화로 60fps 프레임 유지 달성",
-      highlights: [
-        "인게임 무한 러너 핵심 씬(Scene) 설계 및 중력 가속도 피드백이 적용된 C# 물리 점프 컨트롤러 구현",
-        "지면 감지 신뢰도 향상을 위한 FixedUpdate 주기 기반 Raycast 지면 교차 감지 알고리즘 최적화",
-        "단일 스레드 메모리 누수 방지를 위한 동적 장애물 및 재화 인스턴스 대상의 오브젝트 풀링(Object Pooling) 시스템 단독 설계",
-        "가변 오디오 피치, 카메라 셰이크 쉐이더 등 기획 의도에 맞춘 5개 이상의 조작 반응 피드백 연출 요소 구현"
+      keyResult: [
+        "오브젝트 풀링(Object Pooling) 아키텍처 단독 설계로 WebGL 환경의 GC 프레임 드랍(Spike) 제거 및 60fps 고정 달성",
+        "FixedUpdate 보정과 Raycast를 결합한 정교한 물리 점프 컨트롤러 커스텀으로 타격감 향상 및 기기 독립적 조작감 확보",
+        "가변 오디오 피치와 동적 카메라 셰이크 등 피드백 연출을 결합하여 몰입도를 극대화하고 SSAFY 핀테크 트랙 우수상(2위) 수상",
+        "C# UnityWebRequest 기반 커스텀 REST API 통신 모듈을 구축하여 백엔드 금융 데이터 실시간 동기화 완료"
       ],
       github: "https://github.com/kkaemong/zabonzooET",
       teamSize: "4명"
@@ -157,7 +155,7 @@ export const portfolioData = {
       type: "SSAFY 2학기 공통 프로젝트",
       period: "2026.01.12 ~ 2026.02.09",
       tech: ["Vite", "Figma", "React", "TypeScript"],
-      role: "UI/UX Design & Frontend UI (디자인 시스템 구축 및 UI 컴포넌트 개발 리드)",
+      role: "UI/UX Design & Frontend UI",
       description: "웹소켓 & AI를 활용한 릴레이 스토리텔링 게임",
       image: "/gaesorlay.png",
       challenge: [
@@ -169,11 +167,10 @@ export const portfolioData = {
         "설계된 와이어프레임을 바탕으로 React 프론트엔드 환경에 맞게 UI 컴포넌트를 모듈화하여 이식",
         "CSS 가속 및 애니메이션을 적극 활용해 턴 체인지, 타이머 경고 등 게임 내 핵심 인터랙션을 부드럽게 연출"
       ],
-      keyResult: "일관성 있는 디자인 시스템 구축 및 반응형 UI 구현을 통해 실시간 멀티플레이 게임의 유저 몰입도 및 사용성 극대화",
-      highlights: [
-        "Figma 기반 서비스 전체 UI/UX 기획 및 일관성 있는 톤앤매너(Tone & Manner) 구축",
-        "디자인 와이어프레임을 바탕으로 한 프론트엔드 UI 컴포넌트 모듈화 설계 및 React 컴포넌트 이식",
-        "CSS 인터랙션을 활용한 부드러운 화면 전환 및 유저 친화적인 모바일/웹 반응형 레이아웃 구현"
+      keyResult: [
+        "Figma 기반의 규격화된 디자인 시스템(컬러/폰트/컴포넌트)을 구축하여 기획-디자인-개발 간 일관된 톤앤매너 확보",
+        "디자인 시스템을 React 재사용 UI 컴포넌트로 모듈화하여 프론트엔드 개발 생산성 증대 및 반응형 레이아웃 구현",
+        "CSS 트랜지션 애니메이션과 하드웨어 가속을 활용해 실시간 턴 체인지 등 복잡한 인게임 UX를 직관적이고 매끄럽게 완성"
       ],
       github: "https://github.com/gaesorelay/frontend",
       teamSize: "6명"
@@ -197,13 +194,11 @@ export const portfolioData = {
         "Vue.js 및 JWT 토큰 기반 로그인 상태 유지 및 토큰 인증 흐름 구성",
         "Kakao Map API 연동을 통한 현재 위치 기반 주변 식당 탐색 기능 구현 및 캘린더 UI로 월별 식단 데이터 시각화"
       ],
-      keyResult: "인증·지리정보·시각화 서비스를 융합한 풀스택 다이어트 플랫폼 구축 및 Django ORM 쿼리 최적화로 쿼리 수 60% 절감 달성",
-      highlights: [
-        "Django REST Framework를 이용한 사용자 정보, 식단 일지, 커뮤니티 데이터베이스 모델링 및 RESTful API 설계",
-        "JWT 토큰 보안 흐름을 구현하여 사용자 세션 보안성을 유지하고 로컬 저장소 취약점을 보완하는 프론트엔드 인증 모듈 개발",
-        "Django select_related / prefetch_related를 활용해 N+1 쿼리 오버헤드를 추적하고 DB 조인 연산 최적화 구현",
-        "Kakao Map OpenAPI 및 HTML5 Geolocation을 통합 연동하여 현재 위치 주변 2km 반경의 추천 음식점 검색 기능 구현",
-        "Vue.js 기반 반응형 캘린더 및 Chart.js 시각화 컴포넌트 설계를 통한 월별 칼로리/영양성분 대시보드 구현"
+      keyResult: [
+        "Django REST Framework로 백엔드 비즈니스 로직을 API로 구축하고, ORM 최적화(select_related 등)를 적용해 쿼리 수 60% 절감 달성",
+        "Vue.js와 Chart.js를 연동한 반응형 캘린더 대시보드 UI를 통해 사용자의 월별 영양/칼로리 데이터를 한눈에 파악하도록 구현",
+        "Kakao Map OpenAPI와 Geolocation API를 통합해 사용자 현재 위치 기반 추천 음식점 탐색 기능 실시간 연동",
+        "JWT 기반 액세스/리프레시 토큰 인증 파이프라인을 설계하여 보안성을 갖춘 풀스택 로그인 유지 및 세션 관리 달성"
       ],
       github: "https://github.com/kkaemong/Final-PJT",
       teamSize: "2명"
@@ -223,14 +218,12 @@ export const portfolioData = {
       ],
       solution: [
         "LoRA(PEFT) 기법을 설계하여 파라미터 효율적 미세조정(PEFT) 학습 수행",
-        "bfloat16 정밀도(Mixed Precision) 환경을 학습 가속 파이프라인으로 최적화 세팅"
+        "bfloat16 정밀도(Mixed 실시간 Precision) 환경을 학습 가속 파이프라인으로 최적화 세팅"
       ],
-      keyResult: "Qwen2.5-VL Fine-tuning을 통한 멀티모달 추론 정확도(Accuracy) 6%p(0.75 → 0.81) 향상 달성",
-      highlights: [
-        "Qwen2.5-VL 모델을 기반으로 한 이미지-텍스트 복합 추론용 Vision-Language 파이프라인 설계",
-        "PEFT(LoRA) 기법을 설계 및 적용하여 한정된 그래픽 메모리 리소스 내에서 파라미터 효율적 미세조정(Fine-tuning) 학습 리드",
-        "PyTorch 및 Hugging Face 환경에서 Mixed Precision(bfloat16) 학습 기법을 도입해 훈련 속도 및 가속화 2배 향상",
-        "4지선다형 이미지 문제 데이터셋을 모델 입력 템플릿(Prompt Template)으로 변환하는 전처리 및 검증 로직 구현"
+      keyResult: [
+        "제한된 컴퓨팅 리소스(VRAM) 내에서 PEFT(LoRA) 기법을 적용하여 Qwen2.5-VL 멀티모달 모델의 파라미터 효율적인 파인튜닝 성공",
+        "Bfloat16 혼합 정밀도(Mixed Precision) 연산을 도입하여 메모리 병목 해소 및 학습 가속 파이프라인 최적화 달성",
+        "4지선다형 이미지/텍스트 복합 데이터셋을 모델 프롬프트 템플릿으로 구조화하여 멀티모달 추론 정확도 6%p 향상(0.75 → 0.81)"
       ],
       github: "https://github.com/kkaemong/SSAFY-AI-Challenge",
       teamSize: "4명"
@@ -253,12 +246,10 @@ export const portfolioData = {
         "SQLMap 기반 SQL Injection 자동화 취약점 검증 및 DB 데이터 노출 취약 경로 입증",
         "XSS, Directory Indexing, File Download 취약점을 도출하여 대응 방안 및 개선 보안 가이드라인 문서화 완료"
       ],
-      keyResult: "모의 해킹 공격 시나리오를 설계하여 OWASP Top 10 기반 5대 취약 공격 경로 입증 및 기업 실무용 가이드라인 도출",
-      highlights: [
-        "Burp Suite 프록시 툴을 활용한 실시간 HTTP 패킷 캡처 및 세션 인증 변조를 통한 로직 우회 테스트",
-        "SQLMap을 활용해 데이터베이스 정보 탈취 가능성을 실증하기 위한 취약점 점검 자동화 공격 시나리오 작성 및 대응 방안 수립",
-        "파라미터 검증 부재를 악용한 XSS 공격 및 Directory Indexing, File Download 취약 경로 도출",
-        "식별된 취약점을 토대로 공격 트리 및 영향도 분석을 정의하고, 침입 차단 방안(WAF 정책 가이드)을 수립해 방어 가이드라인 문서화"
+      keyResult: [
+        "Burp Suite 프록시 툴로 HTTP 패킷 파라미터를 조작하고 인증 인가 로직을 우회하는 실증적 공격 시나리오 입증",
+        "SQLMap 공격 자동화로 DB 탈취 취약점을 확인하고 XSS 및 디렉토리 인덱싱 등 OWASP Top 10 기준 주요 보안 결함 도출",
+        "식별된 취약점의 상세 영향도 분석을 바탕으로 WAF 정책 가이드 및 서버 설정 개선안을 포함한 실무 방어 가이드라인 수립"
       ],
       teamSize: "6명",
       github: "https://github.com/kkaemong/Web-Hacking-Pjt"
