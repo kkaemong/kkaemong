@@ -57,7 +57,7 @@ export const portfolioData = {
         name: "Python",
         level: 85,
         icon: "python",
-        description: "가장 자신 있는 주력 언어입니다. 알고리즘, 백엔드, AI 전처리 등 폭넓게 활용할 수 있습니다."
+        description: "알고리즘, 백엔드, AI 등 다양한 분야에 폭넓게 활용하는 핵심 주력 언어입니다."
       },
       {
         name: "Django",
@@ -71,13 +71,13 @@ export const portfolioData = {
         name: "C#",
         level: 80,
         icon: "csharp",
-        description: "Unity의 주력 스크립팅 언어로, 핵심 게임 로직과 백엔드 통신 모듈을 직접 설계할 수 있습니다."
+        description: "Unity 핵심 스크립팅 언어로, 게임 로직 및 백엔드 통신 모듈을 직접 설계합니다."
       },
       {
         name: "Unity",
         level: 80,
         icon: "unity",
-        description: "WebGL 타겟의 2D 게임 개발과 객체 풀링(Object Pooling) 최적화 경험이 있습니다."
+        description: "WebGL 2D 게임 개발 및 객체 풀링(Object Pooling) 최적화를 수행합니다."
       },
       {
         name: "TypeScript / JavaScript",
@@ -97,19 +97,19 @@ export const portfolioData = {
         name: "PyTorch",
         level: 40,
         icon: "pytorch",
-        description: "멀티모달 AI 모델을 불러와 텍스트-이미지 추론 파이프라인을 구축하는 프로젝트를 수행했습니다."
+        description: "오픈소스 AI 모델을 활용해 텍스트-이미지 복합 추론 파이프라인을 직접 구축합니다."
       },
       {
         name: "Hugging Face",
         level: 40,
         icon: "huggingface",
-        description: "Transformers 모델 통합 및 커스텀 이미지 데이터셋 전처리 로직을 수행했습니다."
+        description: "Transformers 모델 로딩 및 커스텀 이미지 데이터셋 전처리를 수행합니다."
       },
       {
         name: "PEFT & LoRA",
         level: 40,
         icon: "pytorch",
-        description: "LoRA 기법을 도입하여 GPU 리소스 한계를 넘는 파라미터 효율적인 미세조정(Fine-tuning)을 수행했습니다."
+        description: "LoRA 기법으로 제한된 GPU 환경 내에서 효율적인 모델 미세조정을 수행합니다."
       }
     ],
     support: [
@@ -117,7 +117,7 @@ export const portfolioData = {
         name: "Git & GitHub",
         level: 75,
         icon: "github",
-        description: "Git Flow 전략을 기반으로 여러 직군과 버전 충돌 없이 안전하고 체계적인 협업이 가능합니다."
+        description: "Git Flow 기반의 체계적인 버전 관리로 여러 직군과 충돌 없이 원활하게 협업합니다."
       }
     ]
   },
