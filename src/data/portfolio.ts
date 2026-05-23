@@ -57,13 +57,13 @@ export const portfolioData = {
         name: "Python",
         level: 85,
         icon: "python",
-        description: "파이썬 과정을 이수하며 다진 견고한 CS 알고리즘 해결력을 바탕으로, 풀스택 웹 프로덕트 백엔드 서버 모델링 및 API 설계를 수행하고 AI 모델링 프로젝트에서 대규모 멀티모달 데이터의 입력 템플릿 설계를 진행했습니다."
+        description: "주력 언어로 알고리즘 문제 풀이, Django 백엔드 설계, AI 데이터 전처리 등 다양한 도메인에서 능숙하게 활용할 수 있습니다."
       },
       {
         name: "Django",
         level: 80,
         icon: "django",
-        description: "풀스택 웹 서비스 구축 과정에서 Django REST Framework(DRF) 기반 API 서버를 구축하고, Django ORM의 select_related 및 prefetch_related를 활용해 N+1 쿼리 문제를 해결하며 API 응답 최적화를 수행했습니다."
+        description: "DRF를 활용한 RESTful API 서버 구축이 가능하며, ORM 최적화(N+1 쿼리 해결 등)를 통해 응답 속도를 개선한 경험이 있습니다."
       }
     ],
     webgl: [
@@ -71,25 +71,25 @@ export const portfolioData = {
         name: "C#",
         level: 80,
         icon: "csharp",
-        description: "실시간 2D 게임 클라이언트 구축 중 FixedUpdate 물리 주기 기반의 점프 컨트롤러와 UnityWebRequest 기반 커스텀 REST API 통신 모듈을 설계 및 구현하여 백엔드 데이터를 안정적으로 연동했습니다."
+        description: "Unity 클라이언트 스크립팅 주력 언어로, 물리 제어 및 백엔드 실시간 통신 모듈을 직접 구현할 수 있습니다."
       },
       {
         name: "Unity",
         level: 80,
         icon: "unity",
-        description: "단일 스레드 WebGL 빌드 환경의 프레임 스파이크 제어를 위해 커스텀 오브젝트 풀링(Object Pooling) 시스템을 설계하고, Raycast 지면 감지 및 실시간 오디오 피드백 연출을 안정적으로 구현했습니다."
+        description: "WebGL 타겟의 2D 게임 클라이언트를 구축하며, 객체 풀링(Object Pooling)을 통한 60fps 프레임 최적화 경험이 있습니다."
       },
       {
         name: "TypeScript / JavaScript",
         level: 70,
         icon: "typescript",
-        description: "실시간 멀티플레이 웹 게임 프로젝트에서 유저 조작 패킷 구조와 전역 Props 데이터 모델에 엄격한 TypeScript 타입을 설계하여 런타임 안전성을 확보하고 비동기 제어 안정성을 보장했습니다."
+        description: "React 환경에서 UI 컴포넌트를 구성하고, 엄격한 Props 타입 설계를 통해 런타임 에러를 방지할 수 있습니다."
       },
       {
         name: "React & UI Design",
         level: 70,
         icon: "react",
-        description: "Figma를 활용해 서비스의 전체 톤앤매너(Tone & Manner)와 와이어프레임을 주도적으로 기획하고, 이를 바탕으로 React 환경에서 모바일/웹 반응형 UI 컴포넌트를 모듈화하여 성공적으로 이식했습니다."
+        description: "Figma로 기획한 디자인 톤앤매너를 모바일/웹 반응형 React 컴포넌트로 깔끔하게 모듈화하여 이식할 수 있습니다."
       }
     ],
     ai: [
@@ -97,19 +97,19 @@ export const portfolioData = {
         name: "PyTorch",
         level: 60,
         icon: "pytorch",
-        description: "멀티모달 AI 문제 해결 과정에서 PyTorch 기반의 Qwen2.5-VL 모델을 이식하고, 이미지-텍스트 복합 추론 파이프라인을 구축해 모델의 최종 추론 정확도를 향상시켰습니다."
+        description: "오픈소스 멀티모달(Vision-Language) 모델을 불러와 텍스트-이미지 복합 추론 파이프라인을 구축해 본 경험이 있습니다."
       },
       {
         name: "Hugging Face",
         level: 60,
         icon: "huggingface",
-        description: "AI 추론 파이프라인 구축 시 Hugging Face Transformers 모델 및 토크나이저 통합을 조율하고, 4지선다형 이미지 문제 데이터셋을 모델 입력 템플릿(Prompt Template)으로 전처리하는 가공 로직을 전담했습니다."
+        description: "Transformers 라이브러리를 활용해 모델 및 토크나이저를 로드하고 커스텀 데이터셋을 전처리할 수 있습니다."
       },
       {
         name: "PEFT & LoRA",
         level: 55,
         icon: "pytorch",
-        description: "제한된 GPU 인프라 리소스 한계를 극복하기 위해 PEFT(LoRA) 기법을 도입하고, 핵심 가중치 레이어에 LoRA 어댑터를 연결하여 메모리 오버플로우(OOM) 없는 효율적인 미세조정 학습 루프를 설계했습니다."
+        description: "제한된 GPU 환경에서 LoRA 기법을 활용해 파라미터 효율적인 모델 미세조정(Fine-tuning)을 수행할 수 있습니다."
       }
     ],
     support: [
@@ -117,7 +117,7 @@ export const portfolioData = {
         name: "Git & GitHub",
         level: 75,
         icon: "github",
-        description: "다양한 규모의 웹 및 게임 협업 프로젝트에서 Git Flow 브랜치 전략 설계와 대용량 파일(LFS) 형상 관리를 조율하여, 여러 직군이 참여하는 협업 환경에서 버전 충돌 없이 매끄럽게 프로젝트를 리드했습니다."
+        description: "Git Flow 브랜치 전략과 대용량 파일(LFS) 관리를 통해 여러 직군과 버전 충돌 없이 매끄럽게 협업할 수 있습니다."
       }
     ]
   },
