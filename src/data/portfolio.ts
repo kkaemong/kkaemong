@@ -97,19 +97,19 @@ export const portfolioData = {
         name: "PyTorch",
         level: 60,
         icon: "pytorch",
-        description: "오픈소스 멀티모달(Vision-Language) 모델을 불러와 텍스트-이미지 복합 추론 파이프라인을 구축해 본 경험이 있습니다."
+        description: "오픈소스 멀티모달(Vision-Language) 모델을 이식하여 텍스트-이미지 복합 추론 파이프라인을 구축하는 프로젝트를 수행했습니다."
       },
       {
         name: "Hugging Face",
         level: 60,
         icon: "huggingface",
-        description: "Transformers 라이브러리를 활용해 모델 및 토크나이저를 로드하고 커스텀 데이터셋을 전처리할 수 있습니다."
+        description: "Transformers 라이브러리를 활용해 모델과 토크나이저를 통합하고, 커스텀 데이터셋을 전처리하는 로직을 수행했습니다."
       },
       {
         name: "PEFT & LoRA",
         level: 55,
         icon: "pytorch",
-        description: "제한된 GPU 환경에서 LoRA 기법을 활용해 파라미터 효율적인 모델 미세조정(Fine-tuning)을 수행할 수 있습니다."
+        description: "제한된 GPU 환경에서 LoRA 기법을 도입하여 파라미터 효율적인 모델 미세조정(Fine-tuning) 학습을 수행했습니다."
       }
     ],
     support: [
