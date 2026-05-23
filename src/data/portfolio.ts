@@ -80,13 +80,13 @@ export const portfolioData = {
         description: "WebGL 2D 게임 개발 및 객체 풀링(Object Pooling) 최적화를 수행합니다."
       },
       {
-        name: "TypeScript / JavaScript",
+        name: "TypeScript",
         level: 70,
         icon: "typescript",
-        description: "엄격한 타입 설계를 바탕으로 에러 없이 안정적인 웹 UI 컴포넌트를 개발할 수 있습니다."
+        description: "엄격한 타입 설계를 바탕으로 안정적인 웹 UI 컴포넌트를 개발할 수 있습니다."
       },
       {
-        name: "React & UI Design",
+        name: "React",
         level: 70,
         icon: "react",
         description: "Figma 톤앤매너를 완벽하게 이해하고 세련된 웹 반응형 프론트엔드 UI를 구축할 수 있습니다."
@@ -97,19 +97,19 @@ export const portfolioData = {
         name: "PyTorch",
         level: 40,
         icon: "pytorch",
-        description: "오픈소스 AI 모델을 활용해 텍스트-이미지 복합 추론 파이프라인을 직접 구축합니다."
+        description: "오픈소스 AI 모델을 활용해 텍스트-이미지 복합 추론 파이프라인을 수행했습니다."
       },
       {
         name: "Hugging Face",
         level: 40,
         icon: "huggingface",
-        description: "Transformers 모델 로딩 및 커스텀 이미지 데이터셋 전처리를 수행합니다."
+        description: "Transformers 모델 로딩 및 커스텀 이미지 데이터셋 전처리를 수행했습니다."
       },
       {
         name: "PEFT & LoRA",
         level: 40,
         icon: "pytorch",
-        description: "LoRA 기법으로 제한된 GPU 환경 내에서 효율적인 모델 미세조정을 수행합니다."
+        description: "LoRA 기법으로 제한된 GPU 환경 내에서 효율적인 모델 미세조정을 수행했습니다."
       }
     ],
     support: [
@@ -117,7 +117,7 @@ export const portfolioData = {
         name: "Git & GitHub",
         level: 75,
         icon: "github",
-        description: "Git Flow 기반의 체계적인 버전 관리로 여러 직군과 충돌 없이 원활하게 협업합니다."
+        description: "Git Flow 기반의 체계적인 버전 관리로 여러 직군과 원활하게 협업합니다."
       }
     ]
   },
