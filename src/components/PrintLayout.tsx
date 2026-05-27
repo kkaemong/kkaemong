@@ -3,6 +3,7 @@ import { portfolioData, Project } from '@/data/portfolio';
 
 export default function PrintLayout() {
   const { about, skills, projects, experience } = portfolioData;
+  const certifications = (portfolioData as any).certifications || [];
 
   return (
     <div className="hidden print:block max-w-4xl mx-auto bg-white text-slate-900 font-sans p-8 space-y-12">
@@ -113,6 +114,27 @@ export default function PrintLayout() {
           ))}
         </div>
       </section>
+
+      {/* Certifications & Languages */}
+      {certifications && certifications.length > 0 && (
+        <section>
+          <h3 className="text-lg font-black uppercase tracking-widest text-slate-400 mb-6 pb-1 border-b border-slate-200">
+            Certifications & Languages
+          </h3>
+          <div className="space-y-4">
+            {certifications.map((cert: any) => (
+              <div key={cert.id} className="break-inside-avoid">
+                <div className="flex justify-between items-baseline mb-1">
+                  <h4 className="text-base font-bold">{cert.title}</h4>
+                  <span className="text-sm text-slate-500 font-medium">{cert.date}</span>
+                </div>
+                <p className="text-sm text-slate-700 font-bold mb-1">{cert.issuer}</p>
+                {cert.description && <p className="text-xs text-slate-500">{cert.description}</p>}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

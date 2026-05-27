@@ -122,6 +122,33 @@ export const portfolioData = {
   },
   projects: [
     {
+      id: "gifted",
+      title: "GIFTED",
+      type: "SSAFY 2학기 자율 프로젝트",
+      period: "2026.04.05 ~ 2026.05.21 (자체 추가 개발 진행 중)",
+      tech: ["Unity WebGL", "C#", "FSM", "Object Pooling", "Git", "GitHub"],
+      role: "Unity 클라이언트 오브젝트 & 상호작용 개발",
+      description: "Unity 기반 포장 액션 캐주얼 액션 게임",
+      image: "/Gifted.png",
+      github: "https://github.com/gifted-hamyeonham/gifted",
+      challenge: [
+        "실시간 멀티플레이어 환경에서 다수의 동적 오브젝트(장애물, 아이템, 발판 등) 상호작용 시 발생하는 클라이언트 간 위치/상태 동기화 지연 및 끊김 현상",
+        "인게임 씬(Scene) 내 배치된 수많은 상호작용 오브젝트의 동적 생성 및 소멸로 인한 모바일/웹 환경 메모리 병목 및 CPU 스파이크 발생"
+      ],
+      solution: [
+        "이벤트 기반 오브젝트 상태 머신(FSM)을 설계하여, 클라이언트 로컬에서 선제적으로 판정을 처리(Client-side Prediction)하고 가벼운 상태 데이터만 동기화하여 레이턴시 최소화",
+        "오브젝트 풀링(Object Pooling)을 모듈화하여, 다양한 종류의 상호작용 오브젝트가 단일 매니저 클래스를 통해 중앙 집중식으로 재사용되도록 최적화",
+        "인터페이스 기반(IInteractable) 설계 패턴을 도입하여 기획 요구사항에 맞춰 새로운 기믹의 오브젝트를 유연하고 빠르게 추가할 수 있는 컴포넌트 아키텍처 구축"
+      ],
+      keyResult: [
+        "이벤트 기반 FSM 및 클라이언트 예측 설계로 렉(Lag) 없는 실시간 동기화 구현",
+        "모듈화된 오브젝트 풀링(Object Pooling) 기법 도입으로 GC 프레임 드랍 제거 및 60fps 최적화",
+        "IInteractable 인터페이스 기반 공통 아키텍처 설계를 통한 컴포넌트 개발 속도 향상",
+        "공식 기간 종료 이후에도 게임 완성도를 위해 팀원들과 매주 자체 추가 개발 진행"
+      ],
+      teamSize: "6명"
+    },
+    {
       id: "jabonju",
       title: "자본주 E.T. (zabonzooET)",
       type: "SSAFY 2학기 핀테크 부문 특화프로젝트",
@@ -286,5 +313,7 @@ export const portfolioData = {
     blog: "https://velog.io/@junemay31/posts",
     github: "github.com/kkaemong",
     message: "함께 성장하며 빈틈없이 견고한 서비스를 만들어나갈 동료를 기다립니다."
-  }
+  },
+  certifications: []
 };
+
