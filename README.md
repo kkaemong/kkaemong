@@ -6,13 +6,13 @@
 
 <table width="100%">
   <tr>
-    <!-- 좌측: 전체 깃허브 기여 stats 위젯 -->
+    <!-- 좌측: 전체 사용 언어 compact 위젯 (파랑 색상 중복 해결을 위해 typescript 숨김) -->
     <td width="50%" align="center" valign="middle">
-      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&icon_color=30a14e&v=2" width="100%" alt="GitHub Stats" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=compact&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&hide=html,css,jupyter%20notebook,typescript&v=3" width="100%" alt="Top Languages" />
     </td>
-    <!-- 우측: 준영님의 성실한 잔디 기록을 증명해 주는 연속 커밋 스트릭(Streak) 카드! -->
+    <!-- 우측: 전체 깃허브 기여 stats 위젯 -->
     <td width="50%" align="center" valign="middle">
-      <img src="https://streak-stats.demolab.com/?user=kkaemong&theme=tokyonight&background=ffffff&ring=30a14e&fire=30a14e&currStreakNum=000000&sideNums=000000&sideLabels=000000&currStreakLabel=30a14e&hide_border=true&v=2" width="100%" alt="Commit Streak" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&icon_color=30a14e&v=3" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
 </table>
@@ -20,7 +20,13 @@
 <br/>
 
 <div align="center">
-  <img src="./profile-3d-contrib/profile-green-animate.svg?v=2" alt="3D Contributions" width="100%" />
+  <img src="https://streak-stats.demolab.com/?user=kkaemong&theme=tokyonight&background=ffffff&ring=30a14e&fire=30a14e&currStreakNum=000000&sideNums=000000&sideLabels=000000&currStreakLabel=30a14e&hide_border=true&v=3" width="80%" alt="Commit Streak" />
+</div>
+
+<br/>
+
+<div align="center">
+  <img src="./profile-3d-contrib/profile-green-animate.svg?v=3" alt="3D Contributions" width="100%" />
 </div>
 
 <br/>
