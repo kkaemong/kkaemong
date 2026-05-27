@@ -26,6 +26,10 @@ files.forEach(file => {
     // Hide the language donut chart and legend entirely to prevent recruiter confusion
     content = content.replace(/<g transform="translate\(40, 520\)">/gi, '<g transform="translate(40, 520)" display="none">');
     
+    // Replace the standard GitHub activity green (#47a042) with a premium Deep Indigo (#4f46e5)
+    // This turns the 3D grass pillars into a stunning indigo theme that perfectly matches the profile theme
+    content = content.replace(/#47a042/gi, '#4f46e5');
+    
     if (content !== original) {
       fs.writeFileSync(filePath, content, 'utf8');
       console.log(`Successfully modified colors and layout in ${file}`);
