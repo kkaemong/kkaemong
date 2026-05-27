@@ -8,7 +8,7 @@
   <tr>
     <!-- 1층 좌측: 전체 사용 언어 donut 위젯 -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&hide=html,css,jupyter%20notebook&cache_seconds=86400" width="100%" alt="Top Languages" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=compact&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&hide=html,css,jupyter%20notebook&cache_seconds=86400" width="100%" alt="Top Languages" />
     </td>
     <!-- 1층 우측: 전체 깃허브 기여 stats 위젯 -->
     <td width="58%" align="center" valign="middle">
