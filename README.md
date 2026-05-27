@@ -30,7 +30,7 @@
 <br/>
 
 <div align="center">
-  <img src="./profile-3d-contrib/profile-green-animate.svg" alt="3D Contributions" width="100%" />
+  <img src="./profile-3d-contrib/profile-season-animate.svg" alt="3D Contributions" width="100%" />
 </div>
 
 <br/>
