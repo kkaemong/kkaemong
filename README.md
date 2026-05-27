@@ -7,12 +7,12 @@
 <table width="100%">
   <tr>
     <!-- 좌측: 전체 사용 언어 compact 위젯 (파랑 색상 중복 해결을 위해 typescript 숨김) -->
-    <td width="50%" align="center" valign="middle">
-      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=compact&bg_color=ffffff&hide_border=true&title_color=4f46e5&text_color=000000&hide=html,css,jupyter%20notebook,typescript&v=4" width="100%" alt="Top Languages" />
+    <td width="45%" align="center" valign="middle">
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=compact&bg_color=ffffff&hide_border=true&title_color=4f46e5&text_color=000000&hide=html,css,jupyter%20notebook,typescript&v=5" width="100%" alt="Top Languages" />
     </td>
     <!-- 우측: 전체 깃허브 기여 stats 위젯 -->
-    <td width="50%" align="center" valign="middle">
-      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=4f46e5&text_color=000000&icon_color=4f46e5&v=4" width="100%" alt="GitHub Stats" />
+    <td width="55%" align="center" valign="middle">
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=4f46e5&text_color=000000&icon_color=4f46e5&custom_title=GitHub%20Stats&v=5" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
 </table>
