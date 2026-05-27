@@ -23,9 +23,12 @@ files.forEach(file => {
     // Replace Vue color #41b883 -> #00c2a8 (Vibrant Mint/Teal)
     content = content.replace(/#41b883/gi, '#00c2a8');
     
+    // Hide the language donut chart and legend entirely to prevent recruiter confusion
+    content = content.replace(/<g transform="translate\(40, 520\)">/gi, '<g transform="translate(40, 520)" display="none">');
+    
     if (content !== original) {
       fs.writeFileSync(filePath, content, 'utf8');
-      console.log(`Successfully modified colors in ${file}`);
+      console.log(`Successfully modified colors and layout in ${file}`);
       modifiedCount++;
     }
   }
