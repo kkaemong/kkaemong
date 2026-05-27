@@ -8,21 +8,21 @@
   <tr>
     <!-- 1층 좌측: 전체 사용 언어 donut 위젯 -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=html,css,jupyter%20notebook&cache_seconds=86400" width="100%" alt="Top Languages" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&hide=html,css,jupyter%20notebook&cache_seconds=86400" width="100%" alt="Top Languages" />
     </td>
     <!-- 1층 우측: 전체 깃허브 기여 stats 위젯 -->
     <td width="58%" align="center" valign="middle">
-      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&icon_color=0000cc&cache_seconds=86400" width="100%" alt="GitHub Stats" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api?username=kkaemong&show_icons=true&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&icon_color=30a14e&cache_seconds=86400" width="100%" alt="GitHub Stats" />
     </td>
   </tr>
   <tr>
     <!-- 2층 좌측: 준영님의 'algorithm' 레포 전용 Python 100% donut 위젯 -->
     <td width="42%" align="center" valign="middle">
-      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=0000cc&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,c%23,typescript,vue,shaderlab,hlsl,shell,dockerfile,jupyter%20notebook&custom_title=Algorithm%20Languages&cache_seconds=86400" width="100%" alt="Algorithm Languages" />
+      <img src="https://github-readme-stats-theta-ten-yezqdhr1y5.vercel.app/api/top-langs/?username=kkaemong&layout=donut&bg_color=ffffff&hide_border=true&title_color=30a14e&text_color=000000&hide=java,kotlin,go,c%2B%2B,c,html,css,javascript,c%23,typescript,vue,shaderlab,hlsl,shell,dockerfile,jupyter%20notebook&custom_title=Algorithm%20Languages&cache_seconds=86400" width="100%" alt="Algorithm Languages" />
     </td>
     <!-- 2층 우측: 준영님의 성실한 잔디 기록을 증명해 주는 연속 커밋 스트릭(Streak) 카드! -->
     <td width="58%" align="center" valign="middle">
-      <img src="https://streak-stats.demolab.com/?user=kkaemong&theme=tokyonight&background=ffffff&ring=0000cc&fire=0000cc&currStreakNum=000000&sideNums=000000&sideLabels=000000&currStreakLabel=0000cc&hide_border=true" width="100%" alt="Commit Streak" />
+      <img src="https://streak-stats.demolab.com/?user=kkaemong&theme=tokyonight&background=ffffff&ring=30a14e&fire=30a14e&currStreakNum=000000&sideNums=000000&sideLabels=000000&currStreakLabel=30a14e&hide_border=true" width="100%" alt="Commit Streak" />
     </td>
   </tr>
 </table>
@@ -30,7 +30,7 @@
 <br/>
 
 <div align="center">
-  <img src="./profile-3d-contrib/profile-season-animate.svg" alt="3D Contributions" width="100%" />
+  <img src="./profile-3d-contrib/profile-green-animate.svg" alt="3D Contributions" width="100%" />
 </div>
 
 <br/>
