@@ -10,7 +10,6 @@ const navItems = [
   { name: '기술 스택', href: '#skills' },
   { name: '프로젝트', href: '#projects' },
   { name: '경력 및 학력', href: '#experience' },
-  { name: '자격증', href: '#certifications' },
   { name: '연락처', href: '#contact' },
 ];
 

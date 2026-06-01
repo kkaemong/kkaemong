@@ -103,13 +103,26 @@ export default function Projects() {
                     <div className="h-[1px] flex-1 bg-slate-100" />
                   </div>
                   
-                  <h3 className="text-3xl md:text-4xl print:text-2xl font-display font-bold text-primary mb-4 print:mb-2 transition-colors duration-300 leading-tight">
-                    {project.title}
-                  </h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4 print:mb-2">
+                    <h3 className="text-3xl md:text-4xl print:text-2xl font-display font-bold text-primary transition-colors duration-300 leading-tight">
+                      {project.title}
+                    </h3>
+                    {project.award && (
+                      <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 text-sm md:text-base font-extrabold rounded-full border border-amber-200/60 shadow-sm whitespace-nowrap">
+                        <span className="text-lg">👑</span> {project.award}
+                      </span>
+                    )}
+                  </div>
                   
                   <div className="flex flex-col gap-2 mb-6 print:mb-2 print:flex-row print:items-center">
                     <div className="flex items-center gap-3">
                       <span className="text-slate-400 font-semibold text-sm">{project.period}</span>
+                      {project.teamSize && (
+                        <>
+                          <span className="w-1 h-1 rounded-full bg-slate-300 print:hidden" />
+                          <span className="text-slate-500 font-semibold text-sm">{project.teamSize}</span>
+                        </>
+                      )}
                     </div>
                     {project.role && (
                       <div className="text-accent/80 font-bold text-base">
