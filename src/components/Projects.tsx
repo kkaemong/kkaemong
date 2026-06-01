@@ -122,22 +122,6 @@ export default function Projects() {
                     {project.description}
                   </p>
 
-                  {/* Key Result Highlight Badge */}
-                  {project.keyResult && project.keyResult.length > 0 && (
-                    <div className="mb-8 print:mb-4 bg-gradient-to-r from-accent/[0.06] to-transparent border-l-4 border-accent rounded-r-2xl px-5 py-4">
-                      <div className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-3">Key Outcome (핵심 성과)</div>
-                      <ul className="space-y-2">
-                        {project.keyResult.map((result: string, idx: number) => (
-                          <li key={idx} className="flex gap-2.5 items-start">
-                            <span className="shrink-0 text-accent font-bold mt-0.5">✓</span>
-                            <span className="text-primary font-bold text-[14.5px] leading-relaxed break-keep">
-                              {result}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
 
                   <div className="flex flex-wrap gap-3">
                     {project.tech.map(t => (

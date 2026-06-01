@@ -25,6 +25,59 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
 };
 
+function CodeBlock({ code, filename, language }: { code: string; filename: string; language: string }) {
+  const highlightCode = (rawCode: string) => {
+    let escaped = rawCode
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+    
+    // Highlight comments (//... or #...)
+    escaped = escaped.replace(/(\/\/.*|#.*)/g, '<span class="text-emerald-500 font-normal">$1</span>');
+    
+    // Highlight strings ("..." or '...')
+    escaped = escaped.replace(/(["'])(.*?)\1/g, '<span class="text-amber-300">"$2"</span>');
+    
+    // Highlight control keywords
+    const keywords = [
+      'public', 'private', 'protected', 'class', 'interface', 'struct', 'void', 'using', 'namespace',
+      'import', 'from', 'def', 'return', 'async', 'const', 'await', 'let', 'function', 'try', 'catch',
+      'if', 'else', 'for', 'while', 'new', 'static', 'get', 'set', 'require', 'module', 'exports'
+    ];
+    
+    keywords.forEach(kw => {
+      const reg = new RegExp(`\\b(${kw})\\b`, 'g');
+      escaped = escaped.replace(reg, '<span class="text-rose-400 font-semibold">$1</span>');
+    });
+    
+    return escaped;
+  };
+
+  return (
+    <div className="w-full bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl font-mono my-4 text-left">
+      {/* Tab Header Bar */}
+      <div className="flex items-center justify-between px-5 py-3.5 bg-slate-900/60 border-b border-slate-800">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1.5 mr-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+          </div>
+          <span className="text-xs font-semibold text-slate-400 tracking-wide">{filename}</span>
+        </div>
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+          {language}
+        </span>
+      </div>
+      
+      {/* Code Editor Body */}
+      <pre className="p-5 overflow-x-auto text-[13px] leading-relaxed text-slate-300 custom-scrollbar select-text max-h-[450px]">
+        <code dangerouslySetInnerHTML={{ __html: highlightCode(code) }} />
+      </pre>
+    </div>
+  );
+}
+
 export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
   if (!project) return null;
 
@@ -39,7 +92,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100]"
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] cursor-pointer"
           />
           
           {/* Modal Container */}
@@ -53,7 +106,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
             {/* Close Button (Floating) */}
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 z-50 p-3 bg-white/60 hover:bg-white/90 backdrop-blur-xl text-slate-800 rounded-full transition-all duration-300 shadow-sm"
+              className="absolute top-6 right-6 z-50 p-3 bg-white/60 hover:bg-white/90 backdrop-blur-xl text-slate-800 rounded-full transition-all duration-300 shadow-sm cursor-pointer"
             >
               <X size={24} strokeWidth={2.5} />
             </button>
@@ -129,14 +182,30 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                 </motion.div>
 
                 {/* Massive Description */}
-                <motion.div variants={itemVariants} className="mb-20">
+                <motion.div variants={itemVariants} className="mb-8">
                   <p className="text-xl md:text-2xl text-slate-800 leading-[1.6] font-medium font-display tracking-tight text-center max-w-3xl mx-auto break-keep">
                     {project.description}
                   </p>
                 </motion.div>
 
+                {/* Service Detail Introduction (비즈니스/서비스 가치) */}
+                {project.detailedDescription && (
+                  <motion.div 
+                    variants={itemVariants} 
+                    className="mb-16 bg-slate-50/60 border border-slate-100 rounded-[2rem] p-8 max-w-4xl mx-auto"
+                  >
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="w-1.5 h-4 bg-slate-900 rounded-full" />
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">서비스 상세 소개</h4>
+                    </div>
+                    <p className="text-slate-700 text-[15.5px] leading-relaxed font-semibold break-keep">
+                      {project.detailedDescription}
+                    </p>
+                  </motion.div>
+                )}
+
                 {/* Tech & Highlights - Vertical Flow */}
-                <motion.div variants={itemVariants} className="space-y-8 max-w-4xl mx-auto w-full">
+                <motion.div variants={itemVariants} className="space-y-12 max-w-4xl mx-auto w-full">
                   
                   {/* PSR Section (Problem → Solution → Result) */}
                   {(project.challenge || project.solution || project.keyResult) && (
@@ -211,6 +280,95 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                       </div>
                     </div>
                   )}
+
+                  {/* Deep-Dive Troubleshooting & Code Section */}
+                  {project.troubleshooting && project.troubleshooting.length > 0 && (
+                    <div className="pt-8 space-y-8">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">
+                        Technical Troubleshooting &amp; Implementation
+                      </h3>
+                      
+                      <div className="space-y-12">
+                        {project.troubleshooting.map((study, idx) => (
+                          <div 
+                            key={idx} 
+                            className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(15,23,42,0.02)] p-6 md:p-8 space-y-6 hover:shadow-[0_20px_50px_rgba(15,23,42,0.04)] transition-all duration-300"
+                          >
+                            {/* Title with Step Number */}
+                            <div className="flex items-start gap-4">
+                              <span className="shrink-0 w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm flex items-center justify-center font-display shadow-sm">
+                                {idx + 1}
+                              </span>
+                              <h4 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight leading-tight pt-0.5">
+                                {study.title}
+                              </h4>
+                            </div>
+
+                            {/* Problem vs Solution Split Cards */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="bg-rose-50/15 border border-rose-100/30 rounded-[1.5rem] p-6 space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-1.5 h-4 bg-rose-400 rounded-full" />
+                                  <span className="text-[11px] font-bold uppercase tracking-wider text-rose-500">
+                                    상황 및 원인 (Problem)
+                                  </span>
+                                </div>
+                                <p className="text-[13.5px] leading-relaxed text-slate-700 font-semibold break-keep">
+                                  {study.problem}
+                                </p>
+                              </div>
+
+                              <div className="bg-blue-50/15 border border-blue-100/30 rounded-[1.5rem] p-6 space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-1.5 h-4 bg-blue-400 rounded-full" />
+                                  <span className="text-[11px] font-bold uppercase tracking-wider text-blue-500">
+                                    해결 과정 (Solution)
+                                  </span>
+                                </div>
+                                <p className="text-[13.5px] leading-relaxed text-slate-700 font-semibold break-keep">
+                                  {study.solution}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Code Snippet Box */}
+                            {study.codeSnippet && (
+                              <div className="space-y-2.5">
+                                <div className="flex items-center gap-2 px-1">
+                                  <Zap size={14} className="text-amber-500 fill-amber-500" />
+                                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                                    핵심 구현 코드 (Core Implementation)
+                                  </span>
+                                </div>
+                                <CodeBlock 
+                                  code={study.codeSnippet.code} 
+                                  filename={study.codeSnippet.filename} 
+                                  language={study.codeSnippet.language} 
+                                />
+                              </div>
+                            )}
+
+                            {/* Blog/PR Link Button */}
+                            {study.articleUrl && (
+                              <div className="flex justify-end pt-2">
+                                <a 
+                                  href={study.articleUrl} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-100 hover:border-slate-300 rounded-xl text-xs font-bold transition-all duration-300 shadow-sm cursor-pointer group"
+                                >
+                                  <span>상세 분석 글 보기</span>
+                                  <ArrowUpRight size={14} className="opacity-60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                </a>
+                              </div>
+                            )}
+
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                 </motion.div>
 
                 {/* GitHub Pill Button */}
@@ -220,7 +378,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                       href={project.github} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-3 px-10 py-5 bg-slate-900 text-white rounded-full transition-all duration-300 hover:scale-105 hover:bg-black shadow-2xl shadow-slate-900/20"
+                      className="group flex items-center gap-3 px-10 py-5 bg-slate-900 text-white rounded-full transition-all duration-300 hover:scale-105 hover:bg-black shadow-2xl shadow-slate-900/20 cursor-pointer"
                     >
                       <Github size={24} className="group-hover:rotate-12 transition-transform duration-300" />
                       <span className="font-bold text-lg tracking-wide">GitHub Repository</span>
