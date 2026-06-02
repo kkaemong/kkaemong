@@ -21,21 +21,23 @@ export interface Project {
   tech: string[];
   role?: string;
   description: string;
-  detailedDescription?: string; // 서비스 상세 소개 (어떤 비즈니스적 가치를 가진 서비스인가)
+  impactLine?: string;    // 프로젝트 카드에 노출되는 핵심 임팩트 한 줄
+  detailedDescription?: string;
   image?: string;
   github?: string;
   teamSize?: string;
-  award?: string;         // 수상 내역 (왕관 뱃지용)
-  challenge?: string[];   // 직면한 문제/도전 리스트
-  solution?: string[];    // 해결 방법 리스트
-  keyResult?: string[];   // 핵심 성과 리스트
-  troubleshooting?: TroubleShooting[]; // 기술적 트러블슈팅 및 구현 코드 블록
+  award?: string;
+  challenge?: string[];
+  solution?: string[];
+  keyResult?: string[];
+  learned?: string[];     // 이 프로젝트에서 배운 것
+  troubleshooting?: TroubleShooting[];
 }
 
 export const portfolioData = {
   hero: {
-    headline: "사고는 유연하게, 구조는 견고하게",
-    subTitle: "Python을 주무기로 다져진 깊이 있는 CS/알고리즘 기본기 위에 C#, Unity 게임 클라이언트 구현력을 얹었습니다. SSAFY 특화 프로젝트에서 Unity WebGL 60fps 고정 최적화 및 실시간 소켓 동기화 루프를 설계하며, 단순히 작동하는 코드가 아닌 '실제 구동 성능'을 최적화하는 것에 깊이 몰입합니다.",
+    headline: "플레이어가 느끼는 그 순간을,\n코드로 설계합니다",
+    subTitle: "조작감이 어색하면, 사운드가 끊기면, 물체 상호작용이 부자연스러우면 — 그 불편함을 코드 레벨에서 정의하고 직접 해결합니다. SSAFY 특화 프로젝트에서 Unity 인게임 클라이언트를 총괄하며, 단순히 '작동하는 코드'가 아닌 '플레이어가 몰입하는 코드'를 만드는 것에 집착합니다.",
     cta: {
       primary: "프로젝트 살펴보기",
       secondary: "GitHub 방문하기",
@@ -43,8 +45,8 @@ export const portfolioData = {
     }
   },
   about: {
-    title: "사고는 유연하게,\n구조는 견고하게",
-    description: "단순한 코드 작성을 넘어 서비스의 본질적인 목표와 사용자 니즈를 분석합니다. 데이터에 기반한 논리적 의사결정을 통해 프로젝트의 방향성을 잡고, 기획 의도를 가장 효율적으로 달성하는 시스템 아키텍처를 고민합니다.",
+    title: "플레이어가 느끼는\n그 순간을 코드로",
+    description: "게임을 하다 보면 '이 조작감 왜 이래?' 라는 순간이 있습니다. 저는 그 불쾌한 0.1초를 게임 개발자의 시선으로 분석하고, 코드로 고쳐온 사람입니다.",
     personalInfo: [
       { label: "이름", value: "진준영" },
       { label: "생년월일", value: "1999.05.31" },
@@ -55,86 +57,72 @@ export const portfolioData = {
     ],
     points: [
       {
-        title: "비즈니스와 개발의 연결",
-        content: "경영학적 사고로 서비스의 비즈니스 목적과 가치를 분석하고, 이를 견고한 기술적 설계와 안정적인 구현으로 치환합니다."
+        title: "상호작용은 인터페이스부터 설계한다",
+        content: "IInteractable 인터페이스로 어떤 물체든 일관된 상호작용을 규격화합니다. 에셋이 바뀌어도, 기획이 바뀌어도, 플레이어는 어색함을 느끼지 않습니다."
       },
       {
-        title: "사용자 중심의 가치 구현",
-        content: "기획의 의도와 디자이너의 레이아웃을 정교한 코드로 이식하며, 실시간 통신 및 상태 최적화를 통해 몰입감 높은 사용자 경험을 창출합니다."
+        title: "플레이어의 감각을 코드로 번역한다",
+        content: "Mathf.Lerp 감속, 속도 비례 사운드 Pitch 동기화, 점프 FSM 상태 명확화 — 숫자를 튜닝하는 게 아니라 플레이어가 느낄 감각을 튜닝합니다."
       },
       {
-        title: "유연한 스택 및 문제 해결력",
-        content: "프로젝트의 특성에 맞춰 웹 프론트엔드뿐만 아니라 Unity, 백엔드 API, 멀티모달 AI 등 다양한 기술 도메인을 주도적으로 학습하고 적용합니다."
+        title: "몰입을 지키기 위해 성능까지 파고든다",
+        content: "조작감이 끊기는 원인을 추적하다 GC 스파이크와 메모리 누수까지 잡게 됐습니다. 최적화는 목적이 아니라 몰입을 위한 수단입니다."
       }
     ]
   },
   skills: {
-    core: [
-      {
-        name: "Python",
-        level: 85,
-        icon: "python",
-        description: "알고리즘, 백엔드, AI 등 다양한 분야에 폭넓게 활용하는 핵심 주력 언어입니다."
-      },
-      {
-        name: "Django",
-        level: 80,
-        icon: "django",
-        description: "DRF 시리얼라이저(Serializer)를 직접 설계하여 RESTful API 백엔드를 구축할 수 있습니다."
-      }
-    ],
-    webgl: [
+    main: [
       {
         name: "C#",
-        level: 80,
+        tag: "주력",
         icon: "csharp",
-        description: "Unity 핵심 스크립팅 언어로, 게임 로직 및 백엔드 통신 모듈을 직접 설계합니다."
+        description: "Unity 핵심 스크립팅 언어. FSM 상태 관리, 제네릭 기반 오브젝트 풀링, 비동기 서버 통신 모듈을 직접 설계합니다."
       },
       {
         name: "Unity",
-        level: 80,
+        tag: "주력",
         icon: "unity",
-        description: "WebGL 2D 게임 개발 및 객체 풀링(Object Pooling) 최적화를 수행합니다."
+        description: "2D/3D 인게임 인터랙션 설계, 애니메이터 FSM 제어, 물리 로직 구현 및 프레임 최적화를 총괄합니다."
+      }
+    ],
+    sub: [
+      {
+        name: "Python",
+        tag: "보조",
+        icon: "python",
+        description: "알고리즘 문제 해결과 게임 툴 자동화 스크립트, AI 모델 연동 파이프라인에 적극 활용합니다."
       },
       {
-        name: "TypeScript",
-        level: 70,
+        name: "TypeScript & React",
+        tag: "보조",
         icon: "typescript",
-        description: "엄격한 타입 설계를 바탕으로 안정적인 웹 UI 컴포넌트를 개발할 수 있습니다."
+        description: "웹소켓 실시간 멀티플레이어 게임의 클라이언트 상태 파이프라인 및 GPU 가속 UI 애니메이션을 설계합니다."
       },
       {
-        name: "React",
-        level: 70,
-        icon: "react",
-        description: "Figma 톤앤매너를 완벽하게 이해하고 세련된 웹 반응형 프론트엔드 UI를 구축할 수 있습니다."
-      }
-    ],
-    ai: [
-      {
-        name: "PyTorch",
-        level: 40,
-        icon: "pytorch",
-        description: "오픈소스 AI 모델을 활용해 텍스트-이미지 복합 추론 파이프라인을 수행했습니다."
+        name: "Django & Spring Boot",
+        tag: "보조",
+        icon: "django",
+        description: "인게임 클라이언트와의 RESTful API 통신 및 JWT 기반 인증 흐름을 직접 설계하고 구축했습니다."
       },
-      {
-        name: "Hugging Face",
-        level: 40,
-        icon: "huggingface",
-        description: "Transformers 모델 로딩 및 커스텀 이미지 데이터셋 전처리를 수행했습니다."
-      },
-      {
-        name: "PEFT & LoRA",
-        level: 40,
-        icon: "pytorch",
-        description: "LoRA 기법으로 제한된 GPU 환경 내에서 효율적인 모델 미세조정을 수행했습니다."
-      }
-    ],
-    support: [
       {
         name: "Git & GitHub",
-        level: 75,
+        tag: "보조",
         icon: "github",
-        description: "Git Flow 기반의 체계적인 버전 관리로 여러 직군과 원활하게 협업합니다."
+        description: "Git Flow 기반 협업 및 팀 브랜치 전략을 주도하여 충돌 없는 버전 관리 환경을 만듭니다."
+      }
+    ],
+    exp: [
+      {
+        name: "PyTorch & LoRA",
+        tag: "경험",
+        icon: "pytorch",
+        description: "단일 24GB GPU 제약에서 LoRA 기법으로 7B 거대 모델을 OOM 없이 파인튜닝하여 정확도 0.75→0.81 달성."
+      },
+      {
+        name: "보안 & 모의해킹",
+        tag: "경험",
+        icon: "linux",
+        description: "OWASP Top 10 기반 K-Shield Jr 수료. 인증 우회, SQL 인젝션 등 4대 취약점 실증 및 보안 리포트 작성."
       }
     ]
   },
@@ -148,12 +136,17 @@ export const portfolioData = {
       tech: ["Unity WebGL", "C#", "FSM", "Object Pooling", "Git", "GitHub"],
       role: "Unity 클라이언트 오브젝트 & 상호작용 로직 개발",
       description: "Unity 기반 포장 액션 캐주얼 액션 게임",
-      detailedDescription: "물건의 특성과 규격에 맞추어 상자를 포장하고 적재하는 멀티플레이어 웹 게임입니다. 외부 에셋을 임포트하여 게임 로직에 맞게 가공하고 최적화하는 과정을 전담했습니다. 크기(Scale)와 높이(Pivot)가 다른 다양한 3D 에셋들을 게임 내에서 일관성 있게 상호작용할 수 있도록 부모-자식(Parent-Child) 계층 구조화로 규격화하고, 객체 생성 부하를 줄이는 오브젝트 풀링(Object Pooling) 아키텍처를 도입하여 WebGL 환경에서의 프레임 드랍을 완벽하게 방어했습니다.",
+      impactLine: "IInteractable 인터페이스로 크기·Pivot이 다른 3D 에셋의 상호작용을 규격화하고, 오브젝트 풀링으로 GC 스파이크를 원천 차단한 포장 액션 게임",
+      detailedDescription: "물건의 특성과 규격에 맞추어 상자를 포장하고 적재하는 WebGL 포장 액션 게임입니다. 외부 에셋을 임포트하여 게임 로직에 맞게 가공하고 최적화하는 과정을 전담했습니다. 크기(Scale)와 높이(Pivot)가 다른 다양한 3D 에셋들을 게임 내에서 일관성 있게 상호작용할 수 있도록 부모-자식(Parent-Child) 계층 구조화로 규격화하고, 객체 생성 부하를 줄이는 오브젝트 풀링(Object Pooling) 아키텍처를 도입하여 WebGL 환경에서의 프레임 드랍을 완벽하게 방어했습니다.",
       image: "/Gifted.png",
       github: "https://github.com/gifted-hamyeonham/gifted",
       keyResult: [
-        "에셋 규격화 및 IInteractable 인터페이스 설계 패턴 도입으로 기획 변경에 유연한 컴포넌트 아키텍처 확보",
-        "메모리 누수 차단 및 게임 성능 최적화 달성으로 60fps 유지"
+        "IInteractable 인터페이스를 12개 이상 핵심 클래스에 적용하여, 에셋 스토어 에셋의 Pivot이나 Scale이 달라도 동일한 상호작용 로직(Interact())이 동작하도록 규격화",
+        "ObjectPool<T> 제네릭 풀링 도입으로 매 프레임 발생하던 Instantiate/Destroy GC 가메모리 할당을 0으로 수렴시켜 WebGL 60fps 안정화"
+      ],
+      learned: [
+        "인터페이스는 단순 코드 구조를 넘어, '어떤 물체든 동일하게 다룰 수 있어야 한다'는 설계 철학에서 나온다는 것을 체감했습니다.",
+        "GC 스파이크를 잡아보는 과정에서, 메모리 할당 시점과 해제 시점을 설계 수준에서 통제하는 것이 성능의 핵심임을 직접 배웠습니다."
       ],
       troubleshooting: [
         {
@@ -187,13 +180,19 @@ export const portfolioData = {
       tech: ["Unity WebGL", "C#", "Spring Boot", "PostgreSQL", "AWS EC2"],
       role: "Unity 인게임 클라이언트 총괄",
       description: "Unity · Spring Boot · AWS 풀스택 2D 러너 금융 학습 게임",
+      impactLine: "Unity 인게임 C# 클라이언트를 단독 총괄하고, Lerp 감속·사운드 Pitch 동기화로 조작감을 완성하여 핀테크 트랙 우수상 수상",
       award: "우수상",
       detailedDescription: "지구에 불시착한 E.T.가 시대별 대한민국 경제 격변기를 직접 달리며 겪는 2D 러너 게임입니다. Unity 인게임 클라이언트 개발을 총괄하여 1980/2000/2020년대 배경 씬(Scene)을 분할 구축하고, 캐릭터의 점프 물리 로직(Rigidbody2D)부터 사운드/피격 이펙트, 그리고 애니메이션 상태 머신(Animator) 제어까지 게임에 필요한 핵심 인게임 C# 엔진을 전부 단독으로 설계했습니다. 추가로 Spring Boot 서버와의 데이터 연동을 위한 커스텀 통신 모듈을 구축하여 클라이언트 아키텍처의 완성도를 높였습니다.",
       image: "/jabonju.png",
       github: "https://github.com/kkaemong/zabonzooET",
       keyResult: [
-        "게임 내 핵심 C# 로직(물리, 애니메이션, UI 제어) 전담 구축으로 핀테크 트랙 2위 우수상 수상 견인",
-        "비동기 통신 에러율 감소 및 클라이언트-서버 간 퀴즈 데이터 동기화 아키텍처 안정화"
+        "FSM state 0~4 명확 분리 및 Pitch = globalSpeed/5f 실시간 동기화로 조작감을 완성하여 핀테크 트랙 우수상 수상",
+        "파편화된 UnityWebRequest 코드를 Generic<T> + Action 콜백 APIManager 단일 클래스로 통합하여 비동기 타이밍 오류 구조적 해소"
+      ],
+      learned: [
+        "FSM을 명확히 설계하지 않으면 애니메이션 상태가 꼬이는 것은 시간의 문제가 아니라 설계의 문제임을 실무로 체득했습니다.",
+        "사운드 Pitch를 속도에 동기화하는 수준의 세밀한 튜닝이 플레이어의 몰입감에 직접적으로 영향을 준다는 것을 체감했습니다. '조작감'은 시각만이 아니라 청각과 함께 설계해야 한다는 교훈이었습니다.",
+        "Generic 타입과 Action 델리게이트를 결합하면 다양한 데이터 모델을 하나의 통신 시스템으로 안전하게 처리할 수 있다는 것을 이 프로젝트에서 노득했습니다."
       ],
       troubleshooting: [
         {
@@ -237,6 +236,7 @@ export const portfolioData = {
       tech: ["React", "TypeScript", "Zustand", "Vite", "Framer Motion"],
       role: "Front-End",
       description: "웹소켓 & AI를 활용한 릴레이 스토리텔링 게임",
+      impactLine: "웹소켓 실시간 멀티플레이 게임에서 Zustand 오디오 크로스페이드와 GPU 가속 UI로 끊김 없는 60fps 클라이언트 경험 구현",
       detailedDescription: "유저들이 랜덤한 이미지를 보고 즉흥적으로 스토리를 이어 적으며 기상천외한 동화책을 만들어가는 실시간 멀티플레이 웹 게임입니다. 두 팀으로 나뉘어 제한 시간 내에 창의적인 문장을 작성하며 릴레이 스토리 대결을 펼칩니다. 게임이 종료되면 AI 및 관객 심사위원의 평가를 통해 승패가 결정되며, 예측할 수 없는 유쾌한 결말을 함께 즐길 수 있습니다.",
       image: "/gaesorlay.png",
       github: "https://github.com/kkaemong/gaesorelay",
@@ -277,6 +277,7 @@ export const portfolioData = {
       tech: ["Vue.js", "Pinia", "Python", "Django DRF", "JWT", "Kakao Map API"],
       role: "FE/BE 풀스택 개발 (회원, 커뮤니티, 카카오맵)",
       description: "Django와 Vue.js를 활용한 사용자 맞춤형 식단 관리 및 커뮤니티 플랫폼",
+      impactLine: "JWT 인증 파이프라인 설계로 IDOR 취약점을 원천 방어하고, 카카오맵 SDK 비동기 메모리 누수를 직접 해결한 헬스케어 서비스",
       detailedDescription: "SSAFY 멀티캠퍼스 교육생들이 당일 섭취한 점심(20층 식단 API) 칼로리를 기반으로 저녁 식단을 추천/설계해주는 개인 맞춤형 헬스케어 서비스입니다. Vue.js를 활용하여 전체적인 초록색 톤앤매너와 브랜드 UI를 기획/구현했으며, Kakao Map API를 연동해 주변 건강 식당 탐색 기능을 개발했습니다. 백엔드(Django)에서는 회원 도메인과 커뮤니티를 전담 구축하고 전체 시스템의 JWT 인증 및 권한(Authorization) 흐름을 상세하게 설계했습니다.",
       image: "/SSAIETMAIN.png",
       github: "https://github.com/kkaemong/SSAIET",
@@ -327,6 +328,7 @@ export const portfolioData = {
       tech: ["Python", "PyTorch", "LLM", "VLM", "PEFT", "LoRA"],
       role: "이미지/텍스트 동시 이해 모델 개발",
       description: "Qwen2.5-VL 기반 모델링을 통해\n이미지와 텍스트를 동시에 이해하고 문제를 해결하는 AI 프로젝트",
+      impactLine: "단일 24GB GPU 제약에서 LoRA 도입으로 7B 모델 OOM 없이 파인튜닝, 정확도 0.75 → 0.81 달성한 4일 해커톤",
       detailedDescription: "주어진 컴퓨팅 자원 내에서 오픈소스 거대 언어 모델(LLM)과 비전 언어 모델(VLM)을 타겟 도메인에 맞게 파인튜닝하는 해커톤 프로젝트입니다. 단일 24GB GPU라는 하드웨어적 한계를 극복하기 위해 파라미터 효율적 튜닝(PEFT)과 LoRA(Low-Rank Adaptation) 기법을 도입했으며, 베이스라인 코드의 메모리 병목을 분석하고 최적화하는 엔지니어링에 매진했습니다. 이를 통해 훈련 안정성을 확보하여 성공적인 실험 결과를 도출하고 주도적으로 팀 발표를 이끌었습니다.",
       image: "/AIchallange.png",
       github: "https://github.com/kkaemong/SSAFY-AI-Challenge",
@@ -377,6 +379,7 @@ export const portfolioData = {
       tech: ["Burp Suite", "SQLMap", "OWASP TOP 10", "Network Security"],
       role: "웹 애플리케이션 모의 해킹 및 취약점 분석",
       description: "취약점 분석을 통해 보안 취약점을 진단하고 대응 방안을 수립한 보안 프로젝트",
+      impactLine: "OWASP Top 10 기반 모의 침투로 인증 우회·SQL 인젝션 등 4대 취약점을 실증하고 보안 권고 리포트를 작성한 K-Shield Jr 프로젝트",
       detailedDescription: "제공된 보안 취약 웹사이트를 대상으로 OWASP TOP 10 기반의 체계적인 모의 침투를 수행한 실무 정보보안 프로젝트입니다. Burp Suite와 SQLMap을 활용하여 팀원들과 공격 범위를 세분화하고, 불충분한 인증(2FA 우회), 대량 문자열 삽입에 의한 버퍼 오버플로우, SQL 인젝션 등을 집요하게 식별했습니다. 도출된 취약점의 공격 시나리오를 구체화하고 즉각적인 보안 패치 권고사항을 담은 종합 리포트를 작성했습니다.",
       image: "/kshield.png",
       github: "https://github.com/kkaemong/Web-Hacking-Pjt",
@@ -421,18 +424,24 @@ export const portfolioData = {
     },
     {
       id: 2,
+      title: "현재 학습 중",
+      period: "2026.06 ~",
+      content: "C# 심화 (Generic, 다형성, 인터페이스 패턴) 및 Unity 시스템 아키텍처 개인 학습 진행 중. 실무 수준의 클라이언트 구조 설계 역량 고도화 목표"
+    },
+    {
+      id: 3,
       title: "협성대학교 경영학 전공",
       period: "2018.03 ~ 2024.08",
       content: "경영 데이터 분석 및 비즈니스 통계 이론 이수"
     },
     {
-      id: 3,
+      id: 4,
       title: "제 11기 K-Shield Jr 정보보안 과정",
       period: "2023.09 ~ 2023.10",
       content: "웹 취약점 진단 및 모의 해킹 실무 교육 수료"
     },
     {
-      id: 4,
+      id: 5,
       title: "Philippines Residency",
       period: "2002 ~ 2009",
       content: "7년 해외 거주 및 영어 커뮤니케이션 가능"

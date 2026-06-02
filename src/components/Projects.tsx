@@ -29,7 +29,7 @@ export default function Projects() {
               프로젝트
             </h2>
             <p className="text-slate-700 text-lg md:text-xl max-w-3xl font-semibold leading-relaxed">
-              유연한 사고로 문제를 정의하고, 견고한 구조로 해결책을 구현한 프로젝트들입니다.
+              플레이어가 느끼는 조작감과 인터랙션을 코드로 설계해온 프로젝트들입니다. 각 카드를 클릭하면 트러블슈팅 과정과 핵심 구현 코드를 확인할 수 있습니다.
             </p>
           </motion.div>
 
@@ -87,6 +87,13 @@ export default function Projects() {
                     </span>
                   </div>
 
+                  {/* Click hint overlay */}
+                  <div className="absolute inset-0 flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="inline-flex items-center gap-2 bg-black/70 text-white text-xs font-bold px-4 py-2 rounded-full backdrop-blur-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                      클릭하면 상세 내용을 볼 수 있습니다
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -131,7 +138,14 @@ export default function Projects() {
                     )}
                   </div>
 
-                  <p className="text-slate-800 text-lg print:text-sm leading-relaxed font-semibold mb-4 print:mb-2">
+                  {/* Impact Line — 카드 핵심 임팩트 한 줄 */}
+                  {project.impactLine && (
+                    <p className="text-slate-600 text-base leading-relaxed mb-4 print:mb-2 italic border-l-2 border-accent/40 pl-3">
+                      {project.impactLine}
+                    </p>
+                  )}
+
+                  <p className="text-slate-400 text-sm print:text-xs leading-relaxed mb-4 print:mb-2">
                     {project.description}
                   </p>
 

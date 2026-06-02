@@ -473,6 +473,28 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                     </div>
                   )}
 
+                  {/* What I Learned */}
+                  {(project as any).learned && (project as any).learned.length > 0 && (
+                    <div className="pt-8 border-t border-slate-100">
+                      <div className="flex items-center gap-2 mb-6">
+                        <span className="w-1.5 h-4 bg-accent rounded-full" />
+                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                          이 프로젝트에서 배운 것 (What I Learned)
+                        </h3>
+                      </div>
+                      <ul className="space-y-4">
+                        {(project as any).learned.map((item: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-3 text-slate-700 text-[15px] leading-relaxed font-medium break-keep">
+                            <span className="shrink-0 w-6 h-6 rounded-full bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mt-0.5">
+                              {idx + 1}
+                            </span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                 </motion.div>
 
                 {/* GitHub Pill Button */}

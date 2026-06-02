@@ -2,17 +2,16 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Target, Cpu, Globe } from 'lucide-react';
+import { Gamepad2, Cpu, Zap } from 'lucide-react';
 import { portfolioData } from '@/data/portfolio';
 
-const icons = [Target, Cpu, Globe];
+const icons = [Gamepad2, Cpu, Zap];
 
 export default function About() {
-  const { about } = portfolioData;
+  const { about, contact } = portfolioData;
 
   return (
     <section id="about" className="bg-slate-50 py-28 border-y border-slate-200/60 relative overflow-hidden print:py-8 print:bg-white print:border-none">
-      {/* Background decoration */}
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none print:hidden" style={{ backgroundImage: 'radial-gradient(#0f172a 1.5px, transparent 1.5px)', backgroundSize: '48px 48px' }} />
 
       <div className="section-container relative z-10 print:py-0">
@@ -37,9 +36,9 @@ export default function About() {
             </p>
           </motion.div>
         </div>
- 
+
         {/* 3 Core Value Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-8 print:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-8 print:gap-4 mb-16">
           {about.points.map((point, i) => {
             const Icon = icons[i % icons.length];
             return (
@@ -62,6 +61,19 @@ export default function About() {
             );
           })}
         </div>
+
+        {/* Contact Info — 하단에 작게 */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-wrap items-center gap-x-8 gap-y-2 text-sm text-slate-400 font-medium border-t border-slate-200/60 pt-8"
+        >
+          <span className="text-slate-300 font-bold uppercase tracking-widest text-xs">Contact</span>
+          <a href={`mailto:${contact.email}`} className="hover:text-accent transition-colors">{contact.email}</a>
+          <a href={`https://${contact.github}`} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">{contact.github}</a>
+          <a href={contact.blog} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Velog 블로그</a>
+        </motion.div>
       </div>
     </section>
   );
