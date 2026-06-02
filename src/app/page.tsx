@@ -15,7 +15,7 @@ export default function Home() {
       <Sidebar />
       <Hero />
       <About />
-      <Skills />
+      {/* <Skills /> - Merged into Projects */}
       <Projects />
       <Experience />
       <Footer />

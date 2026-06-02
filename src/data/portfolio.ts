@@ -37,7 +37,7 @@ export interface Project {
 export const portfolioData = {
   hero: {
     headline: "플레이어가 느끼는 그 순간을,\n코드로 설계합니다",
-    subTitle: "조작감이 어색하면, 사운드가 끊기면, 물체 상호작용이 부자연스러우면 — 그 불편함을 코드 레벨에서 정의하고 직접 해결합니다. SSAFY 특화 프로젝트에서 Unity 인게임 클라이언트를 총괄하며, 단순히 '작동하는 코드'가 아닌 '플레이어가 몰입하는 코드'를 만드는 것에 집착합니다.",
+    subTitle: "조작감이 어색하거나 사운드가 끊길 때,\n그 불편함을 코드 레벨에서 추적하고 해결합니다.\n\n단순히 '작동하는 코드'를 넘어,\n'플레이어가 몰입하는 코드'를 만드는 것에 집착합니다.",
     cta: {
       primary: "프로젝트 살펴보기",
       secondary: "GitHub 방문하기",
@@ -45,8 +45,8 @@ export const portfolioData = {
     }
   },
   about: {
-    title: "플레이어가 느끼는\n그 순간을 코드로",
-    description: "게임을 하다 보면 '이 조작감 왜 이래?' 라는 순간이 있습니다. 저는 그 불쾌한 0.1초를 게임 개발자의 시선으로 분석하고, 코드로 고쳐온 사람입니다.",
+    title: "당연함을 지키기 위해\n보이지 않는 곳을 다듬습니다",
+    description: "찰나의 끊김과 미세한 어색함을 방치하지 않습니다.\n\n유저의 시선이 닿지 않는 코드 깊은 곳을 파고들어 원인을 해결하고, 기획 변화에도 무너지지 않는 단단한 뼈대를 고민하는 클라이언트 개발자입니다.",
     personalInfo: [
       { label: "이름", value: "진준영" },
       { label: "생년월일", value: "1999.05.31" },
@@ -57,16 +57,16 @@ export const portfolioData = {
     ],
     points: [
       {
-        title: "상호작용은 인터페이스부터 설계한다",
-        content: "IInteractable 인터페이스로 어떤 물체든 일관된 상호작용을 규격화합니다. 에셋이 바뀌어도, 기획이 바뀌어도, 플레이어는 어색함을 느끼지 않습니다."
+        title: "유연하고 단단한 설계",
+        content: "IInteractable 인터페이스로 결합도를 낮춰, 잦은 기획 변경과 에셋 추가에도 흔들리지 않는 뼈대를 구축합니다."
       },
       {
-        title: "플레이어의 감각을 코드로 번역한다",
-        content: "Mathf.Lerp 감속, 속도 비례 사운드 Pitch 동기화, 점프 FSM 상태 명확화 — 숫자를 튜닝하는 게 아니라 플레이어가 느낄 감각을 튜닝합니다."
+        title: "수치로 깎아낸 조작감",
+        content: "FSM으로 복잡한 행동을 제어하고, Lerp 감속과 사운드 동기화를 통해 눈과 귀가 일치하는 타격감을 구현합니다."
       },
       {
-        title: "몰입을 지키기 위해 성능까지 파고든다",
-        content: "조작감이 끊기는 원인을 추적하다 GC 스파이크와 메모리 누수까지 잡게 됐습니다. 최적화는 목적이 아니라 몰입을 위한 수단입니다."
+        title: "끊김 없는 프레임 최적화",
+        content: "오브젝트 풀링을 적극 활용하여, 잦은 객체 생성과 파괴로 인한 GC 스파이크 및 프레임 저하를 원천 차단합니다."
       }
     ]
   },
@@ -93,22 +93,16 @@ export const portfolioData = {
         description: "알고리즘 문제 해결과 게임 툴 자동화 스크립트, AI 모델 연동 파이프라인에 적극 활용합니다."
       },
       {
-        name: "TypeScript & React",
+        name: "TypeScript",
         tag: "보조",
         icon: "typescript",
         description: "웹소켓 실시간 멀티플레이어 게임의 클라이언트 상태 파이프라인 및 GPU 가속 UI 애니메이션을 설계합니다."
       },
       {
-        name: "Django & Spring Boot",
+        name: "Django",
         tag: "보조",
         icon: "django",
-        description: "인게임 클라이언트와의 RESTful API 통신 및 JWT 기반 인증 흐름을 직접 설계하고 구축했습니다."
-      },
-      {
-        name: "Git & GitHub",
-        tag: "보조",
-        icon: "github",
-        description: "Git Flow 기반 협업 및 팀 브랜치 전략을 주도하여 충돌 없는 버전 관리 환경을 만듭니다."
+        description: "클라이언트와의 RESTful API 통신 및 JWT 기반 인증 흐름을 직접 설계하고 구축했습니다."
       }
     ],
     exp: [
@@ -177,7 +171,7 @@ export const portfolioData = {
       type: "SSAFY 2학기 특화 프로젝트 (핀테크 트랙)",
       period: "2026.02.16 ~ 2026.04.03",
       teamSize: "6인",
-      tech: ["Unity WebGL", "C#", "Spring Boot", "PostgreSQL", "AWS EC2"],
+      tech: ["Unity WebGL", "C#", "FSM", "REST API"],
       role: "Unity 인게임 클라이언트 총괄",
       description: "Unity · Spring Boot · AWS 풀스택 2D 러너 금융 학습 게임",
       impactLine: "Unity 인게임 C# 클라이언트를 단독 총괄하고, Lerp 감속·사운드 Pitch 동기화로 조작감을 완성하여 핀테크 트랙 우수상 수상",
@@ -376,7 +370,7 @@ export const portfolioData = {
       type: "K-Shield Jr 11기 프로젝트",
       period: "2023.10.02 ~ 2023.10.31",
       teamSize: "6인",
-      tech: ["Burp Suite", "SQLMap", "OWASP TOP 10", "Network Security"],
+      tech: ["Burp Suite", "SQLMap", "OWASP TOP 10", "보안 & 모의해킹"],
       role: "웹 애플리케이션 모의 해킹 및 취약점 분석",
       description: "취약점 분석을 통해 보안 취약점을 진단하고 대응 방안을 수립한 보안 프로젝트",
       impactLine: "OWASP Top 10 기반 모의 침투로 인증 우회·SQL 인젝션 등 4대 취약점을 실증하고 보안 권고 리포트를 작성한 K-Shield Jr 프로젝트",
@@ -424,24 +418,18 @@ export const portfolioData = {
     },
     {
       id: 2,
-      title: "현재 학습 중",
-      period: "2026.06 ~",
-      content: "C# 심화 (Generic, 다형성, 인터페이스 패턴) 및 Unity 시스템 아키텍처 개인 학습 진행 중. 실무 수준의 클라이언트 구조 설계 역량 고도화 목표"
-    },
-    {
-      id: 3,
       title: "협성대학교 경영학 전공",
       period: "2018.03 ~ 2024.08",
       content: "경영 데이터 분석 및 비즈니스 통계 이론 이수"
     },
     {
-      id: 4,
+      id: 3,
       title: "제 11기 K-Shield Jr 정보보안 과정",
       period: "2023.09 ~ 2023.10",
       content: "웹 취약점 진단 및 모의 해킹 실무 교육 수료"
     },
     {
-      id: 5,
+      id: 4,
       title: "Philippines Residency",
       period: "2002 ~ 2009",
       content: "7년 해외 거주 및 영어 커뮤니케이션 가능"

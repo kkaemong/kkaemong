@@ -108,69 +108,22 @@ export default function Hero() {
             className="w-full max-w-[850px] bg-white rounded-[3rem] border border-slate-200/60 p-10 lg:p-12 print:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] flex flex-col justify-between z-10"
           >
             <div>
-              <h3 className="text-2xl font-bold text-primary mb-8 print:mb-4 flex items-center gap-4">
-                <span className="w-2 h-8 bg-accent rounded-full print:h-6" />
-                Information
-              </h3>
-              
-              {/* Staggered container for items */}
-              <motion.div 
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.08,
-                      delayChildren: 0.4
-                    }
-                  }
-                }}
-                initial="hidden"
-                animate="visible"
-                className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 print:gap-y-4"
+              <motion.h1 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="text-3xl md:text-5xl font-display font-extrabold text-primary mb-6 leading-tight whitespace-pre-line tracking-tight"
               >
-                {about.personalInfo?.map((info) => (
-                  <motion.div 
-                    key={info.label} 
-                    variants={{
-                      hidden: { opacity: 0, y: 15 },
-                      visible: { 
-                        opacity: 1, 
-                        y: 0,
-                        transition: { type: "spring", stiffness: 100, damping: 15 }
-                      }
-                    }}
-                    whileHover={{ x: 6 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="flex items-center gap-5 group"
-                  >
-                    {/* Icon Box with elastic rotation & bounce on hover */}
-                    <motion.div 
-                      whileHover={{ 
-                        scale: 1.15,
-                        rotate: [0, -12, 10, -5, 0],
-                      }}
-                      transition={{ 
-                        scale: { type: "spring", stiffness: 300, damping: 12 },
-                        rotate: { duration: 0.5, ease: "easeInOut" }
-                      }}
-                      className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-accent group-hover:bg-accent/5 group-hover:border-accent/30 transition-colors shadow-sm shrink-0"
-                    >
-                      {info.label === "이름" && <User size={22} />}
-                      {info.label === "생년월일" && <Calendar size={22} />}
-                      {info.label === "주소지" && <MapPin size={22} />}
-                      {info.label === "연락처" && <Phone size={22} />}
-                      {info.label === "이메일" && <Mail size={22} />}
-                      {info.label === "학력" && <GraduationCap size={22} />}
-                    </motion.div>
-                    
-                    <div className="min-w-0 print:w-full">
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1.5">{info.label}</p>
-                      <p className="text-primary font-bold text-lg lg:text-xl truncate print:whitespace-normal print:overflow-visible print:text-base">{info.value}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+                {hero.headline}
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="text-lg md:text-xl text-slate-600 leading-relaxed font-semibold whitespace-pre-line break-keep"
+              >
+                {hero.subTitle}
+              </motion.p>
             </div>
  
             {/* Magnetic-like GitHub Call to Action button */}
