@@ -21,7 +21,6 @@ const gaegu = Gaegu({
 
 const singleDay = Single_Day({
   weight: ["400"],
-  subsets: ["latin"],
   variable: "--font-single-day",
   display: "swap",
 });
@@ -52,4 +51,3 @@ export default function RootLayout({
     </html>
   );
 }
-
