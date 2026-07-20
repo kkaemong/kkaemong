@@ -36,17 +36,18 @@ export interface Project {
 
 export const portfolioData = {
   hero: {
-    headline: "플레이어가 느끼는 그 순간을,\n코드로 설계합니다",
-    subTitle: "조작감이 어색하거나 사운드가 끊길 때,\n그 불편함을 코드 레벨에서 추적하고 해결합니다.\n\n단순히 '작동하는 코드'를 넘어,\n'플레이어가 몰입하는 코드'를 만드는 것에 집착합니다.",
+    headline: "플레이어가 느끼는\n그 찰나의 순간을,\n코드로 정밀하게 설계합니다",
+    subTitle: "조작감이 어색하거나 프레임과 사운드가 끊길 때, 그 불편함을 코드 레벨에서 추적하고 해결합니다.\n\n단순히 '작동하는 코드'를 넘어, '플레이어가 온전히 몰입하는 게임 경험'을 완성하는 게임 클라이언트 개발자 진준영입니다.",
     cta: {
-      primary: "프로젝트 살펴보기",
-      secondary: "GitHub 방문하기",
-      githubUrl: "https://github.com/kkaemong"
+      primary: "대표 프로젝트 보기",
+      secondary: "GitHub",
+      githubUrl: "https://github.com/kkaemong",
+      velogUrl: "https://velog.io/@junemay31/posts"
     }
   },
   about: {
-    title: "당연함을 지키기 위해\n보이지 않는 곳을 다듬습니다",
-    description: "찰나의 끊김과 미세한 어색함을 방치하지 않습니다.\n\n유저의 시선이 닿지 않는 코드 깊은 곳을 파고들어 원인을 해결하고, 기획 변화에도 무너지지 않는 단단한 뼈대를 고민하는 클라이언트 개발자입니다.",
+    title: "당연한 몰입감을 지키기 위해\n보이지 않는 엔진 속을\n다듬습니다",
+    description: "찰나의 프레임 드랍과 미세한 조작감의 어색함을 방치하지 않습니다.\n\n유저의 시선이 닿지 않는 코드 깊은 곳을 파고들어 원인을 해결하고, 기획 변화와 대규모 객체 생성에도 무너지지 않는 단단한 클라이언트 뼈대를 만듭니다.",
     personalInfo: [
       { label: "이름", value: "진준영" },
       { label: "생년월일", value: "1999.05.31" },
@@ -57,16 +58,16 @@ export const portfolioData = {
     ],
     points: [
       {
-        title: "유연하고 단단한 설계",
-        content: "IInteractable 인터페이스로 결합도를 낮춰, 잦은 기획 변경과 에셋 추가에도 흔들리지 않는 뼈대를 구축합니다."
+        title: "유연하고 단단한 클라이언트 아키텍처",
+        content: "IInteractable 인터페이스 계층화로 외부 3D 에셋의 Pivot·Scale 차이를 흡수하고, 잦은 기획 변경에도 흔들리지 않는 게임 시스템을 설계합니다."
       },
       {
-        title: "수치로 깎아낸 조작감",
-        content: "FSM으로 복잡한 행동을 제어하고, Lerp 감속과 사운드 동기화를 통해 눈과 귀가 일치하는 타격감을 구현합니다."
+        title: "수치로 깎아낸 조작감과 감각 동기화",
+        content: "FSM(상태 머신)으로 애니메이션 꼬임을 방지하고, Mathf.Lerp 선형 보간과 속도 비례 Audio Pitch 동기화로 눈과 귀가 즐거운 타격감을 만듭니다."
       },
       {
-        title: "끊김 없는 프레임 최적화",
-        content: "오브젝트 풀링을 적극 활용하여, 잦은 객체 생성과 파괴로 인한 GC 스파이크 및 프레임 저하를 원천 차단합니다."
+        title: "끊김 없는 프레임 최적화 & GC 방어",
+        content: "제네릭 ObjectPool<T> 오버헤드 통제로 매 프레임 발생하는 GC 가비지 할당을 0으로 수렴시켜 WebGL 60fps 안정적인 프레임을 방어합니다."
       }
     ]
   },
@@ -124,7 +125,7 @@ export const portfolioData = {
     {
       id: "gifted",
       title: "GIFTED",
-      type: "SSAFY 2학기 자율 프로젝트",
+      type: "Unity 3D 캐주얼 게임",
       period: "2026.04.05 ~ 2026.05.21",
       teamSize: "6인",
       tech: ["Unity WebGL", "C#", "FSM", "Object Pooling", "Git", "GitHub"],
@@ -168,7 +169,7 @@ export const portfolioData = {
     {
       id: "zabonzooet",
       title: "자본주 E.T.",
-      type: "SSAFY 2학기 특화 프로젝트 (핀테크 트랙)",
+      type: "Unity 2D 러너 금융 게임",
       period: "2026.02.16 ~ 2026.04.03",
       teamSize: "6인",
       tech: ["Unity WebGL", "C#", "FSM", "REST API"],
@@ -224,7 +225,7 @@ export const portfolioData = {
     {
       id: "gaesorelay",
       title: "개소릴레이 (Gaesorelay)",
-      type: "SSAFY 2학기 공통 프로젝트",
+      type: "React 실시간 웹소켓 게임",
       period: "2026.01.12 ~ 2026.02.09",
       teamSize: "6인",
       tech: ["React", "TypeScript", "Zustand", "Vite", "Framer Motion"],
@@ -265,14 +266,14 @@ export const portfolioData = {
     {
       id: "ssaiet",
       title: "SSAIET",
-      type: "SSAFY 1학기 최종 프로젝트",
+      type: "Django · Vue 풀스택 웹",
       period: "2025.12.01 ~ 2025.12.26",
       teamSize: "2인",
       tech: ["Vue.js", "Pinia", "Python", "Django DRF", "JWT", "Kakao Map API"],
       role: "FE/BE 풀스택 개발 (회원, 커뮤니티, 카카오맵)",
       description: "Django와 Vue.js를 활용한 사용자 맞춤형 식단 관리 및 커뮤니티 플랫폼",
       impactLine: "JWT 인증 파이프라인 설계로 IDOR 취약점을 원천 방어하고, 카카오맵 SDK 비동기 메모리 누수를 직접 해결한 헬스케어 서비스",
-      detailedDescription: "SSAFY 멀티캠퍼스 교육생들이 당일 섭취한 점심(20층 식단 API) 칼로리를 기반으로 저녁 식단을 추천/설계해주는 개인 맞춤형 헬스케어 서비스입니다. Vue.js를 활용하여 전체적인 초록색 톤앤매너와 브랜드 UI를 기획/구현했으며, Kakao Map API를 연동해 주변 건강 식당 탐색 기능을 개발했습니다. 백엔드(Django)에서는 회원 도메인과 커뮤니티를 전담 구축하고 전체 시스템의 JWT 인증 및 권한(Authorization) 흐름을 상세하게 설계했습니다.",
+      detailedDescription: "사용자가 당일 섭취한 칼로리 데이터를 기반으로 맞춤형 저녁 식단을 추천하고 관리해주는 개인 맞춤형 헬스케어 서비스입니다. Vue.js를 활용하여 브랜드 톤앤매너에 맞춘 메인 UI를 기획/구현했으며, Kakao Map API를 연동해 주변 건강 식당 탐색 기능을 개발했습니다. 백엔드(Django)에서는 회원 도메인과 커뮤니티를 전담 구축하고 전체 시스템의 JWT 인증 및 권한(Authorization) 흐름을 상세하게 설계했습니다.",
       image: "/SSAIETMAIN.png",
       github: "https://github.com/kkaemong/SSAIET",
       keyResult: [
@@ -312,109 +313,14 @@ export const portfolioData = {
           }
         }
       ]
-    },
-    {
-      id: "aichallenge",
-      title: "SSAFY AI Challenge",
-      type: "SSAFY 교내 경진대회",
-      period: "2026.04.15 ~ 2026.04.18",
-      teamSize: "4인",
-      tech: ["Python", "PyTorch", "LLM", "VLM", "PEFT", "LoRA"],
-      role: "이미지/텍스트 동시 이해 모델 개발",
-      description: "Qwen2.5-VL 기반 모델링을 통해\n이미지와 텍스트를 동시에 이해하고 문제를 해결하는 AI 프로젝트",
-      impactLine: "단일 24GB GPU 제약에서 LoRA 도입으로 7B 모델 OOM 없이 파인튜닝, 정확도 0.75 → 0.81 달성한 4일 해커톤",
-      detailedDescription: "주어진 컴퓨팅 자원 내에서 오픈소스 거대 언어 모델(LLM)과 비전 언어 모델(VLM)을 타겟 도메인에 맞게 파인튜닝하는 해커톤 프로젝트입니다. 단일 24GB GPU라는 하드웨어적 한계를 극복하기 위해 파라미터 효율적 튜닝(PEFT)과 LoRA(Low-Rank Adaptation) 기법을 도입했으며, 베이스라인 코드의 메모리 병목을 분석하고 최적화하는 엔지니어링에 매진했습니다. 이를 통해 훈련 안정성을 확보하여 성공적인 실험 결과를 도출하고 주도적으로 팀 발표를 이끌었습니다.",
-      image: "/AIchallange.png",
-      github: "https://github.com/kkaemong/SSAFY-AI-Challenge",
-      keyResult: [
-        "LoRA 파라미터 0.1% 압축 기법을 도입하여, 하드웨어 제약(24GB 단일 GPU) 속에서도 OOM 없이 7B 규모 거대 모델의 안정적인 파인튜닝 완수",
-        "배치 사이즈, 스케줄러, 혼합 정밀도 등 훈련 루프 전반을 직접 최적화하여 4일이라는 짧은 기한 내에 최종 모델 정확도를 0.75에서 0.81로 성공적으로 향상시킴"
-      ],
-      troubleshooting: [
-        {
-          title: "파라미터 효율적 튜닝 (LoRA 도입)",
-          problem: "제공된 베이스라인 코드 그대로 LLM 모델 전체를 튜닝(Full Fine-Tuning)하려고 시도했으나, GPU 메모리(VRAM) 한계를 견디지 못하고 계속해서 CUDA Out of Memory 에러가 발생하며 훈련 프로세스가 강제 종료되었습니다.",
-          solution: "제한된 자원에서 학습을 우회 성공시키기 위해 PEFT 라이브러리의 LoRA 기법을 코드에 접목시켰습니다. 기학습된 무거운 메인 파라미터 텐서는 동결 처리하고 핵심 어텐션 큐 어댑터만 새롭게 업데이트하도록 코드를 Develop했습니다. 이를 통해 역전파 시 훈련 파라미터 비중을 0.1% 수준으로 대폭 낮추고 OOM 없이 모델 튜닝을 성사시켰습니다.",
-          codeSnippet: {
-            filename: "train_lora.py",
-            language: "python",
-            code: "# ❌ [변경 전] 무거운 7B 파라미터 전체 풀-튜닝 시도 (OOM 발생)\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2.5-VL\")\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)\n\n# ✅ [변경 후] PEFT & LoRA 도입: 훈련 파라미터 0.1% 압축\nfrom peft import LoraConfig, get_peft_model\n\npeft_config = LoraConfig(\n    r=8,\n    lora_alpha=32,\n    target_modules=[\"q_proj\", \"v_proj\"], # 핵심 Attention 모듈 타겟팅\n    lora_dropout=0.05,\n    bias=\"none\",\n    task_type=\"CAUSAL_LM\"\n)\n\n# 기존 모델 아키텍처에 경량화 어댑터 장착\nmodel = get_peft_model(base_model, peft_config)"
-          }
-        },
-        {
-          title: "DataLoader 병목 최적화 및 OOM 방어",
-          problem: "거대한 모델 파라미터로 인해 batch_size=2에서도 즉각적인 OOM이 발생하고, num_workers=2 세팅 시 멀티프로세싱 충돌이 발생",
-          solution: "물리적 배치 사이즈를 1로 줄이고 워커를 0으로 세팅하여 메모리 초과 및 충돌을 원천 차단하는 안정적인 학습 환경 구축",
-          codeSnippet: {
-            filename: "train_loader.py",
-            language: "python",
-            code: "# ❌ [변경 전] 물리적 배치 2 및 멀티프로세싱 유지 (즉각적 OOM 및 데드락 발생)\ntrain_loader = DataLoader(train_ds, batch_size=2, num_workers=2, pin_memory=True)\nvalid_loader = DataLoader(valid_ds, batch_size=2, num_workers=2, pin_memory=True)\n\n# ✅ [변경 후] 물리적 배치 최소화 및 워커 비활성화 (학습 환경 안정화)\ntrain_loader = DataLoader(train_ds, batch_size=1, num_workers=0)\nvalid_loader = DataLoader(valid_ds, batch_size=1, num_workers=0)"
-          }
-        },
-        {
-          title: "학습 안정화 및 하이퍼파라미터 사이클 최적화",
-          problem: "fp16 사용 시 Loss NaN 발생, 양자화(8bit) 옵티마이저 충돌, 그리고 에포크 2 및 웜업 10%로 인한 학습 시간 지연",
-          solution: "bfloat16 스케일러로 안정성을 확보하고, 에포크(2→1), 웜업(10%→3%), GRAD_ACCUM(8→4)을 깎아내어 기한 내 가장 최적화된 사이클 도출",
-          codeSnippet: {
-            filename: "train_loop.py",
-            language: "python",
-            code: "# ❌ [변경 전] 불안정한 하이퍼파라미터 및 비효율적 스케줄링 (Loss NaN 발생)\nGRAD_ACCUM = 8\noptimizer = bnb.optim.AdamW8bit(model.parameters(), lr=5e-5, weight_decay=0.01)\nscheduler = get_linear_schedule_with_warmup(optimizer, int(steps*0.1), steps)\n\nfor epoch in range(2):\n    # fp16의 좁은 표현 범위로 인한 오버플로우 발생\n    with torch.cuda.amp.autocast(dtype=torch.float16):\n        ...\n\n# ✅ [변경 후] 수렴 속도 극대화 및 bfloat16 스케일링 (학습 안정화 완료)\nGRAD_ACCUM = 4\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)\nscheduler = get_linear_schedule_with_warmup(optimizer, int(steps*0.03), steps)\n\nfor epoch in range(1):\n    # 더 넓은 지수부를 가진 bf16으로 전환하여 에러 방어\n    with torch.cuda.amp.autocast(dtype=torch.bfloat16):\n        ..."
-          },
-          imageUrl: "https://github.com/user-attachments/assets/0bfa916b-c680-4c27-90bd-93eed793dcfd"
-        }
-      ]
-    },
-    {
-      id: "webhacking",
-      title: "Web Hacking Project",
-      type: "K-Shield Jr 11기 프로젝트",
-      period: "2023.10.02 ~ 2023.10.31",
-      teamSize: "6인",
-      tech: ["Burp Suite", "SQLMap", "OWASP TOP 10", "보안 & 모의해킹"],
-      role: "웹 애플리케이션 모의 해킹 및 취약점 분석",
-      description: "취약점 분석을 통해 보안 취약점을 진단하고 대응 방안을 수립한 보안 프로젝트",
-      impactLine: "OWASP Top 10 기반 모의 침투로 인증 우회·SQL 인젝션 등 4대 취약점을 실증하고 보안 권고 리포트를 작성한 K-Shield Jr 프로젝트",
-      detailedDescription: "제공된 보안 취약 웹사이트를 대상으로 OWASP TOP 10 기반의 체계적인 모의 침투를 수행한 실무 정보보안 프로젝트입니다. Burp Suite와 SQLMap을 활용하여 팀원들과 공격 범위를 세분화하고, 불충분한 인증(2FA 우회), 대량 문자열 삽입에 의한 버퍼 오버플로우, SQL 인젝션 등을 집요하게 식별했습니다. 도출된 취약점의 공격 시나리오를 구체화하고 즉각적인 보안 패치 권고사항을 담은 종합 리포트를 작성했습니다.",
-      image: "/kshield.png",
-      github: "https://github.com/kkaemong/Web-Hacking-Pjt",
-      keyResult: [
-        "OWASP TOP 10 기반 모의 침투를 통해, 시스템의 인증/인가 로직 전반을 무력화하는 4대 핵심 보안 결함 완벽 증명",
-        "모의 해킹 결과 및 취약점별 보안 권고사항을 문서화한 종합 진단 리포트 작성"
-      ],
-      troubleshooting: [
-        {
-          title: "관리자 계정 해시 복호화 및 평문 크래킹 성공",
-          problem: "취약 타겟 사이트에서 관리자 해시값을 탈취하는 데 성공했으나, 일반적인 Brute Force 공격으로는 복호화 시간이 기하급수적으로 길어져 더 깊은 경로로의 침투가 완전히 정체되었습니다.",
-          solution: "DB 테이블(hm_admin_tb)에서 추출한 MD5 해시 데이터(8d38...)를 복호화 툴에 대입해 'kisec123!@'라는 평문 패스워드를 알아내는 해킹 시연 과정을 레포트에 기록했습니다.",
-          imageUrl: "/관리자 계정 복호화.png"
-        },
-        {
-          title: "비정상 입력값에 의한 로그인 인증 강제 우회 (버퍼 오버플로우)",
-          problem: "탈취한 계정 정보 없이도, 로그인 폼의 입력값 검증 부재를 악용한 SQL 인젝션 우회나 버퍼 오버플로우 공격이 가능한지 검증해야 했습니다.",
-          solution: "이메일 필드에 특수기호(')가 포함된 대량의 문자열을 전송했을 때, 서버가 '로그인 되었습니다'라며 인증을 강제 통과시키는 결함을 시연하고 레포트에 기록했습니다.",
-          imageUrl: "/버퍼 오버 플로우.png"
-        },
-        {
-          title: "비밀번호 복잡도 검증 부재 및 약한 문자열 강도 입증",
-          problem: "사용자 계정 탈취를 예방하기 위한 기본적인 패스워드 복잡도(Complexity) 검증 로직이 서버에 제대로 구현되어 있는지 진단해야 했습니다.",
-          solution: "비밀번호 변경 시 단 4자리 숫자('1234')만 입력했음에도 '회원정보를 수정하였습니다'라며 서버가 승인해버리는 심각한 정책 부재를 확인하고 레포트에 기록했습니다.",
-          imageUrl: "/약한 문자열 강도.png"
-        },
-        {
-          title: "타사(Naver) 인증 로직 비교를 통한 보안 아키텍처 제안",
-          problem: "OWASP 보안 진단 가이드라인에 따라, '나의 강의실'이나 '회원정보 수정' 등 민감한 권한이 요구되는 페이지 접근 시 세션 재검증 로직이 안전하게 구현되어 있는지 평가해야 했습니다.",
-          solution: "네이버(NAVER)의 2단계 인증 프롬프트를 모범 사례로 가져와, 타겟 사이트의 결함 화면과 비교 분석하여 세션 재검증 패치 권고사항을 레포트에 기록했습니다.",
-          imageUrl: "/불충분한 인증2.png"
-        }
-      ]
     }
   ],
   experience: [
     {
       id: 1,
       title: "SSAFY AI 아카데미 14기",
-      period: "2025.07 ~ 현재",
-      content: "Python 트랙 수료 및 웹/게임 부문 프로젝트 개발"
+      period: "2025.07 ~ 2026.06",
+      content: "Python 트랙 수료 및 게임 클라이언트/웹 부문 프로젝트 전 과정 이수 완료"
     },
     {
       id: 2,

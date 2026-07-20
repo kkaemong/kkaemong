@@ -2,7 +2,7 @@ import React from 'react';
 import { portfolioData, Project } from '@/data/portfolio';
 
 export default function PrintLayout() {
-  const { about, skills, projects, experience } = portfolioData;
+  const { about, projects, experience } = portfolioData;
   const certifications = (portfolioData as any).certifications || [];
 
   return (
@@ -10,7 +10,7 @@ export default function PrintLayout() {
       {/* Header / Info */}
       <div className="border-b-2 border-slate-900 pb-6">
         <h1 className="text-4xl font-black tracking-tight mb-2">진준영</h1>
-        <h2 className="text-xl font-bold text-slate-600 mb-6">Frontend Developer</h2>
+        <h2 className="text-xl font-bold text-slate-600 mb-6">Game Client Developer</h2>
         
         <div className="grid grid-cols-2 gap-y-2 text-sm text-slate-700">
           {about.personalInfo?.map((info) => (
@@ -36,28 +36,15 @@ export default function PrintLayout() {
         </p>
       </section>
 
-      {/* Tech Stack */}
+      {/* Core Game Client Stack */}
       <section>
         <h3 className="text-lg font-black uppercase tracking-widest text-slate-400 mb-4 pb-1 border-b border-slate-200">
-          Tech Stack
+          Core Tech Stack
         </h3>
-        <div className="space-y-3 text-sm">
-          <div className="flex items-start">
-            <span className="font-bold w-32 shrink-0">Core</span>
-            <span className="text-slate-700">{(skills as any).core?.map((s: any) => s.name).join(', ')}</span>
-          </div>
-          <div className="flex items-start">
-            <span className="font-bold w-32 shrink-0">Project</span>
-            <span className="text-slate-700">{(skills as any).project?.map((s: any) => s.name).join(', ')}</span>
-          </div>
-          <div className="flex items-start">
-            <span className="font-bold w-32 shrink-0">Basic</span>
-            <span className="text-slate-700">{(skills as any).basic?.map((s: any) => s.name).join(', ')}</span>
-          </div>
-          <div className="flex items-start">
-            <span className="font-bold w-32 shrink-0">Tools</span>
-            <span className="text-slate-700">{(skills as any).tools?.map((s: any) => s.name).join(', ')}</span>
-          </div>
+        <div className="space-y-2 text-sm text-slate-800 font-medium">
+          <div><span className="font-bold text-slate-900">Game Client & Engine:</span> Unity, C#, FSM (Finite State Machine), Object Pooling, WebGL</div>
+          <div><span className="font-bold text-slate-900">Web & Fullstack:</span> React, TypeScript, Vue.js, Python, Django, REST API</div>
+          <div><span className="font-bold text-slate-900">Tools & Environment:</span> Git, GitHub, Rider, Visual Studio, Figma</div>
         </div>
       </section>
 

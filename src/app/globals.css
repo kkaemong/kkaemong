@@ -5,7 +5,7 @@
   --foreground: #0f172a;
   --primary: #0f172a;
   --primary-foreground: #f8fafc;
-  --accent: #3b82f6;
+  --accent: #2563eb;
   --accent-foreground: #ffffff;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
@@ -46,11 +46,11 @@ a, button, [role="button"], select, input[type="submit"], input[type="button"], 
 
 @layer components {
   .section-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20;
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-20;
   }
 
   .glass-card {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+    @apply bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-xl;
   }
 
   .btn-primary {
@@ -68,6 +68,8 @@ a, button, [role="button"], select, input[type="submit"], input[type="button"], 
     margin: 1cm;
   }
   body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }

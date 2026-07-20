@@ -1,300 +1,206 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Code2 } from 'lucide-react';
-import { portfolioData, type Project } from '@/data/portfolio';
+import { motion } from 'framer-motion';
+import { portfolioData, Project } from '@/data/portfolio';
+import { ArrowUpRight, Sparkles, Filter } from 'lucide-react';
 import ProjectModal from './ProjectModal';
-import { 
-  SiUnity, SiCplusplus, SiC, SiSpringboot, SiPython, 
-  SiReact, SiNextdotjs, SiGit, SiGithub, SiLinux,
-  SiTypescript, SiDjango, SiPytorch
-} from 'react-icons/si';
-import { TbBrandCSharp } from 'react-icons/tb';
 
-const iconMap: Record<string, React.ReactNode> = {
-  'csharp': <TbBrandCSharp />,
-  'unity': <SiUnity />,
-  'cplusplus': <SiCplusplus />,
-  'c': <SiC />,
-  'springboot': <SiSpringboot />,
-  'django': <SiDjango />,
-  'python': <SiPython />,
-  'react': <SiReact />,
-  'nextjs': <SiNextdotjs />,
-  'typescript': <SiTypescript />,
-  'git': <SiGit />,
-  'github': <SiGithub />,
-  'linux': <SiLinux />,
-  'pytorch': <SiPytorch />,
-};
+const CATEGORIES = [
+  { id: 'ALL', label: '전체 보기', icon: <Filter size={15} /> },
+  { id: 'CSHARP', label: 'C#', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" className="w-4 h-4" /> },
+  { id: 'TYPESCRIPT', label: 'TypeScript', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS" className="w-4 h-4" /> },
+  { id: 'PYTHON', label: 'Python', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" className="w-4 h-4" /> },
+] as const;
 
 export default function Projects() {
-  const { projects, skills } = portfolioData;
+  const { projects } = portfolioData;
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  
-  // Track which project is currently being hovered
-  const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>('ALL');
 
-  // Split skills for left and right columns
-  const leftSkills = skills.main;
-  const rightSkills = [...skills.sub, ...skills.exp];
-  const allSkills = [...leftSkills, ...rightSkills];
+  const handleTabClick = (categoryId: string) => {
+    setActiveCategory(categoryId);
+  };
 
-  // Derive which tech stacks are currently relevant
-  const activeTechs = React.useMemo(() => {
-    if (!hoveredProjectId) return null; // If no project is hovered, highlight all
-    const project = projects.find(p => p.id === hoveredProjectId);
-    return project ? project.tech : null;
-  }, [hoveredProjectId, projects]);
-
-  const isSkillActive = (skillName: string) => {
-    if (!activeTechs) return true;
-    const normalizedSkill = skillName.toLowerCase();
-    return activeTechs.some(tech => {
-      const normalizedTech = tech.toLowerCase();
-      // Basic fuzzy matching (e.g., 'unity' matches 'Unity WebGL', 'Git & GitHub' matches 'Git')
-      return normalizedTech.includes(normalizedSkill) || normalizedSkill.includes(normalizedTech);
-    });
+  const isHighlighted = (project: Project) => {
+    if (activeCategory === 'ALL') return true;
+    if (activeCategory === 'CSHARP') return project.tech.some(t => t.toLowerCase().includes('c#') || t.toLowerCase().includes('unity'));
+    if (activeCategory === 'TYPESCRIPT') return project.tech.some(t => t.toLowerCase().includes('typescript') || t.toLowerCase().includes('react'));
+    if (activeCategory === 'PYTHON') return project.tech.some(t => t.toLowerCase().includes('python') || t.toLowerCase().includes('django'));
+    return true;
   };
 
   return (
-    <section id="projects" className="py-24 print:py-8 bg-slate-50 border-y border-slate-200/60 relative">
-      <div className="section-container max-w-[1440px] mx-auto px-4 md:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center mb-16 md:mb-20 print:hidden">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <span className="w-12 h-[2px] bg-accent/40" />
-              <span className="text-accent text-sm font-display font-bold uppercase tracking-widest">
-                Skills & Projects
-              </span>
-              <span className="w-12 h-[2px] bg-accent/40" />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-display font-black text-primary mb-4 tracking-tight">
-              Projects & Tech Stack
-            </h2>
-            <p className="text-slate-600 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed mb-3">
-              문제 해결과 성능 최적화를 이끌어낸 핵심 프로젝트 경험을 소개합니다.
-            </p>
-            <p className="text-slate-400 text-sm font-medium">
-              💡 프로젝트 카드에 마우스를 올리면 좌측 대시보드에서 해당 기술 스택을 확인할 수 있습니다.
-            </p>
-          </motion.div>
-        </div>
+    <section id="projects" className="py-24 bg-[#FAF9F6] text-slate-900 relative border-t border-slate-200/60 overflow-hidden font-sans">
+      {/* Background Graph Lines */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:2.2rem_2.2rem] opacity-40 pointer-events-none" />
 
-        {/* Mobile Skills (Hidden on Desktop) */}
-        <div className="flex lg:hidden flex-wrap justify-center gap-4 mb-12">
-          {allSkills.map((skill) => {
-            const isHoveringAny = hoveredProjectId !== null;
-            const active = isSkillActive(skill.name);
-            const stateClass = !isHoveringAny 
-              ? 'opacity-100 scale-100' 
-              : active 
-                ? 'opacity-100 scale-110 shadow-md ring-2 ring-accent/50' 
-                : 'opacity-20 scale-90 grayscale blur-[1px]';
+      {/* Sketchbook Point Decorators */}
+      <motion.img
+        animate={{ rotate: [0, 10, 0], y: [0, -5, 0] }}
+        transition={{ duration: 5, repeat: Infinity }}
+        src="/decorations/pencil_green.png"
+        alt="Green Pencil"
+        className="absolute top-16 right-10 w-16 h-auto z-10 hidden lg:block opacity-75 pointer-events-none"
+      />
 
-            return (
-              <div 
-                key={skill.name} 
-                className={`w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center text-xl relative group transition-all duration-300 ${stateClass}`}
-              >
-                <div className={active ? 'text-blue-500' : 'text-slate-500'}>
-                  {iconMap[skill.icon] || <Code2 />}
-                </div>
-                <span className="absolute -top-10 scale-0 group-hover:scale-100 transition-transform bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded-md whitespace-nowrap z-50">
-                  {skill.name}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* 2-Column Layout */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 relative items-start justify-center w-full">
-          
-          {/* Left Column: Unified Skills Dashboard */}
-          <div className="hidden lg:flex flex-col gap-10 sticky top-32 w-52 shrink-0">
-            
-            {/* Core Skills Section */}
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-3 opacity-80 border-b border-slate-200/60 pb-2">
-                <span className="text-xs font-black text-blue-500 uppercase tracking-[0.2em]">Core</span>
-                <span className="h-[2px] flex-1 bg-blue-500/20 rounded-full"></span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {leftSkills.map((skill, i) => {
-                  const isHoveringAny = hoveredProjectId !== null;
-                  const active = isSkillActive(skill.name);
-                  
-                  // Dynamic classes based on hover state
-                  let iconClass = "border-slate-200/60 text-blue-500";
-                  let wrapperClass = "opacity-100 scale-100";
-                  
-                  if (isHoveringAny) {
-                    if (active) {
-                      wrapperClass = "opacity-100 scale-110 z-30";
-                      iconClass = "border-blue-400 ring-4 ring-blue-100 shadow-lg text-blue-600 bg-blue-50/50";
-                    } else {
-                      wrapperClass = "opacity-20 scale-90 grayscale blur-[1px]";
-                      iconClass = "border-transparent text-slate-400";
-                    }
-                  }
-
-                  return (
-                    <motion.div 
-                      key={skill.name}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1, duration: 0.5, type: 'spring' }}
-                      className={`flex flex-col items-center gap-2 transition-all duration-500 ${wrapperClass}`}
-                    >
-                      <div className={`w-14 h-14 bg-white rounded-2xl shadow-sm border flex items-center justify-center text-3xl transition-all duration-500 ${iconClass}`}>
-                        {iconMap[skill.icon] || <Code2 />}
-                      </div>
-                      <span className="text-[11px] font-extrabold text-slate-700 text-center leading-tight">
-                        {skill.name}
-                      </span>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Sub & Tools Section */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-3 opacity-70 border-b border-slate-200/60 pb-2">
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Sub & Tools</span>
-                <span className="h-[2px] flex-1 bg-slate-300 rounded-full"></span>
-              </div>
-
-              <div className="flex flex-col gap-2 w-full">
-                {rightSkills.map((skill, i) => {
-                  const isHoveringAny = hoveredProjectId !== null;
-                  const active = isSkillActive(skill.name);
-                  const isSub = skill.tag === '보조';
-                  const baseColor = isSub ? 'emerald' : 'amber';
-                  
-                  // Dynamic classes based on hover state
-                  let containerClass = `border-slate-200/60`;
-                  let iconColor = `text-${baseColor}-500`;
-                  let wrapperClass = "opacity-100 scale-100";
-                  
-                  if (isHoveringAny) {
-                    if (active) {
-                      wrapperClass = "opacity-100 scale-105 z-30 translate-x-2";
-                      containerClass = `border-${baseColor}-300 ring-2 ring-${baseColor}-100 shadow-md bg-white`;
-                      iconColor = `text-${baseColor}-600`;
-                    } else {
-                      wrapperClass = "opacity-20 scale-95 grayscale blur-[1px]";
-                      containerClass = "border-transparent bg-slate-50/50";
-                      iconColor = "text-slate-400";
-                    }
-                  }
-
-                  return (
-                    <motion.div 
-                      key={skill.name}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.05, duration: 0.3 }}
-                      className={`flex items-center gap-3 w-full p-2 bg-white rounded-xl shadow-sm border transition-all duration-500 ${containerClass} ${wrapperClass}`}
-                    >
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xl shrink-0 bg-slate-50 ${iconColor}`}>
-                        {iconMap[skill.icon] || <Code2 />}
-                      </div>
-                      <div className="flex flex-col min-w-0 flex-1">
-                        <span className={`text-[9px] font-bold mb-0.5 ${isSub ? 'text-emerald-500/80' : 'text-amber-500/80'}`}>{skill.tag}</span>
-                        <span className="text-[11px] font-black text-slate-700 truncate" title={skill.name}>
-                          {skill.name}
-                        </span>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-
+      <div className="section-container relative z-10">
+        {/* Wrapped Notebook Sketchbook Card Box */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-white rounded-[3rem] md:rounded-[3.5rem] border-2 border-slate-200/90 shadow-xl p-8 sm:p-12 md:p-14 relative"
+        >
+          {/* Top Tape Accent Sticker */}
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#e2e8f0] text-slate-700 text-sm font-bold px-9 py-1.5 rounded-sm rotate-[-1deg] shadow-xs uppercase tracking-widest border border-slate-300 z-20">
+            Projects Notes
           </div>
 
-          {/* Right Column: Projects Grid */}
-          <div className="flex-1 w-full max-w-[1100px] mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-              {projects.map((project, i) => (
+          {/* Header */}
+          <div className="text-center mb-12 print:hidden relative">
+            <div>
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <span className="w-8 h-[3px] bg-blue-500/40 rounded-full" />
+                <span className="text-blue-600 text-sm font-bold uppercase tracking-widest">
+                  Featured Works
+                </span>
+                <span className="w-8 h-[3px] bg-blue-500/40 rounded-full" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight relative inline-block">
+                Projects
+                <img src="/decorations/heart.png" alt="Heart" className="absolute -top-3 -right-7 w-7 h-auto pointer-events-none" />
+              </h2>
+              <p className="text-slate-600 text-base sm:text-lg font-normal max-w-2xl mx-auto leading-relaxed">
+                문제 정의부터 기술적 해결, 프레임/메모리 최적화까지 직접 수행한 핵심 프로젝트입니다.
+              </p>
+            </div>
+
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+              {CATEGORIES.map((tab) => {
+                const isActive = activeCategory === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => handleTabClick(tab.id)}
+                    className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 shadow-xs cursor-pointer border ${
+                      isActive
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-md scale-105'
+                        : 'bg-[#FAF9F6] text-slate-700 border-slate-200/80 hover:bg-slate-100 hover:text-slate-900'
+                    }`}
+                  >
+                    {tab.icon}
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Projects Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+            {projects.map((project, i) => {
+              const highlighted = isHighlighted(project as Project);
+              const isFiltering = activeCategory !== 'ALL';
+
+              return (
                 <motion.div
                   key={project.id}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
-                  onMouseEnter={() => setHoveredProjectId(project.id)}
-                  onMouseLeave={() => setHoveredProjectId(null)}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
                   onClick={() => setSelectedProject(project as Project)}
-                  className={`group cursor-pointer bg-white rounded-[2rem] overflow-hidden shadow-sm transition-all duration-500 border relative h-full print:border-none print:shadow-none print:mb-8
-                    ${hoveredProjectId === project.id ? 'shadow-2xl border-accent/40 -translate-y-2 ring-4 ring-accent/10' : 'border-slate-200/80 hover:shadow-lg'}`}
+                  className={`group cursor-pointer bg-[#FAF9F6] rounded-[2rem] overflow-hidden transition-all duration-500 border flex flex-col relative h-full ${
+                    isFiltering
+                      ? highlighted
+                        ? 'opacity-100 border-2 border-blue-600 ring-8 ring-blue-500/20 shadow-2xl -translate-y-2.5 scale-[1.02] z-10'
+                        : 'opacity-25 grayscale-[70%] border-slate-200/30 hover:opacity-60 scale-[0.96]'
+                      : 'opacity-100 shadow-sm hover:shadow-xl border-slate-200/90 hover:border-blue-400/50 hover:-translate-y-1.5'
+                  }`}
                 >
+                  {/* Top Highlight Accent Bar */}
+                  {isFiltering && highlighted && (
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 z-20" />
+                  )}
+
                   {/* Project Image Header */}
-                  <div className="h-48 relative overflow-hidden bg-slate-100 shrink-0">
+                  <div className="h-56 relative overflow-hidden bg-slate-100 shrink-0">
                     {project.image ? (
-                      <img src={project.image} alt={project.title} className={`w-full h-full object-cover transition-transform duration-700 ${hoveredProjectId === project.id ? 'scale-110' : 'scale-100'}`} />
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center">
                         <span className="text-3xl font-black text-primary/10 tracking-tighter uppercase">{project.title}</span>
                       </div>
                     )}
-                    
-                    {/* Glassmorphism Hover Overlay */}
-                    <div className={`absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-all duration-500 flex items-center justify-center print:hidden ${hoveredProjectId === project.id ? 'opacity-100' : 'opacity-0'}`}>
-                      <span className={`bg-accent text-white font-bold px-6 py-3 rounded-2xl flex items-center gap-2 transform transition-all duration-500 shadow-xl border border-white/20 text-sm ${hoveredProjectId === project.id ? 'translate-y-0' : 'translate-y-6'}`}>
-                        자세히 보기 <ArrowUpRight size={18} className={hoveredProjectId === project.id ? 'translate-x-1 -translate-y-1 transition-transform' : ''} />
+
+                    {/* Type Badge */}
+                    <div className="absolute top-4 left-4 z-10 print:hidden">
+                      <span className={`backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-semibold tracking-wider uppercase shadow-sm ${
+                        highlighted ? 'bg-slate-900/90 text-white' : 'bg-slate-600/70 text-slate-200'
+                      }`}>
+                        {project.type}
                       </span>
                     </div>
-                    
-                    {/* Floating Type Badge */}
-                    <div className="absolute top-4 left-4 z-10 print:hidden">
-                      <span className="bg-white/95 backdrop-blur-md text-primary px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest uppercase shadow-sm border border-white/40">
-                        {project.type}
+
+                    {/* Hover Overlay Button */}
+                    <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-full flex items-center gap-2 text-sm shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        상세 정보 보기 <ArrowUpRight size={18} />
                       </span>
                     </div>
                   </div>
 
-                  {/* Project Info */}
-                  <div className="p-6 md:p-8 flex-1 flex flex-col relative z-20">
-                    <h3 className={`text-2xl font-black mb-3 transition-colors tracking-tight line-clamp-1 ${hoveredProjectId === project.id ? 'text-accent' : 'text-primary'}`}>{project.title}</h3>
-                    <p className="text-slate-600 font-medium mb-6 leading-relaxed text-sm md:text-base break-keep line-clamp-2 md:line-clamp-3">
-                      {project.description}
-                    </p>
-                    
-                    {/* Tech Stack Bubbles */}
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {project.tech.map(t => (
-                        <span key={t} className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold tracking-wider transition-colors uppercase border ${hoveredProjectId === project.id ? 'bg-accent/10 text-accent border-accent/20' : 'bg-slate-50 border-slate-200/60 text-slate-700'}`}>
+                  {/* Project Body */}
+                  <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-start mb-2.5 gap-2">
+                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1 leading-snug">
+                          {project.title}
+                        </h3>
+                        {project.award && (
+                          <span className="shrink-0 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                            🏆 {project.award}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-slate-600 text-sm sm:text-base font-normal mb-5 leading-relaxed break-keep line-clamp-2">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    {/* Tech Stack Pills */}
+                    <div className="flex flex-wrap gap-1.5 pt-3.5 border-t border-slate-200/60 mt-auto">
+                      {project.tech.map((t) => (
+                        <span
+                          key={t}
+                          className={`px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-medium tracking-wide uppercase ${
+                            highlighted ? 'bg-white text-slate-700 border border-slate-200/80 shadow-2xs' : 'bg-slate-100/60 text-slate-500'
+                          }`}
+                        >
                           {t}
                         </span>
                       ))}
                     </div>
                   </div>
                 </motion.div>
-              ))}
-            </div>
+              );
+            })}
           </div>
-
-        </div>
+        </motion.div>
       </div>
 
-      {/* Project Modal with Slide Up Animation */}
+      {/* Project Detail Modal */}
       <ProjectModal
         isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
         project={selectedProject}
+        onClose={() => setSelectedProject(null)}
       />
     </section>
   );

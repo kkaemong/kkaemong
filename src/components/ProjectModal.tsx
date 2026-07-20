@@ -25,65 +25,6 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
 };
 
-function CodeBlock({ code, filename, language }: { code: string; filename: string; language: string }) {
-  const highlightCode = (code: string) => {
-    if (!code) return '';
-    const lines = code.split('\n');
-    return lines.map(line => {
-      let escaped = line
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-      
-      // 만약 줄이 주석으로 시작하면 다른 하이라이팅 무시하고 전체를 초록색으로 처리
-      if (escaped.trim().startsWith('//') || escaped.trim().startsWith('#')) {
-        return `<span class="text-emerald-500 font-normal">${escaped}</span>`;
-      }
-
-      // 키워드 하이라이팅 (HTML 태그와의 충돌을 막기 위해 임시 마커 사용)
-      const keywords = [
-        'public', 'private', 'protected', 'class', 'interface', 'struct', 'void', 'using', 'namespace',
-        'const', 'let', 'var', 'function', 'return', 'import', 'from', 'export', 'default', 'async', 'await',
-        'if', 'else', 'for', 'while', 'new', 'static', 'get', 'set', 'require', 'module', 'exports', 'def', 'as'
-      ];
-      
-      keywords.forEach(kw => {
-        const reg = new RegExp(`\\b(${kw})\\b`, 'g');
-        escaped = escaped.replace(reg, `__KW_${kw}__`);
-      });
-
-      // 마커를 실제 HTML span 태그로 일괄 치환
-      escaped = escaped.replace(/__KW_([a-zA-Z0-9_]+)__/g, '<span class="text-rose-400 font-semibold">$1</span>');
-
-      return escaped;
-    }).join('\n');
-  };
-
-  return (
-    <div className="w-full bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl font-mono my-4 text-left">
-      {/* Tab Header Bar */}
-      <div className="flex items-center justify-between px-5 py-3.5 bg-slate-900/60 border-b border-slate-800">
-        <div className="flex items-center gap-2">
-          <div className="flex gap-1.5 mr-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-          </div>
-          <span className="text-xs font-semibold text-slate-400 tracking-wide">{filename}</span>
-        </div>
-        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-          {language}
-        </span>
-      </div>
-
-      {/* Code Editor Body */}
-      <pre className="p-5 overflow-x-auto text-[13px] leading-relaxed text-slate-300 custom-scrollbar select-text max-h-[450px]">
-        <code dangerouslySetInnerHTML={{ __html: highlightCode(code) }} />
-      </pre>
-    </div>
-  );
-}
-
 function TroubleshootingCard({ study, idx }: { study: any; idx: number }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -142,22 +83,7 @@ function TroubleshootingCard({ study, idx }: { study: any; idx: number }) {
               </div>
             </div>
 
-            {/* Code Snippet Box */}
-            {study.codeSnippet && (
-              <div className="space-y-2.5">
-                <div className="flex items-center gap-2 px-1">
-                  <Zap size={14} className="text-amber-500 fill-amber-500" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    핵심 구현 코드 (Core Implementation)
-                  </span>
-                </div>
-                <CodeBlock
-                  code={study.codeSnippet.code}
-                  filename={study.codeSnippet.filename}
-                  language={study.codeSnippet.language}
-                />
-              </div>
-            )}
+
 
             {/* Before/After Image Set */}
             {(study.beforeImageUrl || study.afterImageUrl) && (
@@ -266,7 +192,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300, mass: 0.8 }}
-            className="fixed inset-x-0 bottom-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[90vw] md:max-w-5xl h-[95vh] md:h-[90vh] bg-white rounded-t-[2.5rem] md:rounded-[3rem] shadow-2xl z-[101] overflow-hidden flex flex-col"
+            className="fixed inset-x-0 bottom-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:w-[90vw] md:max-w-5xl h-[95vh] md:h-[90vh] bg-[#FAF9F6] rounded-t-[2.5rem] md:rounded-[3rem] shadow-2xl z-[101] overflow-hidden flex flex-col"
           >
             {/* Close Button (Floating) */}
             <button

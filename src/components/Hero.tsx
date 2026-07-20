@@ -10,8 +10,48 @@ export default function Hero() {
   const { hero, about } = portfolioData;
 
   return (
-    <section id="hero" className="relative min-h-screen print:min-h-0 md:h-auto flex items-center pt-28 pb-20 print:pt-4 print:pb-4 overflow-hidden bg-white">
-      {/* Background Decorative Elements */}
+    <section id="hero" className="relative min-h-screen print:min-h-0 md:h-auto flex items-center pt-28 pb-20 print:pt-4 print:pb-4 overflow-hidden bg-[#FAF9F6] text-slate-900">
+      {/* Background Notebook Graph Grid Line Effect */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:2.2rem_2.2rem] opacity-50 pointer-events-none" />
+
+      {/* Point Sketchbook Decorations (Subtle & Non-distracting) */}
+      <motion.img
+        animate={{ y: [0, -6, 0], rotate: [-15, -8, -15] }}
+        transition={{ duration: 4, repeat: Infinity }}
+        src="/decorations/pencil_blue.png"
+        alt="Blue Pencil"
+        className="absolute top-28 right-12 w-16 h-auto z-10 hidden lg:block opacity-80 pointer-events-none"
+      />
+      <motion.img
+        animate={{ y: [0, 6, 0], rotate: [15, 25, 15] }}
+        transition={{ duration: 4.5, repeat: Infinity }}
+        src="/decorations/pencil_red.png"
+        alt="Red Pencil"
+        className="absolute bottom-28 left-10 w-16 h-auto z-10 hidden lg:block opacity-80 pointer-events-none"
+      />
+      <motion.img
+        animate={{ rotate: [0, 360] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+        src="/decorations/star.png"
+        alt="Star"
+        className="absolute top-24 left-16 w-7 h-auto z-10 hidden lg:block opacity-75 pointer-events-none"
+      />
+      <motion.img
+        animate={{ rotate: [0, -360] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+        src="/decorations/star.png"
+        alt="Star"
+        className="absolute bottom-20 right-16 w-8 h-auto z-10 hidden lg:block opacity-75 pointer-events-none"
+      />
+      <motion.img
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 2.5, repeat: Infinity }}
+        src="/decorations/big_heart.png"
+        alt="Heart"
+        className="absolute bottom-16 right-36 w-8 h-auto z-10 hidden lg:block opacity-75 pointer-events-none"
+      />
+
+      {/* Background Decorative Blur Elements */}
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -38,7 +78,7 @@ export default function Hero() {
         className="absolute bottom-1/4 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 print:hidden"
       />
 
-      <div className="section-container flex flex-col items-center justify-center gap-12 lg:gap-16 w-full print:gap-2">
+      <div className="section-container flex flex-col items-center justify-center gap-12 lg:gap-16 w-full print:gap-2 relative z-10">
         {/* Main Focus: Profile Photo & Information Card (Wider/Shorter) */}
         <div className="flex flex-col xl:flex-row items-center justify-center gap-12 lg:gap-16 w-full print:flex-col print:gap-4 print:items-start">
           {/* Profile Photo with Boutique 3D Parallax & Floating Loop */}
@@ -65,6 +105,11 @@ export default function Hero() {
               }}
               className="relative w-full aspect-[4/5]"
             >
+              {/* Point Tape Sticker on Photo Corner */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-amber-200/80 rounded-xs border border-amber-300/60 shadow-xs z-20 rotate-[-2deg] pointer-events-none flex items-center justify-center">
+                <span className="text-[10px] font-bold text-amber-800 tracking-wider">SKETCHBOOK</span>
+              </div>
+
               {/* Outer decorative line (Rotates slightly opposite on hover) */}
               <motion.div 
                 whileHover={{ scale: 1.06, rotate: -2 }}
@@ -105,14 +150,26 @@ export default function Hero() {
               damping: 15,
               delay: 0.3
             }}
-            className="w-full max-w-[850px] bg-white rounded-[3rem] border border-slate-200/60 p-10 lg:p-12 print:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] flex flex-col justify-between z-10"
+            className="w-full max-w-[850px] bg-white rounded-[3rem] border border-slate-200/80 p-10 lg:p-12 print:p-6 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.03)] flex flex-col justify-between z-10 relative"
           >
+            {/* Point Heart Decorator on Top Right */}
+            <img src="/decorations/heart.png" alt="Heart" className="absolute -top-3 -right-2 w-7 h-auto z-20 pointer-events-none" />
+
             <div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-sm font-bold tracking-wide mb-4 font-sans"
+              >
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+                🎮 Game Client Developer
+              </motion.div>
               <motion.h1 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-3xl md:text-5xl font-display font-extrabold text-primary mb-6 leading-tight whitespace-pre-line tracking-tight"
+                className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-5 leading-snug whitespace-pre-line tracking-tight break-keep font-sans"
               >
                 {hero.headline}
               </motion.h1>
@@ -120,65 +177,54 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="text-lg md:text-xl text-slate-600 leading-relaxed font-semibold whitespace-pre-line break-keep"
+                className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed font-normal whitespace-pre-line break-keep font-sans"
               >
                 {hero.subTitle}
               </motion.p>
             </div>
  
-            {/* Magnetic-like GitHub Call to Action button */}
-            <div className="mt-12 print:mt-6 pt-8 print:pt-4 border-t border-slate-100">
+            {/* Call to Action Buttons (GitHub & Velog) */}
+            <div className="mt-8 print:mt-6 pt-5 print:pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-4 font-sans">
+              {/* GitHub Button */}
               <motion.a
                 href={hero.cta.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial="rest"
-                whileHover="hover"
-                whileTap={{ scale: 0.995 }}
-                variants={{
-                  rest: { scale: 1, y: 0 },
-                  hover: { 
-                    scale: 1.005, 
-                    y: -4,
-                    transition: { type: "spring", stiffness: 400, damping: 20 }
-                  }
-                }}
-                className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-accent/5 hover:text-accent border border-transparent hover:border-accent/20 transition-all group"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-1 flex items-center justify-between p-4 rounded-2xl bg-slate-900 text-white hover:bg-black transition-all group shadow-md"
               >
-                <div className="flex items-center gap-4">
-                  {/* GitHub Logo box */}
-                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-primary group-hover:text-accent transition-colors shadow-sm">
-                    {/* Wiggles like a cute head tilt when button hovered */}
-                    <motion.div
-                      variants={{
-                        rest: { rotate: 0, scale: 1 },
-                        hover: { 
-                          rotate: [0, -18, 15, -10, 5, 0],
-                          scale: 1.1,
-                          transition: { duration: 0.65, ease: "easeInOut" }
-                        }
-                      }}
-                    >
-                      <Github size={20} />
-                    </motion.div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
+                    <Github size={20} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">GitHub Repository</p>
-                    <p className="font-bold text-base">Visit My GitHub</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Code & Repos</p>
+                    <p className="font-bold text-base">GitHub 바로가기</p>
                   </div>
                 </div>
-                {/* Chevron arrow elastic spring bounce pointing to destination */}
-                <motion.div
-                  variants={{
-                    rest: { x: 0 },
-                    hover: { 
-                      x: 6,
-                      transition: { type: "spring", stiffness: 300, damping: 10 }
-                    }
-                  }}
-                >
-                  <ChevronRight size={20} className="text-slate-300 group-hover:text-accent transition-colors" />
-                </motion.div>
+                <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+
+              {/* Velog Button */}
+              <motion.a
+                href={hero.cta.velogUrl || "https://velog.io/@junemay31/posts"}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-1 flex items-center justify-between p-4 rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700 transition-all group shadow-md"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white font-bold text-lg font-serif">
+                    v
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-emerald-200 uppercase tracking-widest leading-none mb-1">Tech Blog</p>
+                    <p className="font-bold text-base">Velog 기술 블로그</p>
+                  </div>
+                </div>
+                <ChevronRight size={18} className="text-emerald-200 group-hover:translate-x-1 transition-transform" />
               </motion.a>
             </div>
           </motion.div>
