@@ -177,18 +177,18 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
       p.x = Math.max(40, Math.min(960, p.x + dx * p.speed));
       p.y = Math.max(40, Math.min(560, p.y + dy * p.speed));
 
-      // Check proximity to booths
+      // Check proximity to booths using for...of loop to prevent type inference issues
       let closestBooth: Booth | null = null;
-      let minDistance = 90;
+      const minDistance = 90;
 
-      booths.forEach((b) => {
+      for (const b of booths) {
         const boothCenterX = b.x;
         const boothCenterY = b.y;
         const dist = Math.hypot(p.x - boothCenterX, p.y - boothCenterY);
         if (dist < minDistance) {
           closestBooth = b;
         }
-      });
+      }
 
       if (nearBoothRef.current?.id !== closestBooth?.id) {
         nearBoothRef.current = closestBooth;
@@ -315,7 +315,7 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
 
   return (
     <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-between p-4 relative overflow-hidden select-none">
-      
+
       {/* Background Ambient Glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -362,7 +362,7 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
       {/* Main 2D Canvas Area */}
       <main className="w-full max-w-5xl my-4 flex-1 flex flex-col items-center justify-center relative">
         <div className="relative rounded-2xl overflow-hidden border-2 border-slate-800 shadow-2xl bg-slate-900">
-          
+
           <canvas
             ref={canvasRef}
             width={1000}
@@ -468,8 +468,8 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
                   <p>안녕하세요! <strong>게임 클라이언트 개발자 진준영</strong>입니다.</p>
                   <p>C# 및 Unity를 기반으로 가비지 컬렉션(GC) 최소화, 프레임 안정화, 물리/상태 머신(FSM) 아키텍처 설계를 전담해 왔습니다.</p>
                   <div className="p-3 bg-slate-800 rounded-xl text-xs space-y-1 font-mono">
-                    <p>🎓 SSAFY (삼성청년SW아카데미) 수료 (2025.07 ~ 2026.06)</p>
-                    <p>🏆 핀테크 트랙 우수상 수상 (자본주 E.T.)</p>
+                    <p>🎓 SSAFY (삼성청년SW아카데미) 수료</p>
+                    <p>🏆 프로젝트 우수상 수상</p>
                   </div>
                 </div>
               )}
@@ -479,7 +479,7 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
                   <h4 className="font-bold text-amber-400">🎓 SSAFY 교육 및 경력사항</h4>
                   <ul className="space-y-2 text-xs">
                     <li className="p-2.5 bg-slate-800 rounded-lg">
-                      <strong className="text-white">SSAFY 13기 교육생 (2025.07 ~ 2026.06)</strong><br />
+                      <strong className="text-white">SSAFY 교육생</strong><br />
                       웹 & 알고리즘 트랙 및 2학기 게임/풀스택 프로젝트 전담 완료
                     </li>
                     <li className="p-2.5 bg-slate-800 rounded-lg">
@@ -542,9 +542,9 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
         )}
       </AnimatePresence>
 
-      {/* Project Detail Modal Triggered from Game Mode */}
       {selectedModalProject && (
         <ProjectModal
+          isOpen={!!selectedModalProject} // 혹시 이 값이 빠져서 그럴 수 있습니다.
           project={selectedModalProject}
           onClose={() => setSelectedModalProject(null)}
         />
