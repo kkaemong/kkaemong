@@ -9,8 +9,9 @@ import Experience from "@/components/Experience";
 import Footer from "@/components/Footer";
 import PrintLayout from "@/components/PrintLayout";
 import LandingModeSelector from "@/components/LandingModeSelector";
+import InteractiveGameMode from "@/components/InteractiveGameMode";
 
-type PortfolioMode = 'SELECT' | 'STANDARD';
+type PortfolioMode = 'SELECT' | 'GAME' | 'STANDARD';
 
 export default function Home() {
   const [portfolioMode, setPortfolioMode] = useState<PortfolioMode>('SELECT');
@@ -41,14 +42,24 @@ export default function Home() {
     setPortfolioMode(mode);
     if (mode === 'STANDARD') {
       window.history.pushState({ mode: 'STANDARD' }, '', '#resume');
-    } else {
+    } else if (mode === 'SELECT') {
       window.history.pushState({ mode: 'SELECT' }, '', window.location.pathname);
     }
   };
 
   // Full Screen Entrance Landing Selector
   if (portfolioMode === 'SELECT') {
-    return <LandingModeSelector onSelectMode={() => changeMode('STANDARD')} />;
+    return <LandingModeSelector onSelectMode={(mode) => changeMode(mode)} />;
+  }
+
+  // Full Screen Interactive Game Mode
+  if (portfolioMode === 'GAME') {
+    return (
+      <InteractiveGameMode
+        onSwitchToStandard={() => changeMode('STANDARD')}
+        onBackToLanding={() => changeMode('SELECT')}
+      />
+    );
   }
 
   // Full Screen Standard Portfolio Document Mode

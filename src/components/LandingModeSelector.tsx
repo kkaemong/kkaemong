@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface LandingModeSelectorProps {
   onSelectMode: (mode: 'GAME' | 'STANDARD') => void;
@@ -15,12 +15,13 @@ interface DecItem {
   initialRotate: number;
   floatY: number;
   duration: number;
+  penColor?: string;
 }
 
 const DECORATION_ASSETS = [
-  { src: '/decorations/pencil_red.png', alt: 'Red Pencil', defaultWidth: 80 },
-  { src: '/decorations/pencil_blue.png', alt: 'Blue Pencil', defaultWidth: 75 },
-  { src: '/decorations/pencil_green.png', alt: 'Green Pencil', defaultWidth: 70 },
+  { src: '/decorations/pencil_red.png', alt: 'Red Pencil', defaultWidth: 80, penColor: '#EF4444' },
+  { src: '/decorations/pencil_blue.png', alt: 'Blue Pencil', defaultWidth: 75, penColor: '#3B82F6' },
+  { src: '/decorations/pencil_green.png', alt: 'Green Pencil', defaultWidth: 70, penColor: '#16A34A' },
   { src: '/decorations/star.png', alt: 'Star', defaultWidth: 32 },
   { src: '/decorations/heart.png', alt: 'Heart', defaultWidth: 28 },
   { src: '/decorations/big_heart.png', alt: 'Big Heart', defaultWidth: 42 },
@@ -30,6 +31,199 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [blink, setBlink] = useState<boolean>(true);
   const [decorations, setDecorations] = useState<DecItem[]>([]);
+  const [penColor, setPenColor] = useState<string>('#EF4444');
+  const [activePencilId, setActivePencilId] = useState<number | null>(null);
+  const [heldPencilSrc, setHeldPencilSrc] = useState<string | null>(null);
+  const [isErasing, setIsErasing] = useState(false);
+  const INTRO_SEEN_KEY = 'kkaemong_pencil_intro_seen';
+  const [showIntro, setShowIntro] = useState(false);
+  const [showEraserHint, setShowEraserHint] = useState(false);
+  const toolHeld = Boolean(heldPencilSrc) || isErasing;
+
+  const dismissIntro = () => {
+    setShowIntro(false);
+    try { localStorage.setItem(INTRO_SEEN_KEY, '1'); } catch {}
+  };
+
+  // First-visit intro only: a brief dark spotlight explaining the drawing feature exists,
+  // since nothing about the page otherwise hints that the decorations are interactive.
+  // Remembered in localStorage so it doesn't come back on every refresh.
+  useEffect(() => {
+    let alreadySeen = false;
+    try { alreadySeen = localStorage.getItem(INTRO_SEEN_KEY) === '1'; } catch {}
+    if (alreadySeen) return;
+
+    setShowIntro(true);
+    const timer = setTimeout(() => dismissIntro(), 3800);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Nudge toward the eraser corner button each time a pencil is picked up, then fade —
+  // the eraser button itself has no other explanation once the old hint bar was removed.
+  useEffect(() => {
+    if (!heldPencilSrc) return;
+    setShowEraserHint(true);
+    const timer = setTimeout(() => setShowEraserHint(false), 4000);
+    return () => clearTimeout(timer);
+  }, [heldPencilSrc]);
+
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const cursorPencilRef = useRef<HTMLImageElement | null>(null);
+  const eraserCursorRef = useRef<HTMLDivElement | null>(null);
+  const isDrawingRef = useRef(false);
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+  const ERASER_SIZE = 32;
+
+  // Where the pencil's drawn tip sits inside its own artwork (% of the image's own box),
+  // measured from the pencil_blue.png asset. Used as the CSS transform-origin so rotating
+  // the cursor pivots around the tip instead of the image center — the tip then stays
+  // exactly under the pointer regardless of rotation.
+  const TIP_ORIGIN = '94% 4%';
+  // Rotating 180° from the artwork's own orientation flips which end anchors at the
+  // cursor (tip instead of eraser) while keeping the same natural diagonal the art was
+  // drawn at, so it still reads as a pencil actually being gripped rather than floating.
+  const HELD_PENCIL_ANGLE_DEG = 180;
+
+  // Moves the held-pencil cursor image to follow the pointer. Driven by a window-level
+  // listener so it keeps following even when a decoration (e.g. another pencil) is the
+  // direct event target instead of the canvas.
+  const moveCursorPencil = (x: number, y: number) => {
+    const img = cursorPencilRef.current;
+    if (!img) return;
+    img.style.opacity = '1';
+    img.style.transform = `translate(${x}px, ${y}px) translate(-94%, -4%) rotate(${HELD_PENCIL_ANGLE_DEG}deg)`;
+  };
+
+  const moveCursorEraser = (x: number, y: number) => {
+    const el = eraserCursorRef.current;
+    if (!el) return;
+    el.style.opacity = '1';
+    el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+  };
+
+  // Draw + cursor tracking are both window-level (not bound to the canvas element)
+  // so that dragging works even when it starts or passes over another element with
+  // its own pointer-events (mode cards, pencil decorations) sitting above the canvas.
+  useEffect(() => {
+    if (!heldPencilSrc && !isErasing) return;
+    const moveCursor = isErasing ? moveCursorEraser : moveCursorPencil;
+
+    const handleDown = (e: PointerEvent) => {
+      isDrawingRef.current = true;
+      lastPointRef.current = null;
+      drawAt(e.clientX, e.clientY, isErasing);
+      moveCursor(e.clientX, e.clientY);
+    };
+    const handleMove = (e: PointerEvent) => {
+      if (isDrawingRef.current) drawAt(e.clientX, e.clientY, isErasing);
+      moveCursor(e.clientX, e.clientY);
+    };
+    const handleUp = () => {
+      isDrawingRef.current = false;
+      lastPointRef.current = null;
+    };
+
+    window.addEventListener('pointerdown', handleDown);
+    window.addEventListener('pointermove', handleMove);
+    window.addEventListener('pointerup', handleUp);
+    return () => {
+      window.removeEventListener('pointerdown', handleDown);
+      window.removeEventListener('pointermove', handleMove);
+      window.removeEventListener('pointerup', handleUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [heldPencilSrc, isErasing]);
+
+  // Size the doodle canvas to the viewport and keep it crisp on resize
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const prev = document.createElement('canvas');
+      prev.width = canvas.width;
+      prev.height = canvas.height;
+      prev.getContext('2d')?.drawImage(canvas, 0, 0);
+
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.scale(dpr, dpr);
+        if (prev.width > 0) ctx.drawImage(prev, 0, 0, prev.width / dpr, prev.height / dpr);
+      }
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
+
+  const drawAt = (x: number, y: number, erase: boolean) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!ctx) return;
+    const last = lastPointRef.current;
+    ctx.globalCompositeOperation = erase ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = penColor;
+    ctx.lineWidth = erase ? ERASER_SIZE : 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    if (last) {
+      ctx.moveTo(last.x, last.y);
+      ctx.lineTo(x, y);
+    } else {
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + 0.1, y + 0.1);
+    }
+    ctx.stroke();
+    lastPointRef.current = { x, y };
+  };
+
+  const clearDoodles = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  const togglePencil = (id: number, src: string, color: string) => {
+    // Toggle by color, not by the specific decoration instance clicked — picking up any
+    // pencil of the color you're already holding puts it back down.
+    if (heldPencilSrc && penColor === color) {
+      setActivePencilId(null);
+      setHeldPencilSrc(null);
+    } else {
+      setPenColor(color);
+      setActivePencilId(id);
+      setHeldPencilSrc(src);
+      setIsErasing(false);
+    }
+  };
+
+  // The pinned pencil doubles as the first-visit intro target: dismiss the intro (if still
+  // showing) and pick the pencil up, in one click.
+  const handleAnchorPencilClick = () => {
+    if (showIntro) dismissIntro();
+    togglePencil(-1, '/decorations/pencil_red.png', '#EF4444');
+  };
+
+  const toggleEraser = () => {
+    setShowEraserHint(false);
+    setIsErasing((prev) => {
+      const next = !prev;
+      if (next) {
+        setActivePencilId(null);
+        setHeldPencilSrc(null);
+      }
+      return next;
+    });
+  };
 
   // Blinking effect for selection cursor
   useEffect(() => {
@@ -98,6 +292,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
         initialRotate: rotate,
         floatY: Math.floor(Math.random() * 8) + 4,
         duration: 2.8 + Math.random() * 3.2,
+        penColor: asset.penColor,
       });
     });
 
@@ -146,6 +341,51 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
         }
       `}</style>
 
+      {/* ================= FIRST-VISIT INTRO SPOTLIGHT ================= */}
+      {/* Dims the page and zoom-pulses one dedicated pencil at a fixed, always-legible
+          spot (not one of the randomly-scattered decorations, which could land anywhere).
+          Clicking that pencil dismisses + picks it up; clicking elsewhere just dismisses.
+          Shown once only — remembered in localStorage. */}
+      <AnimatePresence>
+        {showIntro && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            onClick={dismissIntro}
+            className="fixed inset-0 z-[100] bg-black/75 cursor-pointer"
+          >
+            <p className="sketch-font absolute top-44 sm:top-48 left-8 sm:left-16 text-white text-xl sm:text-2xl font-bold leading-snug max-w-[240px]">
+              커지는 연필을 클릭해서 들어보세요!
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ================= PINNED PENCIL (ALWAYS FIXED, TOP-LEFT) ================= */}
+      {/* Guaranteed-findable pencil, independent of the randomly-scattered decorations below
+          (which could land anywhere or none nearby). Pulses big during the first-visit intro
+          to draw the eye, then settles into a gentle idle bob. Always clickable to pick up. */}
+      <motion.img
+        src="/decorations/pencil_red.png"
+        alt="연필 - 클릭해서 이 색으로 들거나 내려놓기"
+        draggable={false}
+        animate={{
+          scale: showIntro ? [1, 1.5, 1] : activePencilId === -1 ? 1.15 : [1, 1.08, 1],
+        }}
+        transition={{ duration: showIntro ? 1.3 : 2.6, repeat: Infinity, ease: 'easeInOut' }}
+        whileHover={{ scale: 1.3 }}
+        onClick={handleAnchorPencilClick}
+        className={`fixed top-24 sm:top-28 left-8 sm:left-16 w-16 z-[110] pointer-events-auto cursor-pointer transition-[filter] ${
+          showIntro
+            ? 'drop-shadow-[0_0_16px_rgba(255,255,255,0.9)]'
+            : activePencilId === -1
+            ? 'drop-shadow-[0_0_6px_rgba(59,130,246,0.7)]'
+            : 'drop-shadow-xs'
+        }`}
+      />
+
       {/* ================= DOODLE NOTEBOOK / GRAPH PAPER BACKGROUND ================= */}
       {/* Grid Pattern (Notebook Graph Lines) */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:1.8rem_1.8rem] opacity-75 pointer-events-none" />
@@ -153,25 +393,118 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
       {/* Notebook Margin Line (Red Line on Left) */}
       <div className="absolute top-0 bottom-0 left-8 sm:left-16 w-[2px] bg-red-300/70 pointer-events-none hidden sm:block" />
 
-      {/* ================= ABUNDANTLY DENSE DYNAMICALLY RANDOMIZED DECORATIONS ================= */}
-      {decorations.map((item) => (
-        <motion.img
-          key={item.id}
-          src={item.src}
-          alt={item.alt}
-          style={item.style}
-          animate={{
-            y: [0, -item.floatY, 0],
-            rotate: [item.initialRotate - 6, item.initialRotate + 6, item.initialRotate - 6],
-          }}
-          transition={{
-            duration: item.duration,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="pointer-events-none drop-shadow-xs"
+      {/* ================= DOODLE DRAWING SURFACE ================= */}
+      {/* Purely a paint target — pointer handling lives in the window-level effect above so
+          drawing still works when a drag starts or passes over the mode cards / decorations. */}
+      <canvas
+        ref={canvasRef}
+        className={`absolute inset-0 z-[5] touch-none ${heldPencilSrc || isErasing ? 'cursor-none' : ''}`}
+      />
+
+      {/* Held-pencil custom cursor: its tip (not the image center) is pinned under the pointer */}
+      {heldPencilSrc && (
+        <img
+          ref={cursorPencilRef}
+          src={heldPencilSrc}
+          alt=""
+          draggable={false}
+          className="fixed top-0 left-0 w-12 h-auto z-[60] pointer-events-none opacity-0 drop-shadow-md"
+          style={{ willChange: 'transform', transformOrigin: TIP_ORIGIN }}
         />
-      ))}
+      )}
+
+      {/* Eraser cursor: a little gray eraser block (standing upright), sized to the brush */}
+      {isErasing && (
+        <div
+          ref={eraserCursorRef}
+          className="fixed top-0 left-0 z-[60] pointer-events-none opacity-0 rounded-md border border-slate-400 shadow-sm overflow-hidden flex flex-col"
+          style={{ width: ERASER_SIZE * 0.85, height: ERASER_SIZE * 1.3, willChange: 'transform' }}
+        >
+          <div className="w-full h-2/3 bg-slate-300" />
+          <div className="w-full h-1/3 bg-slate-100" />
+        </div>
+      )}
+
+      {/* ================= ABUNDANTLY DENSE DYNAMICALLY RANDOMIZED DECORATIONS ================= */}
+      {decorations.map((item) => {
+        const handlePencilClick = item.penColor
+          ? () => togglePencil(item.id, item.src, item.penColor!)
+          : undefined;
+
+        return (
+          <motion.img
+            key={item.id}
+            src={item.src}
+            alt={item.penColor ? `${item.alt} - 클릭해서 이 색으로 들거나 내려놓기` : item.alt}
+            style={item.style}
+            draggable={false}
+            animate={{
+              y: [0, -item.floatY, 0],
+              rotate: [item.initialRotate - 6, item.initialRotate + 6, item.initialRotate - 6],
+              scale: activePencilId === item.id ? 1.15 : 1,
+            }}
+            whileHover={item.penColor ? { scale: 1.3 } : undefined}
+            transition={{
+              duration: item.duration,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            onClick={handlePencilClick}
+            className={`drop-shadow-xs ${
+              item.penColor
+                ? `pointer-events-auto cursor-pointer ${activePencilId === item.id ? 'drop-shadow-[0_0_6px_rgba(59,130,246,0.7)]' : ''}`
+                : 'pointer-events-none'
+            }`}
+          />
+        );
+      })}
+
+      {/* Eraser discovery moment: same treatment as the pencil intro — dim everything,
+          zoom-pulse the real eraser button in place (no ring, no dark box around it). */}
+      <AnimatePresence>
+        {showEraserHint && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            onClick={() => setShowEraserHint(false)}
+            className="fixed inset-0 z-[35] bg-black/70 cursor-pointer"
+          >
+            <p className="sketch-font absolute bottom-28 sm:bottom-32 right-5 text-white text-sm sm:text-lg font-bold whitespace-nowrap">
+              🧹 여기 지우개로 지울 수 있어요
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Eraser + clear-all: persistent corner buttons
+          so they're always reachable regardless of hint/idle state. */}
+      <div className="fixed bottom-5 right-5 z-40 flex items-center gap-3">
+        <button
+          onClick={clearDoodles}
+          title="전체 지우기"
+          className="h-14 sm:h-16 px-4 sm:px-5 rounded-full shadow-lg border-2 flex items-center justify-center whitespace-nowrap text-xs sm:text-base font-bold text-slate-500 bg-white/90 hover:bg-white border-slate-300 transition-colors"
+        >
+          전체 지우기
+        </button>
+        <motion.button
+          onClick={toggleEraser}
+          title="지우개"
+          animate={showEraserHint ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+          transition={{ duration: 1.3, repeat: showEraserHint ? Infinity : 0, ease: 'easeInOut' }}
+          className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-lg border-2 flex items-center justify-center transition-colors ${
+            isErasing
+              ? 'bg-slate-700 border-slate-800'
+              : 'bg-white/90 border-slate-300 hover:bg-white'
+          }`}
+        >
+          <span className="w-4 h-6 sm:w-5 sm:h-7 rounded-[3px] border border-slate-400 shadow-sm overflow-hidden flex flex-col rotate-[-8deg]">
+            <span className="w-full h-2/3 bg-slate-300" />
+            <span className="w-full h-1/3 bg-slate-100" />
+          </span>
+        </motion.button>
+      </div>
 
       {/* ================= CENTER SKETCHBOOK TITLE & OPTIONS ================= */}
       <main className="w-full max-w-5xl mx-auto my-auto py-2 z-20 flex flex-col items-center text-center sketch-font">
@@ -195,6 +528,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
               transition={{ duration: 2, repeat: Infinity }}
               src="/decorations/big_heart.png"
               alt="Heart"
+              draggable={false}
               className="absolute -top-3 left-1 sm:left-4 w-6 sm:w-9 h-auto z-10"
             />
 
@@ -204,6 +538,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
               transition={{ duration: 4, repeat: Infinity }}
               src="/decorations/star.png"
               alt="Star"
+              draggable={false}
               className="absolute -bottom-3 right-1 sm:right-4 w-6 sm:w-8 h-auto z-10"
             />
           </div>
@@ -225,15 +560,15 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
           
           {/* OPTION 1: 게임으로 포트폴리오 보기 */}
           <motion.div
-            whileHover={{ scale: 1.015, rotate: -0.5 }}
-            whileTap={{ scale: 0.99 }}
-            onMouseEnter={() => setSelectedIndex(0)}
-            onClick={() => onSelectMode('GAME')}
-            className={`cursor-pointer p-5 sm:p-6 rounded-2xl border-2 transition-all duration-200 relative ${
+            whileHover={toolHeld ? undefined : { scale: 1.015, rotate: -0.5 }}
+            whileTap={toolHeld ? undefined : { scale: 0.99 }}
+            onMouseEnter={() => { if (!toolHeld) setSelectedIndex(0); }}
+            onClick={() => { if (!toolHeld) onSelectMode('GAME'); }}
+            className={`p-5 sm:p-6 rounded-2xl border-2 transition-all duration-200 relative ${
               selectedIndex === 0
                 ? 'bg-amber-100/90 border-slate-900 shadow-[6px_6px_0px_#3b82f6] rotate-[-1deg]'
                 : 'bg-white/80 border-slate-800 shadow-[3px_3px_0px_#cbd5e1] opacity-90 hover:opacity-100 rotate-[0.5deg]'
-            }`}
+            } ${toolHeld ? 'cursor-default !opacity-50' : 'cursor-pointer'}`}
           >
             <div className="flex items-center justify-between relative z-10">
               <div className="flex items-center gap-4">
@@ -262,15 +597,15 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
 
           {/* OPTION 2: 포트폴리오 바로 감상하기 */}
           <motion.div
-            whileHover={{ scale: 1.015, rotate: 0.5 }}
-            whileTap={{ scale: 0.99 }}
-            onMouseEnter={() => setSelectedIndex(1)}
-            onClick={() => onSelectMode('STANDARD')}
-            className={`cursor-pointer p-5 sm:p-6 rounded-2xl border-2 transition-all duration-200 relative ${
+            whileHover={toolHeld ? undefined : { scale: 1.015, rotate: 0.5 }}
+            whileTap={toolHeld ? undefined : { scale: 0.99 }}
+            onMouseEnter={() => { if (!toolHeld) setSelectedIndex(1); }}
+            onClick={() => { if (!toolHeld) onSelectMode('STANDARD'); }}
+            className={`p-5 sm:p-6 rounded-2xl border-2 transition-all duration-200 relative ${
               selectedIndex === 1
                 ? 'bg-emerald-100/90 border-slate-900 shadow-[6px_6px_0px_#10b981] rotate-[1deg]'
                 : 'bg-white/80 border-slate-800 shadow-[3px_3px_0px_#cbd5e1] opacity-90 hover:opacity-100 rotate-[-0.5deg]'
-            }`}
+            } ${toolHeld ? 'cursor-default !opacity-50' : 'cursor-pointer'}`}
           >
             <div className="flex items-center justify-between relative z-10">
               <div className="flex items-center gap-4">
@@ -303,9 +638,9 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
 
       {/* Bottom Footer */}
       <footer className="w-full text-center text-xs text-slate-400 py-2 z-20 sketch-font flex items-center justify-center gap-2">
-        <img src="/decorations/star.png" alt="Star" className="w-3.5 h-auto opacity-70" />
+        <img src="/decorations/star.png" alt="Star" draggable={false} className="w-3.5 h-auto opacity-70" />
         <span>© 2026 JIN JUNE YOUNG PORTFOLIO</span>
-        <img src="/decorations/star.png" alt="Star" className="w-3.5 h-auto opacity-70" />
+        <img src="/decorations/star.png" alt="Star" draggable={false} className="w-3.5 h-auto opacity-70" />
       </footer>
 
     </div>
