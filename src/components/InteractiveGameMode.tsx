@@ -1,9 +1,11 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { ArrowLeft, FileText } from 'lucide-react';
+import { type Project } from '@/data/portfolio';
+import ProjectModal from './ProjectModal';
 
 const GameScene3D = dynamic(() => import('./GameScene3D'), { ssr: false });
 
@@ -13,6 +15,8 @@ interface InteractiveGameModeProps {
 }
 
 export default function InteractiveGameMode({ onSwitchToStandard, onBackToLanding }: InteractiveGameModeProps) {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-slate-900 flex flex-col items-center justify-center p-4 relative overflow-hidden select-none">
 
@@ -57,7 +61,7 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-3xl aspect-video rounded-[1.75rem] bg-slate-900 p-3 sm:p-4 shadow-2xl"
+        className="relative z-10 w-full max-w-5xl aspect-video rounded-[1.75rem] bg-slate-900 p-3 sm:p-4 shadow-2xl"
       >
         {/* Bezel details */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1.5">
@@ -71,18 +75,24 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
           <Suspense
             fallback={
               <div className="w-full h-full flex items-center justify-center text-xs text-slate-400 font-bold">
-                3D 씬 불러오는 중...
+                3D 갤러리 불러오는 중...
               </div>
             }
           >
-            <GameScene3D />
+            <GameScene3D onSelectProject={setSelectedProject} onOpenResume={onSwitchToStandard} />
           </Suspense>
         </div>
       </motion.div>
 
       <p className="relative z-10 mt-3 text-xs text-slate-400 font-medium">
-        💡 드래그해서 회전, 스크롤로 확대/축소해보세요
+        💡 드래그해서 회전, 스크롤로 확대/축소 · 프로젝트를 클릭하면 상세 정보를 볼 수 있어요
       </p>
+
+      <ProjectModal
+        isOpen={!!selectedProject}
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </div>
   );
 }

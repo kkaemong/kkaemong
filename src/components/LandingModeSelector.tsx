@@ -36,6 +36,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
   const [heldPencilSrc, setHeldPencilSrc] = useState<string | null>(null);
   const [isErasing, setIsErasing] = useState(false);
   const INTRO_SEEN_KEY = 'kkaemong_pencil_intro_seen';
+  const ERASER_HINT_SEEN_KEY = 'kkaemong_eraser_hint_seen';
   const [showIntro, setShowIntro] = useState(false);
   const [showEraserHint, setShowEraserHint] = useState(false);
   const toolHeld = Boolean(heldPencilSrc) || isErasing;
@@ -43,6 +44,11 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
   const dismissIntro = () => {
     setShowIntro(false);
     try { localStorage.setItem(INTRO_SEEN_KEY, '1'); } catch {}
+  };
+
+  const dismissEraserHint = () => {
+    setShowEraserHint(false);
+    try { localStorage.setItem(ERASER_HINT_SEEN_KEY, '1'); } catch {}
   };
 
   // First-visit intro only: a brief dark spotlight explaining the drawing feature exists,
@@ -59,12 +65,17 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Nudge toward the eraser corner button each time a pencil is picked up, then fade —
-  // the eraser button itself has no other explanation once the old hint bar was removed.
+  // Nudge toward the eraser corner button the first time ever a pencil is picked up, then
+  // fade — remembered in localStorage (like the intro) so it doesn't nag on every pickup,
+  // only the one time the user genuinely doesn't know the eraser exists yet.
   useEffect(() => {
     if (!heldPencilSrc) return;
+    let alreadySeen = false;
+    try { alreadySeen = localStorage.getItem(ERASER_HINT_SEEN_KEY) === '1'; } catch {}
+    if (alreadySeen) return;
+
     setShowEraserHint(true);
-    const timer = setTimeout(() => setShowEraserHint(false), 4000);
+    const timer = setTimeout(() => dismissEraserHint(), 4000);
     return () => clearTimeout(timer);
   }, [heldPencilSrc]);
 
@@ -214,7 +225,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
   };
 
   const toggleEraser = () => {
-    setShowEraserHint(false);
+    dismissEraserHint();
     setIsErasing((prev) => {
       const next = !prev;
       if (next) {
@@ -460,7 +471,9 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
       })}
 
       {/* Eraser discovery moment: same treatment as the pencil intro — dim everything,
-          zoom-pulse the real eraser button in place (no ring, no dark box around it). */}
+          zoom-pulse the real eraser button in place (no ring, no dark box around it).
+          No emoji stand-in for the eraser; the arrow points straight at the real pulsing
+          button below so there's no ambiguity about what "here" refers to. */}
       <AnimatePresence>
         {showEraserHint && (
           <motion.div
@@ -468,11 +481,18 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            onClick={() => setShowEraserHint(false)}
+            onClick={dismissEraserHint}
             className="fixed inset-0 z-[35] bg-black/70 cursor-pointer"
           >
-            <p className="sketch-font absolute bottom-28 sm:bottom-32 right-5 text-white text-sm sm:text-lg font-bold whitespace-nowrap">
-              🧹 여기 지우개로 지울 수 있어요
+            <p className="sketch-font absolute bottom-28 sm:bottom-32 right-5 text-white text-sm sm:text-lg font-bold whitespace-nowrap flex items-center gap-1.5">
+              지우개로 지울 수 있어요
+              <motion.span
+                animate={{ x: [0, 4, 0], y: [0, 4, 0] }}
+                transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+                aria-hidden
+              >
+                ↘
+              </motion.span>
             </p>
           </motion.div>
         )}
