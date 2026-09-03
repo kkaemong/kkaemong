@@ -2,7 +2,7 @@
 
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { ArrowLeft, FileText } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { portfolioData, type Project } from '@/data/portfolio';
 import ProjectModal from './ProjectModal';
 import type { UnityPortfolioGameHandle } from './UnityPortfolioGame';
@@ -158,19 +158,11 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
           <ArrowLeft size={18} />
         </button>
       )}
-      <button
-        onClick={onSwitchToStandard}
-        className="absolute top-5 right-5 z-20 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 shadow-md text-xs font-bold text-slate-600 hover:text-blue-600 hover:shadow-lg transition-all cursor-none"
-      >
-        <FileText size={14} />
-        <span>포트폴리오 보기</span>
-      </button>
-
-      <p className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 text-xs text-slate-500 font-medium bg-white/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full shadow-sm whitespace-nowrap">
-        {gameFailed
-          ? '💡 카드에 마우스를 올려보세요 · 클릭하면 상세 정보를 볼 수 있어요'
-          : '🕹️ 방향키로 움직여서 부스를 찾아가 보세요'}
-      </p>
+      {gameFailed && (
+        <p className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 text-xs text-slate-500 font-medium bg-white/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full shadow-sm whitespace-nowrap">
+          💡 카드에 마우스를 올려보세요 · 클릭하면 상세 정보를 볼 수 있어요
+        </p>
+      )}
 
       <ProjectModal
         isOpen={!!selectedProject}
