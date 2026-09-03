@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>포트폴리오 게임 맵</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: #FAF9F6;
+        overflow: hidden;
+        cursor: none;
+      }
+      #unity-container {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #unity-canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        background: #FAF9F6;
+      }
+      #unity-loading-bar {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        font-family: 'Gaegu', sans-serif;
+      }
+      #unity-progress-bar-empty {
+        width: 180px;
+        height: 8px;
+        border-radius: 4px;
+        background: #E2E8F0;
+        overflow: hidden;
+      }
+      #unity-progress-bar-full {
+        width: 0%;
+        height: 100%;
+        background: #3B82F6;
+        transition: width 0.15s ease-out;
+      }
+      #unity-loading-label {
+        font-size: 13px;
+        color: #64748B;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unity-container">
+      <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-loading-label">맵 불러오는 중...</div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+    </div>
+    <!--
+      Filenames are hardcoded rather than using Unity's %MACRO% template
+      substitution — on this Unity 6 install (6000.3.12f1) the WebGL build
+      pipeline copied this custom template's text verbatim without running
+      macro substitution, leaving literal "%UNITY_..._FILENAME%" tokens in
+      the output. The "WebGL" prefix comes from BuildWebGL.cs's output
+      folder name (Build/WebGL) — Unity names these files after the build
+      location's basename, not PlayerSettings.productName — so keep this in
+      sync with OutputPath in BuildWebGL.cs if that ever changes.
+    -->
+    <script src="Build/WebGL.loader.js"></script>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+
+      var buildUrl = "Build";
+      var config = {
+        dataUrl: buildUrl + "/WebGL.data",
+        frameworkUrl: buildUrl + "/WebGL.framework.js",
+        codeUrl: buildUrl + "/WebGL.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Portfolio",
+        productName: "Portfolio",
+        productVersion: "1.0",
+      };
+
+      createUnityInstance(canvas, config, function (progress) {
+        progressBarFull.style.width = (100 * progress) + "%";
+      }).then(function (unityInstance) {
+        window.unityInstance = unityInstance;
+        loadingBar.style.display = "none";
+        if (window.parent) {
+          window.parent.postMessage({ type: "PORTFOLIO_GAME_READY" }, "*");
+        }
+      }).catch(function (message) {
+        console.error(message);
+      });
+
+      // Relay from the hosting portfolio page: closing a project modal
+      // unlocks player movement again (see PlayerController2D.ResumeFromBooth).
+      window.addEventListener("message", function (event) {
+        if (!event.data || event.data.type !== "PORTFOLIO_RESUME_BOOTH") return;
+        if (window.unityInstance) {
+          window.unityInstance.SendMessage("Player", "ResumeFromBooth");
+        }
+      });
+    </script>
+  </body>
+</html>

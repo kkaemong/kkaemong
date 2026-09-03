@@ -1,49 +1,158 @@
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
 import { ArrowLeft, FileText } from 'lucide-react';
-import { type Project } from '@/data/portfolio';
+import { portfolioData, type Project } from '@/data/portfolio';
 import ProjectModal from './ProjectModal';
+import type { UnityPortfolioGameHandle } from './UnityPortfolioGame';
 
 const GameScene3D = dynamic(() => import('./GameScene3D'), { ssr: false });
+const UnityPortfolioGame = dynamic(() => import('./UnityPortfolioGame'), { ssr: false });
 
 interface InteractiveGameModeProps {
   onSwitchToStandard: () => void;
   onBackToLanding?: () => void;
 }
 
+const TIP_ORIGIN = '94% 4%';
+
+// Non-project booths (About Me / Experience) on the map: no modal, just a
+// brief scenic pause before movement unlocks again on its own.
+const SCENIC_PAUSE_MS = 1400;
+
 export default function InteractiveGameMode({ onSwitchToStandard, onBackToLanding }: InteractiveGameModeProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [gameFailed, setGameFailed] = useState(false);
+  const gameRef = useRef<UnityPortfolioGameHandle | null>(null);
+  const trailCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const cursorRef = useRef<HTMLImageElement | null>(null);
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+
+  const handleBoothReached = useCallback((boothId: string) => {
+    const project = portfolioData.projects.find((p) => p.id === boothId);
+    if (project) {
+      setSelectedProject(project);
+      return;
+    }
+    window.setTimeout(() => gameRef.current?.resume(), SCENIC_PAUSE_MS);
+  }, []);
+
+  const closeProjectModal = useCallback(() => {
+    setSelectedProject(null);
+    gameRef.current?.resume();
+  }, []);
+
+  // Fit the trail canvas to the viewport and keep it crisp on resize
+  useEffect(() => {
+    const canvas = trailCanvasRef.current;
+    if (!canvas) return;
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
+
+  // Continuously fades the trail toward the page color, so pencil strokes
+  // left by the custom cursor linger a moment and then dissolve instead of
+  // needing an explicit clear.
+  useEffect(() => {
+    const canvas = trailCanvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
+    let raf: number;
+    const fade = () => {
+      // destination-out erases by reducing alpha, instead of painting translucent
+      // color over a transparent canvas — the latter accumulates opacity over
+      // time (source-over compositing) and eventually washes the whole page white.
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'source-over';
+      raf = requestAnimationFrame(fade);
+    };
+    raf = requestAnimationFrame(fade);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  // Custom pencil cursor: replaces the system pointer everywhere in GAME
+  // mode (ties back to the site's pencil motif) and leaves a faint graphite
+  // stroke behind it as it moves.
+  useEffect(() => {
+    const canvas = trailCanvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
+
+    const handleMove = (e: PointerEvent) => {
+      const cursor = cursorRef.current;
+      if (cursor) {
+        cursor.style.opacity = '1';
+        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-94%, -4%) rotate(180deg)`;
+      }
+      const last = lastPointRef.current;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = 'rgba(100, 116, 139, 0.45)';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      if (last) {
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(e.clientX, e.clientY);
+      } else {
+        ctx.moveTo(e.clientX, e.clientY);
+        ctx.lineTo(e.clientX + 0.1, e.clientY + 0.1);
+      }
+      ctx.stroke();
+      lastPointRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    window.addEventListener('pointermove', handleMove);
+    return () => window.removeEventListener('pointermove', handleMove);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-slate-900 flex flex-col items-center justify-center p-4 relative overflow-hidden select-none">
+    <div className="fixed inset-0 w-screen h-screen bg-[#FAF9F6] text-slate-900 overflow-hidden select-none cursor-none">
 
-      {/* Notebook Graph Paper Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:2.2rem_2.2rem] opacity-50 pointer-events-none" />
+      {/* Full-bleed scene — no cabinet frame, this *is* the screen */}
+      <Suspense
+        fallback={
+          <div className="absolute inset-0 flex items-center justify-center text-xs text-slate-400 font-bold">
+            불러오는 중...
+          </div>
+        }
+      >
+        {gameFailed ? (
+          <GameScene3D onSelectProject={setSelectedProject} onOpenResume={onSwitchToStandard} />
+        ) : (
+          <UnityPortfolioGame
+            apiRef={gameRef}
+            onBoothReached={handleBoothReached}
+            onFailure={() => setGameFailed(true)}
+          />
+        )}
+      </Suspense>
 
-      {/* Floating Doodle Decorations */}
-      <motion.img
-        animate={{ y: [0, -6, 0], rotate: [-8, 2, -8] }}
-        transition={{ duration: 4.5, repeat: Infinity }}
-        src="/decorations/pencil_blue.png"
+      {/* Fading pencil-stroke trail, purely decorative */}
+      <canvas ref={trailCanvasRef} className="absolute inset-0 z-10 pointer-events-none" />
+
+      {/* Custom pencil cursor tracking the pointer everywhere in GAME mode */}
+      <img
+        ref={cursorRef}
+        src="/decorations/pencil_red.png"
         alt=""
-        className="absolute top-24 left-8 w-14 h-auto hidden lg:block opacity-80 pointer-events-none z-0"
-      />
-      <motion.img
-        animate={{ y: [0, 8, 0], rotate: [6, -6, 6] }}
-        transition={{ duration: 5, repeat: Infinity }}
-        src="/decorations/star.png"
-        alt=""
-        className="absolute bottom-16 right-10 w-9 h-auto hidden lg:block opacity-80 pointer-events-none z-0"
+        draggable={false}
+        className="fixed top-0 left-0 w-10 h-auto z-30 pointer-events-none opacity-0 drop-shadow-md"
+        style={{ willChange: 'transform', transformOrigin: TIP_ORIGIN }}
       />
 
-      {/* Minimal floating nav */}
+      {/* Floating HUD nav, layered above the canvas */}
       {onBackToLanding && (
         <button
           onClick={onBackToLanding}
-          className="absolute top-5 left-5 z-20 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-blue-600 hover:shadow-lg transition-all cursor-pointer"
+          className="absolute top-5 left-5 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 shadow-md flex items-center justify-center text-slate-600 hover:text-blue-600 hover:shadow-lg transition-all cursor-none"
           title="첫 선택 화면"
         >
           <ArrowLeft size={18} />
@@ -51,47 +160,22 @@ export default function InteractiveGameMode({ onSwitchToStandard, onBackToLandin
       )}
       <button
         onClick={onSwitchToStandard}
-        className="absolute top-5 right-5 z-20 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-white border border-slate-200 shadow-md text-xs font-bold text-slate-600 hover:text-blue-600 hover:shadow-lg transition-all cursor-pointer"
+        className="absolute top-5 right-5 z-20 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 shadow-md text-xs font-bold text-slate-600 hover:text-blue-600 hover:shadow-lg transition-all cursor-none"
       >
         <FileText size={14} />
         <span>포트폴리오 보기</span>
       </button>
 
-      {/* Flash-game style stage: dark cabinet bezel around a centered screen */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-5xl aspect-video rounded-[1.75rem] bg-slate-900 p-3 sm:p-4 shadow-2xl"
-      >
-        {/* Bezel details */}
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
-        </div>
-
-        {/* Screen */}
-        <div className="w-full h-full rounded-2xl bg-[#FAF9F6] border border-slate-800/40 overflow-hidden">
-          <Suspense
-            fallback={
-              <div className="w-full h-full flex items-center justify-center text-xs text-slate-400 font-bold">
-                3D 갤러리 불러오는 중...
-              </div>
-            }
-          >
-            <GameScene3D onSelectProject={setSelectedProject} onOpenResume={onSwitchToStandard} />
-          </Suspense>
-        </div>
-      </motion.div>
-
-      <p className="relative z-10 mt-3 text-xs text-slate-400 font-medium">
-        💡 드래그해서 회전, 스크롤로 확대/축소 · 프로젝트를 클릭하면 상세 정보를 볼 수 있어요
+      <p className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 text-xs text-slate-500 font-medium bg-white/80 backdrop-blur-sm px-3.5 py-1.5 rounded-full shadow-sm whitespace-nowrap">
+        {gameFailed
+          ? '💡 카드에 마우스를 올려보세요 · 클릭하면 상세 정보를 볼 수 있어요'
+          : '🕹️ 방향키로 움직여서 부스를 찾아가 보세요'}
       </p>
 
       <ProjectModal
         isOpen={!!selectedProject}
         project={selectedProject}
-        onClose={() => setSelectedProject(null)}
+        onClose={closeProjectModal}
       />
     </div>
   );

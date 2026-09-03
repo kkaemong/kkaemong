@@ -1,229 +1,127 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, type ThreeEvent } from '@react-three/fiber';
-import {
-  OrbitControls,
-  Float,
-  Billboard,
-  MeshReflectorMaterial,
-  ContactShadows,
-  Environment,
-  Sparkles,
-  Image as DreiImage,
-  Html,
-} from '@react-three/drei';
+import { Image as DreiImage, Html, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import { portfolioData, type Project } from '@/data/portfolio';
 
-const FLOOR_Y = -1.2;
-const BOOTH_RADIUS = 4;
+// A horizontal row of real project screenshots on the site's usual sketchbook
+// paper, each card tilting toward the cursor like it's being picked up off
+// the desk. Card interactivity replaces the old whole-scene camera parallax —
+// the pencil cursor (added in InteractiveGameMode) carries the "look, it
+// follows you" feeling instead.
+const ACCENTS = ['#3B82F6', '#F472B6', '#10B981', '#F59E0B'];
 
-// ================= BRAND DOODLE PRIMITIVES =================
-// Procedural geometry (no external models) echoing the site's hand-drawn
-// pencil / star / heart decorations, now built as real 3D meshes.
-function Pencil({ position }: { position: [number, number, number] }) {
-  return (
-    <Float speed={1.6} rotationIntensity={0.6} floatIntensity={0.8}>
-      <group position={position} rotation={[0, 0, Math.PI / 5]}>
-        <mesh position={[0, 0, 0]}>
-          <cylinderGeometry args={[0.18, 0.18, 1.6, 6]} />
-          <meshStandardMaterial color="#EF4444" />
-        </mesh>
-        <mesh position={[0, 0.95, 0]}>
-          <coneGeometry args={[0.18, 0.35, 6]} />
-          <meshStandardMaterial color="#FDE68A" />
-        </mesh>
-        <mesh position={[0, -0.9, 0]}>
-          <cylinderGeometry args={[0.19, 0.19, 0.18, 6]} />
-          <meshStandardMaterial color="#F472B6" />
-        </mesh>
-      </group>
-    </Float>
-  );
+interface CardSpec {
+  position: [number, number, number];
+  rotationZ: number;
 }
 
-function Star({ position }: { position: [number, number, number] }) {
-  const shape = React.useMemo(() => {
-    const s = new THREE.Shape();
-    const spikes = 5;
-    const outerR = 0.55;
-    const innerR = 0.24;
-    for (let i = 0; i < spikes * 2; i++) {
-      const r = i % 2 === 0 ? outerR : innerR;
-      const a = (i / (spikes * 2)) * Math.PI * 2 - Math.PI / 2;
-      const x = Math.cos(a) * r;
-      const y = Math.sin(a) * r;
-      if (i === 0) s.moveTo(x, y);
-      else s.lineTo(x, y);
+const CARD_LAYOUT: CardSpec[] = [
+  { position: [-6.0, 0.3, 0], rotationZ: -0.05 },
+  { position: [-3.0, -0.25, 0.15], rotationZ: 0.04 },
+  { position: [0.0, 0.3, -0.1], rotationZ: -0.03 },
+  { position: [3.0, -0.25, 0.15], rotationZ: 0.05 },
+];
+const CONTACT_CARD: CardSpec = { position: [6.0, 0.3, 0], rotationZ: -0.04 };
+
+// ================= SKETCHBOOK BACKDROP =================
+// The site's signature notebook-graph-paper pattern, wrapped around the
+// scene as a skydome. Unlit so lighting doesn't wash it out.
+function useNotebookGridTexture() {
+  return useMemo(() => {
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#faf9f6';
+      ctx.fillRect(0, 0, size, size);
+      ctx.strokeStyle = '#d7dce3';
+      ctx.lineWidth = 3;
+      const step = size / 8;
+      for (let i = 0; i <= size; i += step) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, size);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(size, i);
+        ctx.stroke();
+      }
     }
-    s.closePath();
-    return s;
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(10, 6);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
   }, []);
+}
 
+function SketchbookBackdrop() {
+  const texture = useNotebookGridTexture();
   return (
-    <Float speed={1.2} rotationIntensity={1.1} floatIntensity={1.1}>
-      <mesh position={position}>
-        <extrudeGeometry args={[shape, { depth: 0.18, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.03 }]} />
-        <meshStandardMaterial color="#FBBF24" />
-      </mesh>
-    </Float>
+    <mesh>
+      <sphereGeometry args={[26, 32, 32]} />
+      <meshBasicMaterial map={texture} side={THREE.BackSide} fog toneMapped={false} />
+    </mesh>
   );
 }
 
-function Heart({ position }: { position: [number, number, number] }) {
-  const shape = React.useMemo(() => {
-    const s = new THREE.Shape();
-    s.moveTo(0, 0.35);
-    s.bezierCurveTo(0, 0.55, -0.3, 0.65, -0.5, 0.45);
-    s.bezierCurveTo(-0.75, 0.2, -0.55, -0.15, 0, -0.55);
-    s.bezierCurveTo(0.55, -0.15, 0.75, 0.2, 0.5, 0.45);
-    s.bezierCurveTo(0.3, 0.65, 0, 0.55, 0, 0.35);
-    return s;
-  }, []);
-
-  return (
-    <Float speed={1.4} rotationIntensity={0.5} floatIntensity={0.9}>
-      <mesh position={position} scale={0.7}>
-        <extrudeGeometry args={[shape, { depth: 0.16, bevelEnabled: true, bevelSize: 0.02, bevelThickness: 0.02 }]} />
-        <meshStandardMaterial color="#F472B6" />
-      </mesh>
-    </Float>
-  );
-}
-
-// ================= CENTER HUB =================
-// The player's "home base": the original spinning doodle trio, plus a real
-// HTML panel (Html-in-3D) so Korean text stays crisp — 3D vector text fonts
-// don't ship Hangul glyphs, so this is the deliberate, readable choice.
-function Hub({ onOpenResume }: { onOpenResume: () => void }) {
-  const spinRef = useRef<THREE.Group>(null);
-  useFrame((_, delta) => {
-    if (spinRef.current) spinRef.current.rotation.y += delta * 0.15;
-  });
-
-  return (
-    <group>
-      <group ref={spinRef}>
-        <Pencil position={[-1.1, 0.55, 0.1]} />
-        <Star position={[1.0, 0.75, -0.3]} />
-        <Heart position={[0.1, 0.3, 0.95]} />
-      </group>
-
-      <pointLight position={[0, 1.6, 0]} intensity={4} color="#93C5FD" distance={5} decay={2} />
-
-      <Html position={[0, -0.45, 0]} center distanceFactor={7.5} occlude>
-        <div className="pointer-events-none flex flex-col items-center text-center select-none" style={{ width: 220 }}>
-          <p className="sketch-font font-extrabold text-slate-900 text-lg leading-none drop-shadow-sm">진준영</p>
-          <p className="text-[10px] font-bold text-blue-600 tracking-wide mt-1">GAME CLIENT DEVELOPER</p>
-          <button
-            onClick={onOpenResume}
-            className="pointer-events-auto mt-2.5 px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-[10px] font-bold shadow-md hover:bg-blue-600 active:scale-95 transition-all cursor-pointer"
-          >
-            이력서 전체 보기
-          </button>
-          <div className="pointer-events-auto flex items-center gap-2.5 mt-2">
-            <a
-              href={`https://${portfolioData.contact.github}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[9px] font-bold text-slate-500 hover:text-blue-600 bg-white/85 px-2 py-1 rounded-full border border-slate-200 shadow-xs transition-colors"
-            >
-              GitHub
-            </a>
-            <a
-              href={portfolioData.contact.blog}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[9px] font-bold text-slate-500 hover:text-blue-600 bg-white/85 px-2 py-1 rounded-full border border-slate-200 shadow-xs transition-colors"
-            >
-              Blog
-            </a>
-            <a
-              href={`mailto:${portfolioData.contact.email}`}
-              className="text-[9px] font-bold text-slate-500 hover:text-blue-600 bg-white/85 px-2 py-1 rounded-full border border-slate-200 shadow-xs transition-colors"
-            >
-              Email
-            </a>
-          </div>
-        </div>
-      </Html>
-    </group>
-  );
-}
-
-// ================= SKILL CONSTELLATION =================
-// A slowly-orbiting ring of small emissive gems above the hub, each labeled
-// via a billboarded Html chip — a lightweight way to surface the tech stack
-// without crowding the ground-level project booths.
-function SkillOrbit({ skills }: { skills: string[] }) {
+// Grows a group from nothing into place on mount, eased — cards assemble
+// into the row instead of popping in all at once.
+function useEntranceScale(delay: number) {
   const ref = useRef<THREE.Group>(null);
-  useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.09;
+  const startRef = useRef<number | null>(null);
+  useFrame((state, delta) => {
+    if (!ref.current) return;
+    if (startRef.current === null) startRef.current = state.clock.elapsedTime;
+    const elapsed = state.clock.elapsedTime - startRef.current - delay;
+    const target = elapsed > 0 ? 1 : 0.0001;
+    ref.current.scale.setScalar(THREE.MathUtils.damp(ref.current.scale.x, target, 4.5, delta));
   });
-  const radius = 2.15;
-
-  return (
-    <group ref={ref} position={[0, 1.95, 0]}>
-      {skills.map((name, i) => {
-        const a = (i / skills.length) * Math.PI * 2;
-        const x = Math.cos(a) * radius;
-        const z = Math.sin(a) * radius;
-        const y = Math.sin(a * 2.3) * 0.3;
-        return (
-          <group key={name} position={[x, y, z]}>
-            <mesh>
-              <icosahedronGeometry args={[0.1, 0]} />
-              <meshStandardMaterial
-                color="#4f46e5"
-                emissive="#4f46e5"
-                emissiveIntensity={0.55}
-                roughness={0.25}
-                metalness={0.55}
-              />
-            </mesh>
-            <Html center distanceFactor={9} occlude>
-              <span className="sketch-font pointer-events-none select-none whitespace-nowrap text-[9px] font-bold text-slate-700 bg-white/90 px-1.5 py-0.5 rounded-full border border-slate-200 shadow-xs">
-                {name}
-              </span>
-            </Html>
-          </group>
-        );
-      })}
-    </group>
-  );
+  return ref;
 }
 
-// ================= PROJECT BOOTH =================
-// A pedestal + real screenshot (textured plane via drei's Image) + Html
-// title card. Billboarded so the artwork always faces the orbiting camera.
-// Hover brightens the pedestal's emissive rim; click hands the project up
-// to the parent, which reuses the existing 2D ProjectModal for full detail.
-function ProjectBooth({
+// ================= PROJECT CARD =================
+// Outer group carries the entrance scale + the resting desk-tilt (rotationZ).
+// Inner group carries the *dynamic* tilt toward the cursor, computed from
+// where over the card's own surface (UV) the pointer currently is — picked
+// up off the page rather than a flat billboard.
+function ProjectCard({
   project,
-  angle,
+  spec,
+  accent,
+  delay,
   onSelect,
 }: {
   project: Project;
-  angle: number;
+  spec: CardSpec;
+  accent: string;
+  delay: number;
   onSelect: (project: Project) => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const x = Math.cos(angle) * BOOTH_RADIUS;
-  const z = Math.sin(angle) * BOOTH_RADIUS;
+  const entranceRef = useEntranceScale(delay);
+  const tiltRef = useRef<THREE.Group>(null);
+  const pointerOffset = useRef({ x: 0, y: 0 });
 
   useFrame((_, delta) => {
-    if (materialRef.current) {
-      materialRef.current.emissiveIntensity = THREE.MathUtils.damp(
-        materialRef.current.emissiveIntensity,
-        hovered ? 1 : 0.3,
-        6,
-        delta
-      );
-    }
+    if (!tiltRef.current) return;
+    const targetX = hovered ? -pointerOffset.current.y * 0.4 : 0;
+    const targetY = hovered ? pointerOffset.current.x * 0.4 : 0;
+    tiltRef.current.rotation.x = THREE.MathUtils.damp(tiltRef.current.rotation.x, targetX, 8, delta);
+    tiltRef.current.rotation.y = THREE.MathUtils.damp(tiltRef.current.rotation.y, targetY, 8, delta);
   });
 
+  const handleMove = (e: ThreeEvent<PointerEvent>) => {
+    if (!e.uv) return;
+    pointerOffset.current = { x: e.uv.x - 0.5, y: e.uv.y - 0.5 };
+  };
   const handleOver = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     setHovered(true);
@@ -240,75 +138,82 @@ function ProjectBooth({
   };
 
   return (
-    <group position={[x, 0, z]}>
-      {/* Pedestal */}
-      <mesh
-        position={[0, FLOOR_Y + 0.2, 0]}
+    <group ref={entranceRef} scale={0.0001} position={spec.position} rotation={[0, 0, spec.rotationZ]}>
+      <group
+        ref={tiltRef}
+        scale={hovered ? 1.08 : 1}
+        onPointerMove={handleMove}
         onPointerOver={handleOver}
         onPointerOut={handleOut}
         onClick={handleClick}
       >
-        <cylinderGeometry args={[0.62, 0.74, 0.4, 28]} />
-        <meshStandardMaterial
-          ref={materialRef}
-          color="#1e293b"
-          emissive="#3b82f6"
-          emissiveIntensity={0.3}
-          metalness={0.5}
-          roughness={0.3}
-        />
-      </mesh>
+        <mesh position={[0, 0, -0.02]}>
+          <planeGeometry args={[2.1, 1.4]} />
+          <meshStandardMaterial
+            color={hovered ? accent : '#ffffff'}
+            emissive={hovered ? accent : '#000000'}
+            emissiveIntensity={hovered ? 0.25 : 0}
+          />
+        </mesh>
+        <DreiImage url={project.image ?? '/decorations/star.png'} scale={[1.94, 1.24]} radius={0.05} transparent />
+      </group>
 
-      {/* Screenshot card, always facing the camera */}
-      <Billboard position={[0, FLOOR_Y + 1.55, 0]} follow>
-        <Float speed={1.3} rotationIntensity={0} floatIntensity={0.4}>
-          <group scale={hovered ? 1.08 : 1} onPointerOver={handleOver} onPointerOut={handleOut} onClick={handleClick}>
-            <mesh position={[0, 0, -0.03]}>
-              <planeGeometry args={[1.66, 1.1]} />
-              <meshStandardMaterial color={hovered ? '#3b82f6' : '#ffffff'} />
-            </mesh>
-            <DreiImage url={project.image ?? '/decorations/star.png'} scale={[1.5, 0.98]} radius={0.04} transparent />
-          </group>
-        </Float>
-      </Billboard>
-
-      <Html position={[0, FLOOR_Y + 0.75, 0]} center distanceFactor={7.5} occlude>
-        <div
-          onClick={() => onSelect(project)}
-          className="pointer-events-auto cursor-pointer flex flex-col items-center text-center select-none transition-transform"
-          style={{ width: 175, transform: hovered ? 'scale(1.06)' : 'scale(1)' }}
-        >
-          <p className="sketch-font font-extrabold text-slate-900 text-[13px] leading-tight whitespace-nowrap drop-shadow-sm">
+      <Html position={[0, -0.98, 0]} center distanceFactor={7.5} occlude>
+        <div className="pointer-events-none select-none text-center" style={{ width: 190 }}>
+          <p className="sketch-font font-extrabold text-slate-900 text-sm leading-tight drop-shadow-sm">
             {project.title}
           </p>
-          <p className="text-[9px] font-semibold text-blue-600 mt-0.5 whitespace-nowrap">{project.type}</p>
-          {project.award && (
-            <span className="mt-1 text-[9px] font-bold text-amber-600 whitespace-nowrap">🏆 {project.award}</span>
-          )}
+          <p className="text-[10px] font-semibold mt-0.5" style={{ color: accent }}>
+            {project.type}
+          </p>
         </div>
       </Html>
     </group>
   );
 }
 
-// ================= REFLECTIVE FLOOR =================
-function Floor() {
+// Same tilt behavior as a project card, ending the row with an inviting CTA.
+function ContactCard({ onOpenResume, delay }: { onOpenResume: () => void; delay: number }) {
+  const [hovered, setHovered] = useState(false);
+  const entranceRef = useEntranceScale(delay);
+  const tiltRef = useRef<THREE.Group>(null);
+  const pointerOffset = useRef({ x: 0, y: 0 });
+
+  useFrame((_, delta) => {
+    if (!tiltRef.current) return;
+    const targetX = hovered ? -pointerOffset.current.y * 0.4 : 0;
+    const targetY = hovered ? pointerOffset.current.x * 0.4 : 0;
+    tiltRef.current.rotation.x = THREE.MathUtils.damp(tiltRef.current.rotation.x, targetX, 8, delta);
+    tiltRef.current.rotation.y = THREE.MathUtils.damp(tiltRef.current.rotation.y, targetY, 8, delta);
+  });
+
+  const handleMove = (e: ThreeEvent<PointerEvent>) => {
+    if (!e.uv) return;
+    pointerOffset.current = { x: e.uv.x - 0.5, y: e.uv.y - 0.5 };
+  };
+
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, FLOOR_Y, 0]}>
-      <circleGeometry args={[9.5, 64]} />
-      <MeshReflectorMaterial
-        blur={[300, 100]}
-        resolution={1024}
-        mixBlur={1}
-        mixStrength={35}
-        roughness={1}
-        depthScale={1.1}
-        minDepthThreshold={0.4}
-        maxDepthThreshold={1.4}
-        color="#f2f0ea"
-        metalness={0.3}
-      />
-    </mesh>
+    <group ref={entranceRef} scale={0.0001} position={CONTACT_CARD.position} rotation={[0, 0, CONTACT_CARD.rotationZ]}>
+      <group
+        ref={tiltRef}
+        scale={hovered ? 1.08 : 1}
+        onPointerMove={handleMove}
+        onPointerOver={(e: ThreeEvent<PointerEvent>) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
+        onPointerOut={(e: ThreeEvent<PointerEvent>) => { e.stopPropagation(); setHovered(false); document.body.style.cursor = 'auto'; }}
+        onClick={(e: ThreeEvent<PointerEvent>) => { e.stopPropagation(); onOpenResume(); }}
+      >
+        <mesh>
+          <planeGeometry args={[1.7, 1.4]} />
+          <meshStandardMaterial color="#4f46e5" emissive="#4f46e5" emissiveIntensity={hovered ? 0.5 : 0.3} />
+        </mesh>
+      </group>
+      <Html center distanceFactor={7.5} occlude>
+        <div className="pointer-events-none select-none text-center" style={{ width: 150 }}>
+          <p className="sketch-font font-extrabold text-white text-base leading-tight">이력서 전체 보기</p>
+          <p className="text-[10px] font-semibold text-white/80 mt-1">Let&apos;s Connect →</p>
+        </div>
+      </Html>
+    </group>
   );
 }
 
@@ -318,43 +223,77 @@ interface GameScene3DProps {
 }
 
 export default function GameScene3D({ onSelectProject, onOpenResume }: GameScene3DProps) {
-  const { projects, skills } = portfolioData;
-  const skillNames = [...skills.main, ...skills.sub, ...skills.exp].map((s) => s.name);
+  const { projects, skills, contact } = portfolioData;
+  const skillNames = [...skills.main, ...skills.sub].map((s) => s.name);
 
   return (
-    <Canvas camera={{ position: [0, 3.4, 8.2], fov: 45 }} gl={{ antialias: true }} dpr={[1, 2]}>
+    <Canvas camera={{ position: [-1, 0, 14.5], fov: 44 }} gl={{ antialias: true }} dpr={[1, 2]}>
       <color attach="background" args={['#FAF9F6']} />
-      <fog attach="fog" args={['#FAF9F6', 12, 22]} />
+      <fog attach="fog" args={['#FAF9F6', 18, 32]} />
 
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[4, 6, 3]} intensity={1.1} />
-      <directionalLight position={[-3, 2, -2]} intensity={0.35} color="#93C5FD" />
-      <Environment preset="studio" background={false} />
+      <ambientLight intensity={0.85} />
+      <directionalLight position={[4, 6, 5]} intensity={1.0} />
+      <directionalLight position={[-3, 2, -2]} intensity={0.3} color="#93C5FD" />
 
-      <Floor />
-      <ContactShadows position={[0, FLOOR_Y + 0.005, 0]} opacity={0.4} scale={14} blur={2.6} far={4.5} color="#1e293b" />
-      <Sparkles count={90} scale={10} size={2.2} speed={0.25} color="#93c5fd" position={[0, 1.5, 0]} />
+      <SketchbookBackdrop />
+      <Sparkles count={70} scale={13} size={2} speed={0.25} color="#93c5fd" position={[0, 1, -1]} />
 
-      <Hub onOpenResume={onOpenResume} />
-      <SkillOrbit skills={skillNames} />
+      <Html position={[-8.6, 0.3, 0]} center>
+        <div className="pointer-events-none select-none text-center" style={{ width: 220 }}>
+          <p className="sketch-font font-extrabold text-slate-900 text-4xl sm:text-5xl leading-none drop-shadow-sm">
+            진준영
+          </p>
+          <p className="text-blue-600 font-bold text-xs tracking-[0.2em] mt-2.5">GAME CLIENT DEVELOPER</p>
+
+          <div className="flex flex-wrap justify-center gap-1.5 mt-4">
+            {skillNames.map((name) => (
+              <span
+                key={name}
+                className="sketch-font text-[10px] font-bold text-slate-600 bg-white border border-slate-200 rounded-full px-2 py-1 shadow-xs"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+
+          <div className="pointer-events-auto flex items-center justify-center gap-2.5 mt-4">
+            <button
+              onClick={onOpenResume}
+              className="px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-[11px] font-bold shadow-md hover:bg-blue-600 active:scale-95 transition-all cursor-pointer"
+            >
+              이력서 전체 보기
+            </button>
+            <a
+              href={`https://${contact.github}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[10px] font-bold text-slate-500 hover:text-blue-600 bg-white px-2 py-1.5 rounded-full border border-slate-200 shadow-xs transition-colors"
+            >
+              GitHub
+            </a>
+            <a
+              href={contact.blog}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[10px] font-bold text-slate-500 hover:text-blue-600 bg-white px-2 py-1.5 rounded-full border border-slate-200 shadow-xs transition-colors"
+            >
+              Blog
+            </a>
+          </div>
+        </div>
+      </Html>
 
       {projects.map((project, i) => (
-        <ProjectBooth
+        <ProjectCard
           key={project.id}
           project={project as Project}
-          angle={(i / projects.length) * Math.PI * 2 + Math.PI / 4}
+          spec={CARD_LAYOUT[i]}
+          accent={ACCENTS[i % ACCENTS.length]}
+          delay={0.3 + i * 0.15}
           onSelect={onSelectProject}
         />
       ))}
-
-      <OrbitControls
-        enablePan={false}
-        minDistance={4.5}
-        maxDistance={13}
-        autoRotate
-        autoRotateSpeed={0.5}
-        maxPolarAngle={Math.PI / 2.15}
-      />
+      <ContactCard onOpenResume={onOpenResume} delay={0.3 + projects.length * 0.15} />
     </Canvas>
   );
 }
