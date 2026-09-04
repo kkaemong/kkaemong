@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowUpRight, TrendingUp, Zap, CheckCircle2, ChevronDown, ChevronUp, ZoomIn, Download, Code2 } from 'lucide-react';
+import { X, ArrowUpRight, TrendingUp, Zap, CheckCircle2, ChevronDown, ChevronUp, ZoomIn, Download, Code2, Quote } from 'lucide-react';
 import { GithubIcon as Github } from './GithubIcon';
 import { type Project } from '@/data/portfolio';
 
@@ -607,6 +607,29 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                             </div>
                           </div>
                         )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Real Deployment Feedback */}
+                  {project.deploymentFeedback && project.deploymentFeedback.length > 0 && (
+                    <div className="pt-4">
+                      <div className="text-center mb-6">
+                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                          Real User Feedback
+                        </h3>
+                        {project.deploymentContext && (
+                          <p className="text-sm text-slate-500 mt-2 break-keep">{project.deploymentContext}</p>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {project.deploymentFeedback.map((fb, idx) => (
+                          <div key={idx} className="relative p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                            <Quote size={18} className="text-accent/40 mb-2" />
+                            <p className="text-sm text-slate-700 leading-relaxed break-keep">{fb.comment}</p>
+                            <div className="mt-3 text-xs font-bold text-slate-400">{fb.name}</div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}

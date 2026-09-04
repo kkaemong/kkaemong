@@ -32,6 +32,8 @@ export interface Project {
   teamSize?: string;
   award?: string;
   wip?: boolean;          // 개발 중인 프로젝트 (카드/모달에 '개발중' 뱃지 노출)
+  deploymentContext?: string;   // 배포 피드백 섹션에 노출되는 한 줄 설명 (누구에게 배포했는지 등)
+  deploymentFeedback?: { name: string; comment: string }[];  // 실제 배포 후 받은 사용자 피드백
   challenge?: string[];
   solution?: string[];
   keyResult?: string[];
@@ -153,10 +155,18 @@ export const portfolioData = {
       detailedDescription: "산타와 엘프가 협력해 정해진 시간 안에 선물 주문을 처리하는 Windows 스탠드얼론 포장 액션 캐주얼 게임입니다. 상자에 선물을 담고 규격에 맞는 포장지와 리본으로 포장한 뒤 썰매에 적재해 배송하며, 일반·할로윈·케이크 등 테마별 상자와 어항 같은 특수 용기, 훼방 놓는 쥐 등 다양한 오브젝트가 등장합니다.",
       image: "/Gifted.png",
       downloadUrl: "https://drive.google.com/file/d/1HJR-3l0KuqCQ_fLprLA6EK1T_0ZcS3cR/view",
+      deploymentContext: "삼성 임직원 대상 실제 배포 후 받은 피드백입니다.",
+      deploymentFeedback: [
+        { name: "박OO", comment: "아기자기한 크리스마스 디자인의 게임으로 가족과도 함께하고 싶어지는 느낌입니다. 약간의 물리 현상 버그만 개선하면 플레이 하는 것에 전혀 문제가 없을 정도로 완성도가 높습니다." },
+        { name: "김O", comment: "처음에는 무슨 게임이지? 하면서 시작하지만 점점 몰입할 수 있었습니다. 다양한 선물 구성, 스테이지, 보상 등이 추가된다면 더 즐겁게 플레이 할 수 있을 것 같습니다." },
+        { name: "김OO", comment: "귀여운 디자인의 특성 상 선물 박스 그림들의 사이즈를 키워 가시성을 높인다면, 더욱 크리스마스 분위기에 몰입할 수 있을 것 같고, 아직 단조로운 초반 스테이지에서 다양한 옵션이 추가된다면 더 즐거우면서 가벼운 마음으로 즐기기 좋은 게임이 될 것 같습니다." },
+        { name: "이OO", comment: "게임의 완성도가 높고 그래픽 구현이 잘 되어있습니다. 여러 사람이 하면 더 재밌을 것 같습니다." }
+      ],
       keyResult: [
         "썰매 이중 적재·리본 작업대 크기 왜곡·이름 기반 판별 같은 Unity 함정을 플레이테스트에서 하나씩 잡아 수정 — 프레임 타이밍(Destroy), 부모-자식 스케일 상속, 데이터 vs 문자열",
         "상자를 '열림→선물→포장→리본→완성' 상태머신으로 만들고, InsertGift 한 메서드가 아이템 타입 × 현재 상태를 함께 봐 맞는 조합에서만 전이하도록 설계",
-        "6인 팀에서 백엔드와 충돌하지 않게 BoxManager의 GetAllBoxData() 함수 하나만 경계로 노출하고, 임포트 에셋은 부모화 규칙 + UV 생성 에디터 툴로 규격화"
+        "6인 팀에서 백엔드와 충돌하지 않게 BoxManager의 GetAllBoxData() 함수 하나만 경계로 노출하고, 임포트 에셋은 부모화 규칙 + UV 생성 에디터 툴로 규격화",
+        "삼성 임직원 대상 실제 배포 후 받은 피드백(해상도별 UI 가림, 조작법 안내 부족)을 반영해 동적 화면 비율 보정과 조작 안내 페이지를 추가로 구현"
       ],
       troubleshooting: [
         {
@@ -207,6 +217,16 @@ export const portfolioData = {
             language: "csharp",
             before: "// 모델 인스턴스 스케일을 강제로 1 — 프리팹 원본 크기 무시\ninstance.transform.localScale = Vector3.one;\n\n// 재활성화될 때마다 무조건 다시 생성\nif (visualTemplate != null) ApplyTemplate();",
             code: "// 프리팹 원본 스케일 유지 — 상자 크기가 안 튐\ninstance.transform.localScale = prefab.transform.localScale;\n\n// 이미 만들어진 모델이 있으면 재생성 안 함\nif (visualTemplate != null && openedBox == null) ApplyTemplate();\n\n// InsertGift — 아이템 타입 × 현재 상태가 맞을 때만 전이\nif (id.ItemType == BoxItemType.WrappingPaper && state == ClosedWithGift\n    && id.wrappingGroup == allowedWrappingGroup)   { SetWrappedDesign(id.designIndex); }\nelse if (id.ItemType == BoxItemType.Ribbon && state == Wrapped)  { Finish(); }\nelse if (state == EmptyOpened)  { containedItemType = id.ItemType; SetState(ClosedWithGift); }"
+          }
+        },
+        {
+          title: "배포 후 — 모니터마다 화면 비율이 달라 UI가 잘리는 문제",
+          problem: "개발 중엔 항상 같은 해상도로만 테스트해서 몰랐는데, 실제로 배포해서 삼성 임직원분들이 다른 모니터 환경에서 플레이해보니 화면 비율이 개발 기준(16:9)과 다르면 주문서 UI 같은 화면 요소가 위아래·좌우로 잘려서 가려지는 문제가 나왔습니다.",
+          solution: "카메라의 목표 비율과 실제 화면 비율을 매 프레임 비교해, 화면이 더 길쭉하면 위아래 레터박스를, 더 넓으면 좌우 필러박스를 만들도록 Camera.rect를 동적으로 재계산했습니다. 어떤 모니터 비율에서도 목표 비율 영역 안에는 UI가 항상 온전히 들어오도록 만들어, 배포 환경에 따라 화면이 달라지는 문제를 해결했습니다.",
+          codeSnippet: {
+            filename: "ScreenFixManager.cs",
+            language: "csharp",
+            code: "private void Update()\n{\n    MaintainAspectRatio();\n}\n\nprivate void MaintainAspectRatio()\n{\n    Camera camera = Camera.main;\n    if (camera == null) return;\n\n    float targetAspect = (float)width / height;   // 목표 비율 (16:9)\n    float windowAspect = (float)Screen.width / Screen.height;\n    float scaleHeight = windowAspect / targetAspect;\n\n    Rect rect = camera.rect;\n\n    if (scaleHeight < 1.0f)\n    {\n        // 화면이 목표보다 길쭉함 — 위아래 레터박스\n        rect.width = 1.0f;\n        rect.height = scaleHeight;\n        rect.x = 0;\n        rect.y = (1.0f - scaleHeight) / 2.0f;\n    }\n    else\n    {\n        // 화면이 목표보다 넓음 — 좌우 필러박스\n        float scaleWidth = 1.0f / scaleHeight;\n        rect.width = scaleWidth;\n        rect.height = 1.0f;\n        rect.x = (1.0f - scaleWidth) / 2.0f;\n        rect.y = 0;\n    }\n    camera.rect = rect;\n}"
           }
         }
       ]
