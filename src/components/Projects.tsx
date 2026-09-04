@@ -71,7 +71,9 @@ export default function Projects() {
                 <img src="/decorations/heart.png" alt="Heart" className="absolute -top-3 -right-7 w-7 h-auto pointer-events-none" />
               </h2>
               <p className="text-slate-600 text-base sm:text-lg font-normal max-w-2xl mx-auto leading-relaxed">
-                문제 정의부터 기술적 해결, 프레임/메모리 최적화까지 직접 수행한 핵심 프로젝트입니다.
+                플레이어에게 보이는 인게임 로직·애니메이션·연출을
+                <br />
+                직접 구현한 게임 프로젝트입니다.
               </p>
             </div>
 
