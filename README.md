@@ -61,8 +61,6 @@
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 
-<sub>그 외 경험 — PyTorch · LoRA 파인튜닝(단일 24GB GPU, OOM 없이 7B 모델), K-Shield Jr 웹 모의해킹(OWASP Top 10)</sub>
-
 ---
 
 ## Projects
