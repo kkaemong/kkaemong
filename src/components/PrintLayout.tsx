@@ -42,8 +42,9 @@ export default function PrintLayout() {
           Core Tech Stack
         </h3>
         <div className="space-y-2 text-sm text-slate-800 font-medium">
-          <div><span className="font-bold text-slate-900">Game Client & Engine:</span> Unity, C#, FSM (Finite State Machine), Object Pooling, WebGL</div>
-          <div><span className="font-bold text-slate-900">Web & Fullstack:</span> React, TypeScript, Vue.js, Python, Django, REST API</div>
+          <div><span className="font-bold text-slate-900">Game Client & Engine:</span> Unity, C#, FSM (유한 상태 머신), 인터페이스 기반 오브젝트 상호작용, Animator 상태 제어, 코루틴, Unity WebGL</div>
+          <div><span className="font-bold text-slate-900">Web & Front-End:</span> React, TypeScript, Zustand, 실시간 웹소켓 게임 연출</div>
+          <div><span className="font-bold text-slate-900">Back-End:</span> Python, Django, Django REST Framework</div>
           <div><span className="font-bold text-slate-900">Tools & Environment:</span> Git, GitHub, Rider, Visual Studio, Figma</div>
         </div>
       </section>
