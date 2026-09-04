@@ -8,6 +8,7 @@ export interface TroubleShooting {
     code: string;
   };
   imageUrl?: string;
+  images?: { src: string; caption?: string; gain?: number }[];   // 증명 이미지·영상 (갤러리) — gain: 영상 음량 배수(기본 3)
   beforeImageUrl?: string;
   afterImageUrl?: string;
   articleUrl?: string;
@@ -24,20 +25,22 @@ export interface Project {
   impactLine?: string;    // 프로젝트 카드에 노출되는 핵심 임팩트 한 줄
   detailedDescription?: string;
   image?: string;
+  video?: string;         // 게임 플레이 영상 (mp4)
   github?: string;
+  downloadUrl?: string;   // 플레이 빌드 다운로드 링크 (스탠드얼론 등)
   teamSize?: string;
   award?: string;
+  wip?: boolean;          // 개발 중인 프로젝트 (카드/모달에 '개발중' 뱃지 노출)
   challenge?: string[];
   solution?: string[];
   keyResult?: string[];
-  learned?: string[];     // 이 프로젝트에서 배운 것
   troubleshooting?: TroubleShooting[];
 }
 
 export const portfolioData = {
   hero: {
     headline: "플레이어가 느끼는\n그 찰나의 순간을,\n코드로 정밀하게 설계합니다",
-    subTitle: "조작감이 어색하거나 프레임과 사운드가 끊길 때, 그 불편함을 코드 레벨에서 추적하고 해결합니다.\n\n단순히 '작동하는 코드'를 넘어, '플레이어가 온전히 몰입하는 게임 경험'을 완성하는 게임 클라이언트 개발자 진준영입니다.",
+    subTitle: "조작감, 프레임, 사운드 — 플레이어가 '어색하다'고 느끼는 지점을 코드 레벨에서 추적해 해결합니다.\n\n'작동하는 코드'를 넘어 '몰입되는 플레이 경험'까지 책임지는 게임 클라이언트 개발자 진준영입니다.",
     cta: {
       primary: "대표 프로젝트 보기",
       secondary: "GitHub",
@@ -46,8 +49,8 @@ export const portfolioData = {
     }
   },
   about: {
-    title: "당연한 몰입감을 지키기 위해\n보이지 않는 엔진 속을\n다듬습니다",
-    description: "찰나의 프레임 드랍과 미세한 조작감의 어색함을 방치하지 않습니다.\n\n유저의 시선이 닿지 않는 코드 깊은 곳을 파고들어 원인을 해결하고, 기획 변화와 대규모 객체 생성에도 무너지지 않는 단단한 클라이언트 뼈대를 만듭니다.",
+    title: "플레이어에게 보이는 부분을\n인게임 로직부터 연출까지\n직접 짭니다",
+    description: "게임을 만들 때 '작동하는가'에서 멈추지 않고, 플레이어가 실제로 느끼는 감각까지 신경 씁니다.\n\n인게임 로직·애니메이션·연출을 직접 구현하며 시스템 전체를 이해하려 하고, 반복되는 부분은 공통 규칙으로 묶어 기획이 바뀌어도 무너지지 않게 만듭니다.\n\n조작감·프레임·사운드가 서로 어긋나는 순간을 그냥 넘기지 않고 코드에서 원인을 찾습니다.",
     personalInfo: [
       { label: "이름", value: "진준영" },
       { label: "생년월일", value: "1999.05.31" },
@@ -58,16 +61,16 @@ export const portfolioData = {
     ],
     points: [
       {
-        title: "유연하고 단단한 클라이언트 아키텍처",
-        content: "IInteractable 인터페이스 계층화로 외부 3D 에셋의 Pivot·Scale 차이를 흡수하고, 잦은 기획 변경에도 흔들리지 않는 게임 시스템을 설계합니다."
+        title: "인게임 로직을 직접 짭니다",
+        content: "플레이어·오브젝트·게임 매니저까지, 이미 만들어진 걸 붙이기만 하지 않고 인게임에서 보이는 로직을 직접 구현하며 시스템이 어떻게 도는지 끝까지 파악합니다."
       },
       {
-        title: "수치로 깎아낸 조작감과 감각 동기화",
-        content: "FSM(상태 머신)으로 애니메이션 꼬임을 방지하고, Mathf.Lerp 선형 보간과 속도 비례 Audio Pitch 동기화로 눈과 귀가 즐거운 타격감을 만듭니다."
+        title: "바뀔 걸 전제로 설계합니다",
+        content: "비슷한 오브젝트가 반복되면 공통 인터페이스와 상태머신으로 규격화해, 기획 변경이나 새 요소 추가가 기존 코드를 흔들지 않게 만듭니다."
       },
       {
-        title: "끊김 없는 프레임 최적화 & GC 방어",
-        content: "제네릭 ObjectPool<T> 오버헤드 통제로 매 프레임 발생하는 GC 가비지 할당을 0으로 수렴시켜 WebGL 60fps 안정적인 프레임을 방어합니다."
+        title: "감각까지 신경 씁니다",
+        content: "조작감·애니메이션 타이밍·사운드가 서로 어긋나지 않도록 하나의 흐름으로 묶어 다룹니다. '이 정도면 됐다'로 넘기지 않고 어색함의 원인을 코드에서 찾습니다."
       }
     ]
   },
@@ -77,13 +80,13 @@ export const portfolioData = {
         name: "C#",
         tag: "주력",
         icon: "csharp",
-        description: "Unity 핵심 스크립팅 언어. FSM 상태 관리, 제네릭 기반 오브젝트 풀링, 비동기 서버 통신 모듈을 직접 설계합니다."
+        description: "Unity 핵심 스크립팅 언어. FSM 상태 관리, 인터페이스 기반 오브젝트 상호작용 설계, 애니메이터 상태 제어를 직접 구현합니다."
       },
       {
         name: "Unity",
         tag: "주력",
         icon: "unity",
-        description: "2D/3D 인게임 인터랙션 설계, 애니메이터 FSM 제어, 물리 로직 구현 및 프레임 최적화를 총괄합니다."
+        description: "2D/3D 인게임 인터랙션 설계, 애니메이터 상태 제어, 점프·스크롤 등 물리 로직 구현을 직접 담당합니다."
       }
     ],
     sub: [
@@ -97,7 +100,7 @@ export const portfolioData = {
         name: "TypeScript",
         tag: "보조",
         icon: "typescript",
-        description: "웹소켓 실시간 멀티플레이어 게임의 클라이언트 상태 파이프라인 및 GPU 가속 UI 애니메이션을 설계합니다."
+        description: "React 기반 실시간 멀티플레이 웹 게임의 연출 페이즈와 transform 기반 UI 애니메이션을 구현합니다."
       },
       {
         name: "Django",
@@ -123,45 +126,63 @@ export const portfolioData = {
   },
   projects: [
     {
+      id: "portfolio-game",
+      title: "인터랙티브 포트폴리오 게임",
+      type: "Unity WebGL 포트폴리오",
+      period: "2026.08 ~ (개발중)",
+      teamSize: "1인 (개인 프로젝트)",
+      tech: ["Unity WebGL", "C#", "Next.js", "React"],
+      role: "기획 · Unity 클라이언트 · 웹 연동 전체",
+      wip: true,
+      description: "Unity 기반 3D 마을 인터랙티브 포트폴리오 게임",
+      impactLine: "Unity WebGL 빌드를 Next.js 포트폴리오에 임베드하고, postMessage로 게임 속 부스 도달과 웹 프로젝트 모달을 연동한 인터랙티브 포트폴리오 (개발 중)",
+      detailedDescription: "이 포트폴리오 사이트의 '게임으로 보기' 모드입니다. Unity로 만든 3D 마을을 WebGL로 빌드해 사이트에 임베드하고, 캐릭터가 부스에 도달하면 해당 프로젝트 상세가 열리는 인터랙티브 포트폴리오입니다. 맵 디자인·상호작용 다듬기·모바일 대응이 남아 정식 공개 전 개발 중이며, 지금은 시작 화면 미리보기만 공개하고 있습니다.",
+      image: "/portfolio-game.png"
+    },
+    {
       id: "gifted",
       title: "GIFTED",
       type: "Unity 3D 캐주얼 게임",
       period: "2026.04.05 ~ 2026.05.21",
       teamSize: "6인",
-      tech: ["Unity WebGL", "C#", "FSM", "Object Pooling", "Git", "GitHub"],
+      tech: ["Unity", "C#", "FSM", "Interface", "ScriptableObject", "Git"],
       role: "Unity 클라이언트 오브젝트 & 상호작용 로직 개발",
-      description: "Unity 기반 포장 액션 캐주얼 액션 게임",
-      impactLine: "IInteractable 인터페이스로 크기·Pivot이 다른 3D 에셋의 상호작용을 규격화하고, 오브젝트 풀링으로 GC 스파이크를 원천 차단한 포장 액션 게임",
-      detailedDescription: "물건의 특성과 규격에 맞추어 상자를 포장하고 적재하는 WebGL 포장 액션 게임입니다. 외부 에셋을 임포트하여 게임 로직에 맞게 가공하고 최적화하는 과정을 전담했습니다. 크기(Scale)와 높이(Pivot)가 다른 다양한 3D 에셋들을 게임 내에서 일관성 있게 상호작용할 수 있도록 부모-자식(Parent-Child) 계층 구조화로 규격화하고, 객체 생성 부하를 줄이는 오브젝트 풀링(Object Pooling) 아키텍처를 도입하여 WebGL 환경에서의 프레임 드랍을 완벽하게 방어했습니다.",
+      description: "Unity 기반 포장 액션 캐주얼 게임",
+      impactLine: "임포트 3D 에셋을 부모화해 Pivot·Scale을 규격화하고, 상자의 포장 공정을 상태머신 + 공통 인터페이스로 설계한 포장 액션 게임",
+      detailedDescription: "산타와 엘프가 협력해 정해진 시간 안에 선물 주문을 처리하는 Windows 스탠드얼론 포장 액션 캐주얼 게임입니다. 상자에 선물을 담고 규격에 맞는 포장지와 리본으로 포장한 뒤 썰매에 적재해 배송하며, 일반·할로윈·케이크 등 테마별 상자와 어항 같은 특수 용기, 훼방 놓는 쥐 등 다양한 오브젝트가 등장합니다.",
       image: "/Gifted.png",
-      github: "https://github.com/gifted-hamyeonham/gifted",
+      downloadUrl: "https://drive.google.com/file/d/1HJR-3l0KuqCQ_fLprLA6EK1T_0ZcS3cR/view",
       keyResult: [
-        "IInteractable 인터페이스를 12개 이상 핵심 클래스에 적용하여, 에셋 스토어 에셋의 Pivot이나 Scale이 달라도 동일한 상호작용 로직(Interact())이 동작하도록 규격화",
-        "ObjectPool<T> 제네릭 풀링 도입으로 매 프레임 발생하던 Instantiate/Destroy GC 가메모리 할당을 0으로 수렴시켜 WebGL 60fps 안정화"
-      ],
-      learned: [
-        "인터페이스는 단순 코드 구조를 넘어, '어떤 물체든 동일하게 다룰 수 있어야 한다'는 설계 철학에서 나온다는 것을 체감했습니다.",
-        "GC 스파이크를 잡아보는 과정에서, 메모리 할당 시점과 해제 시점을 설계 수준에서 통제하는 것이 성능의 핵심임을 직접 배웠습니다."
+        "임포트 3D 에셋을 빈 부모 오브젝트로 래핑하고 자식 Transform만 보정해, Pivot·Scale이 달라도 충돌·상호작용 판정이 일관되게 동작하도록 규격화",
+        "포장 공정(열림→선물→포장→리본→완성)을 BoxState 상태머신으로 분리하고 IInteractable·IItemReceiver·IHoldInteractable로 구현해, 썰매·디스펜서도 동일 패턴으로 확장"
       ],
       troubleshooting: [
         {
-          title: "다양한 외부 에셋 Transform 불일치 규격화 및 IInteractable 캡슐화",
-          problem: "에셋 스토어 등에서 가져온 외부 에셋들은 크기, 높이(Pivot), 회전 기준점이 제각각 달랐습니다. 이를 그대로 게임 씬에 배치할 경우 캐릭터가 상호작용할 때 높낮이가 안 맞거나 물리 충돌 판정이 어색해지는 치명적인 UI/UX 저하 문제가 발생했습니다.",
-          solution: "모든 외부 에셋을 직접 씬에 노출하지 않고, 공통 규격의 '빈 부모 오브젝트(Parent Transform)'로 래핑하는 계층화(Hierarchy) 작업을 수행했습니다. 부모 객체에 콜라이더와 로직(IInteractable 인터페이스)을 부착하고, 자식 객체인 외부 에셋은 부모에 맞춰 스케일 및 위치 보정만 진행하여 완벽한 상호작용 시스템을 규격화했습니다.",
+          title: "임포트 3D 에셋의 Pivot·Scale 불일치를 부모 오브젝트로 규격화",
+          problem: "임포트한 외부 3D 에셋들은 크기(Scale)와 피벗(Pivot) 기준이 제각각이라, 씬에 그대로 두면 캐릭터가 상호작용할 때 높이가 안 맞고 충돌 판정이 어긋났습니다.",
+          solution: "에셋을 씬에 직접 두지 않고 공통 규격의 빈 부모 오브젝트로 감싼 뒤(부모화), 자식 에셋은 부모 기준에 맞춰 Scale·위치만 보정했습니다. devil_doll도 real_devildoll 부모를 만들어 캐릭터 눈높이와 상호작용 범위에 맞게 조절했습니다. 콜라이더와 상호작용 컴포넌트는 부모에 붙이고 자식 모델의 스크립트는 제거해, 자식 에셋의 Transform이 무엇이든 충돌·상호작용 판정이 흔들리지 않게 했습니다.",
+          beforeImageUrl: "/gifted-asset-before.png",
+          afterImageUrl: "/gifted-asset-after.png",
           codeSnippet: {
-            filename: "InteractableWrapper.cs",
+            filename: "BoxStateController.cs",
             language: "csharp",
-            code: "public class InteractableWrapper : MonoBehaviour, IInteractable\n{\n    [Header(\"Child Asset Transform 보정 (Inspector)\")]\n    [SerializeField] private Transform visualAsset;\n    \n    // 부모 객체에서 일관된 충돌 판정 및 상호작용 처리\n    public void Interact(PlayerController player)\n    {\n        // 자식 에셋의 Scale이나 Pivot에 구애받지 않는 안전한 로직\n        Debug.Log($\"{gameObject.name} 상호작용 실행\");\n        \n        // 오브젝트 풀에서 꺼낸 이펙트 실행 등\n        EffectManager.Instance.PlayEffect(transform.position);\n    }\n}"
+            code: "// 임포트한 모델 프리팹을 부모(this)의 자식으로 붙이고,\n// 자식에 딸려온 스크립트는 전부 제거 — 부모만 로직·충돌 판정을 책임진다\nprivate GameObject InstantiateModel(GameObject prefab, string name)\n{\n    if (prefab == null) return null;\n    GameObject instance = Instantiate(prefab, transform);\n    instance.name = name;\n\n    // 외부 에셋에 붙어 있던 컴포넌트가 상호작용을 방해하지 않도록 정리\n    MonoBehaviour[] scripts = instance.GetComponentsInChildren<MonoBehaviour>(true);\n    foreach (var script in scripts)\n        if (Application.isPlaying) Destroy(script); else DestroyImmediate(script);\n\n    return instance;\n}"
           }
         },
         {
-          title: "제네릭(Generic) 기반 오브젝트 풀링(Object Pooling) 메모리 최적화",
-          problem: "멀티플레이 캐주얼 게임 특성상 수많은 선물 상자와 아이템이 실시간으로 생성(Instantiate)되고 파괴(Destroy)되었습니다. 이로 인해 메모리 가비지 컬렉션(GC) 스파이크가 발생하면서 WebGL 환경에서 화면이 간헐적으로 뚝뚝 끊기는 심각한 프레임 드랍(Frame Drop) 현상이 발생했습니다.",
-          solution: "객체 생성/파괴로 인한 메모리 할당 부하를 원천 차단하기 위해, 제네릭 타입 <T>를 활용한 범용 ObjectPool 매니저를 구현했습니다. 게임 시작 시 필요한 수량의 오브젝트를 Queue에 미리 생성(Instantiate)해두고 비활성화(SetActive(false)) 시킨 뒤, 필요할 때마다 꺼내 쓰고 다시 반납하는 구조를 설계하여 런타임 메모리 누수를 잡고 안정적인 60fps 방어에 성공했습니다.",
+          title: "상자 포장 공정을 상태머신 + ScriptableObject 템플릿으로 통합",
+          problem: "상자는 열림→선물→포장→리본→완성까지 여러 단계를 거치고, 단계마다 받을 수 있는 아이템(선물·포장지·리본)과 가능한 상호작용이 달랐습니다. 게다가 일반·할로윈·케이크 등 상자 종류마다 비주얼과 허용 포장지가 달라 조건 분기가 빠르게 얽혔습니다.",
+          solution: "단계를 BoxState enum으로 분리하고, '이 상태에서 이 아이템을 받을 수 있는가'를 IItemReceiver·IHoldInteractable 계약으로 통일했습니다. 상태별 모델(열림/닫힘/포장·완성 각 3종)은 BoxVisualTemplate(ScriptableObject)로 주입해 상자 3종을 컴포넌트 하나로 처리하고, WrappingGroup enum으로 상자별 허용 포장지를 제한했습니다. 어항은 별도 FishBowlController지만 같은 상호작용 컴포넌트(Grabbable·InteractHighlight·BoxItemIdentifier)를 그대로 재사용했습니다.",
+          images: [
+            { src: "/Gifted/normalbox.png", caption: "기본맵 박스" },
+            { src: "/Gifted/halloweenbox.png", caption: "할로윈 박스" },
+            { src: "/Gifted/cakebox.png", caption: "케이크 박스" },
+            { src: "/Gifted/icebowl.png", caption: "얼음맵 박스" }
+          ],
           codeSnippet: {
-            filename: "ObjectPoolManager.cs",
+            filename: "BoxStateController.cs",
             language: "csharp",
-            code: "public class ObjectPoolManager<T> where T : MonoBehaviour\n{\n    private Queue<T> poolQueue = new Queue<T>();\n    private T prefab;\n\n    // 💡 객체를 미리 생성하여 Queue에 보관 (메모리 풀링)\n    public void Initialize(int count, T prefabToPool)\n    {\n        prefab = prefabToPool;\n        for (int i = 0; i < count; i++)\n        {\n            T obj = Object.Instantiate(prefab);\n            obj.gameObject.SetActive(false);\n            poolQueue.Enqueue(obj);\n        }\n    }\n\n    // 💡 Instantiate 대신 Queue에서 꺼내서 재사용 (GC 스파이크 차단)\n    public T GetObject()\n    {\n        if (poolQueue.Count > 0)\n        {\n            T obj = poolQueue.Dequeue();\n            obj.gameObject.SetActive(true);\n            return obj;\n        }\n        return Object.Instantiate(prefab); // 큐 부족 시 비상 생성\n    }\n\n    // 💡 Destroy 대신 Queue로 반납\n    public void ReturnObject(T obj)\n    {\n        obj.gameObject.SetActive(false);\n        poolQueue.Enqueue(obj);\n    }\n}"
+            code: "public class BoxStateController : MonoBehaviour,\n    IInteractable, IItemReceiver, IHoldInteractable, IRatTarget\n{\n    public enum BoxState\n    {\n        EmptyOpened,      // 빈 상자 (선물 넣기 가능)\n        ClosedWithGift,   // 선물 들어있음 (포장 전)\n        Wrapped,          // 포장지 씌움 (마무리 전)\n        Finished,         // 최종 완성 (리본 등 완료)\n        Submitted         // 썰매 적재 완료 (상호작용 불가)\n    }\n\n    // 현재 상태에서 이 아이템을 받을 수 있는지 인터페이스 계약으로 판단\n    public bool CanReceiveItem(GameObject item)\n    {\n        var identifier = item.GetComponent<BoxItemIdentifier>();\n        if (identifier == null) return false;\n\n        if (identifier.ItemType == BoxItemType.WrappingPaper)\n            return CanWrap && (identifier.wrappingGroup == allowedWrappingGroup);\n        else if (identifier.ItemType == BoxItemType.Ribbon)\n            return CanFinish;\n        else if (identifier.ItemType == BoxItemType.Box)\n            return false;\n\n        return CanInsertGift;\n    }\n}"
           }
         }
       ]
@@ -172,52 +193,57 @@ export const portfolioData = {
       type: "Unity 2D 러너 금융 게임",
       period: "2026.02.16 ~ 2026.04.03",
       teamSize: "6인",
-      tech: ["Unity WebGL", "C#", "FSM", "REST API"],
-      role: "Unity 인게임 클라이언트 총괄",
-      description: "Unity · Spring Boot · AWS 풀스택 2D 러너 금융 학습 게임",
-      impactLine: "Unity 인게임 C# 클라이언트를 단독 총괄하고, Lerp 감속·사운드 Pitch 동기화로 조작감을 완성하여 핀테크 트랙 우수상 수상",
+      tech: ["Unity WebGL", "C#", "FSM", "Animator", "Coroutine"],
+      role: "Unity 인게임 플레이 개발 (단독)",
+      description: "Unity 2D 러너 금융 학습 게임",
+      impactLine: "플레이어·스폰·애니메이션·퀴즈 연동까지 인게임 전체를 단독 구현하고, 상태머신·속도 동기화·스폰 밸런싱으로 러너 감각을 완성해 핀테크 트랙 우수상 수상",
       award: "우수상",
-      detailedDescription: "지구에 불시착한 E.T.가 시대별 대한민국 경제 격변기를 직접 달리며 겪는 2D 러너 게임입니다. Unity 인게임 클라이언트 개발을 총괄하여 1980/2000/2020년대 배경 씬(Scene)을 분할 구축하고, 캐릭터의 점프 물리 로직(Rigidbody2D)부터 사운드/피격 이펙트, 그리고 애니메이션 상태 머신(Animator) 제어까지 게임에 필요한 핵심 인게임 C# 엔진을 전부 단독으로 설계했습니다. 추가로 Spring Boot 서버와의 데이터 연동을 위한 커스텀 통신 모듈을 구축하여 클라이언트 아키텍처의 완성도를 높였습니다.",
+      detailedDescription: "지구에 불시착한 외계인 E.T.가 1980·2000·2020년대 대한민국 경제 격변기를 달리며 시대별 금융 상식을 배우는 2D 러너 게임입니다. 달리는 중 등장하는 속보 퀴즈를 맞히면 무적 방어막을 얻고, 코인을 모으며 700m 결승선에 도달하면 클리어됩니다. SSAFY 특화 프로젝트 핀테크 트랙 우수상 수상작입니다.",
       image: "/jabonju.png",
+      video: "/zabonzooET/gameplay.mp4",
       github: "https://github.com/kkaemong/zabonzooET",
       keyResult: [
-        "FSM state 0~4 명확 분리 및 Pitch = globalSpeed/5f 실시간 동기화로 조작감을 완성하여 핀테크 트랙 우수상 수상",
-        "파편화된 UnityWebRequest 코드를 Generic<T> + Action 콜백 APIManager 단일 클래스로 통합하여 비동기 타이밍 오류 구조적 해소"
-      ],
-      learned: [
-        "FSM을 명확히 설계하지 않으면 애니메이션 상태가 꼬이는 것은 시간의 문제가 아니라 설계의 문제임을 실무로 체득했습니다.",
-        "사운드 Pitch를 속도에 동기화하는 수준의 세밀한 튜닝이 플레이어의 몰입감에 직접적으로 영향을 준다는 것을 체감했습니다. '조작감'은 시각만이 아니라 청각과 함께 설계해야 한다는 교훈이었습니다.",
-        "Generic 타입과 Action 델리게이트를 결합하면 다양한 데이터 모델을 하나의 통신 시스템으로 안전하게 처리할 수 있다는 것을 이 프로젝트에서 노득했습니다."
+        "player.cs·GameManager.cs·QuizManager.cs와 모든 스포너를 직접 작성하고 3개 시대 애니메이터를 제작 — 사용자에게 보이는 인게임 플레이 전체를 단독 구현",
+        "'장애물이 겹쳐 어지럽다'는 플레이테스트 피드백을 OverlapBox 스폰 가드 + 거리 기반 밀도 커브로 해결, 핀테크 트랙 우수상 수상"
       ],
       troubleshooting: [
         {
-          title: "백엔드 실시간 연동을 위한 Generic APIManager 캡슐화",
-          problem: "Spring Boot 백엔드에서 퀴즈 데이터나 유저 정보를 받아와야 했습니다. 유니티의 기본 HTTP 호출인 UnityWebRequest 코드가 여러 스크립트에 파편화되어 작성되면서, 코드가 길어지고 비동기 타이밍 오류 디버깅이 매우 어려워졌습니다.",
-          solution: "모든 HTTP 통신 레이어를 단일 APIManager 클래스로 분리하고, 어떠한 형태의 데이터 모델(JSON)이라도 유연하게 역직렬화(Deserialize)하여 반환할 수 있도록 Generic <T> 타입과 C# Action 델리게이트 콜백을 결합한 통합 통신 모듈을 설계했습니다.",
-          codeSnippet: {
-            filename: "APIManager.cs",
-            language: "csharp",
-            code: "public class APIManager : MonoBehaviour\n{\n    // Generic을 활용한 범용 비동기 HTTP GET 요청 래퍼\n    public IEnumerator GetRequest<T>(string endpoint, Action<T> onSuccess, Action<string> onError)\n    {\n        using (UnityWebRequest webRequest = UnityWebRequest.Get(BASE_URL + endpoint))\n        {\n            yield return webRequest.SendWebRequest();\n\n            if (webRequest.result == UnityWebRequest.Result.Success)\n            {\n                string jsonResponse = webRequest.downloadHandler.text;\n                T data = JsonUtility.FromJson<T>(jsonResponse);\n                onSuccess?.Invoke(data);\n            }\n            else\n            {\n                onError?.Invoke(webRequest.error);\n            }\n        }\n    }\n}"
-          }
-        },
-        {
-          title: "Mathf.Lerp 및 Coroutine을 활용한 게임 물리/애니메이션 동적 제어",
-          problem: "플레이어가 목표 거리(700m)에 도달했을 때 게임이 냅다 정지해버리면 몰입감이 심하게 깨지는 문제가 있었습니다. 또한 퀴즈 정답 시 획득하는 부스터 구간에서도 속도가 뚝뚝 끊기듯 변하여 러너 게임 특유의 속도감을 온전히 살리지 못했습니다.",
-          solution: "Unity Coroutine과 Mathf.Lerp(선형 보간) 수학 함수를 결합하여 프레임 단위의 부드러운 감속/가속 시스템을 구축했습니다. 특히 완주 시 호출되는 SlowDownAndClearGame() 코루틴에서 배경 스크롤 속도(globalSpeed)와 캐릭터의 다리 움직임(Animator.speed) 비율을 일치시켜 서서히 0으로 수렴하게 만듦으로써, 자동차가 브레이크를 밟듯 자연스러운 시네마틱 연출을 완성했습니다.",
+          title: "거리 기반 퀴즈 트리거 → 게임 전체 정지 & 정답 시 방어막",
+          problem: "이동 거리에 맞춰 속보 퀴즈를 띄우고, 퀴즈를 푸는 동안 게임을 멈춰야 했습니다. 그런데 배경·코인·장애물·플레이어가 각자 속도를 관리하다 보니 정지시켜도 배경만 멈추고 캐릭터는 계속 달리는 식으로 어긋났습니다.",
+          solution: "static globalSpeed 하나로 모든 스크롤을 통제하는 구조를 만들고, currentDifficultySpeed를 프레임마다 올려 난이도 곡선을 잡았습니다. distanceTraveled가 목표 거리에 닿으면 퀴즈 병사를 스폰하고 QuizManager.ShowQuiz()를 호출하며, 이때 globalSpeed와 캐릭터 Animator.speed를 함께 0으로 묶어 화면 전체를 한 번에 정지시켰습니다. 정답을 맞히면 TriggerQuizInvincibility로 일정 시간 무적 방어막을 부여하고 게임을 재개했습니다.",
+          images: [
+            { src: "/zabonzooET/quiz.mp4", caption: "퀴즈 병사 만남 → 팝업 + 게임 전체 정지 → 정답 시 방어막(무적)" }
+          ],
           codeSnippet: {
             filename: "GameManager.cs",
             language: "csharp",
-            code: "IEnumerator SlowDownAndClearGame()\n{\n    float slowDownDuration = 1.5f;\n    float currentStartSpeed = globalSpeed;\n    float elapsed = 0f;\n\n    while (elapsed < slowDownDuration)\n    {\n        elapsed += Time.deltaTime;\n        float t = elapsed / slowDownDuration;\n\n        // 💡 배경 스크롤 속도와 캐릭터 달리기 애니메이션 배속을 동시에 선형 보간(Lerp)\n        globalSpeed = Mathf.Lerp(currentStartSpeed, 0f, t);\n        if (pAnim != null) pAnim.speed = Mathf.Lerp(1f, 0f, t);\n\n        yield return null;\n    }\n    \n    globalSpeed = 0f; // 완전 정지\n}"
+            code: "void Update()\n{\n    if (isGameOver) { globalSpeed = 0f; return; }\n\n    // 난이도 곡선: 정지·부스트 중이 아닐 때만 목표 속도를 서서히 올림\n    if (!IsGamePaused && boostCoroutine == null)\n    {\n        if (currentDifficultySpeed < maxSpeed)\n            currentDifficultySpeed += accelerationRate * Time.deltaTime;\n        globalSpeed = currentDifficultySpeed;   // 모든 스크롤이 이 값 하나를 따름\n    }\n\n    if (!IsGamePaused && globalSpeed > 0)\n    {\n        distanceTraveled += globalSpeed * Time.deltaTime;\n\n        // 이동 거리가 목표에 닿으면 퀴즈 병사 스폰 -> QuizManager 호출\n        if (quizCount < 3 && distanceTraveled >= nextQuizDistance)\n            TriggerBreakingNews();\n    }\n}"
           }
         },
         {
-          title: "조작감 극대화를 위한 상태 머신(Animator) 및 동적 사운드 튜닝",
-          problem: "다중 점프 시 애니메이션 트리거(Trigger)가 중첩되어 꼬이는 버그가 잦았습니다. 또한, 주행 속도가 점차 빨라짐에도 발소리 템포가 똑같아 속도감이 떨어지고 밋밋하다는 피드백이 있었습니다.",
-          solution: "Trigger 대신 SetInteger로 0(Run), 1(1단 점프), 3(2단 점프) 상태 번호를 명확하게 매핑하여 애니메이션 충돌을 원천 차단했습니다. 또한 Update 루프 내에서 글로벌 속도(globalSpeed) 비율을 계산해 AudioSource의 Pitch(음높이 및 재생 속도) 값을 즉각적으로 조절함으로써, 캐릭터가 빨라질수록 발소리도 빠르고 높아지도록 청각적 타격감을 동기화했습니다.",
+          title: "다중 점프 애니메이션 꼬임을 정수 상태값으로 해결 + 속도 비례 발소리 Pitch",
+          problem: "2단 점프 시 Trigger가 중첩돼 점프·착지 애니메이션이 꼬였습니다. 또 주행 속도가 빨라져도 발소리 템포가 그대로여서 속도감이 밋밋하다는 피드백이 있었습니다.",
+          solution: "Trigger 대신 SetInteger(\"state\", n)으로 0 달리기 / 1 1단점프 / 2 착지 / 3 2단점프 / 4 사망을 명확히 매핑해 상태 충돌을 원천 차단했습니다. 플레이어·적·장애물·코인의 애니메이션 클립과 Animator 컨트롤러는 3개 시대에 걸쳐 직접 제작해 player.cs에서 일괄 제어했고, Update에서 speedRatio = globalSpeed / 5f로 발소리 Pitch를 실시간 조절했습니다. 피격 시엔 blink 코루틴 + CameraShake + 파티클로 타격 피드백을 줬습니다.",
+          images: [
+            { src: "/zabonzooET/doublejump.mp4", caption: "1단 → 2단 점프 → 착지, 피격 시 blink + 카메라 흔들림", gain: 1.4 }
+          ],
           codeSnippet: {
             filename: "player.cs",
             language: "csharp",
-            code: "// 💡 1. 달리는 속도에 비례하여 발소리(Pitch) 동적 상승\nbool isRunning = (jumpCount == 0 && !GameManager.isGameOver && GameManager.globalSpeed > 0f);\nif (isRunning)\n{\n    float speedRatio = GameManager.globalSpeed / 5f;\n    GameManager.Instance.runSource.pitch = speedRatio * GameManager.Instance.runSoundSpeedMultiplier;\n}\n\n// 💡 2. Trigger 대신 Integer로 명확한 점프 애니메이션 상태 제어\nvoid Jump()\n{\n    float force = (jumpCount == 0) ? firstJumpForce : secondJumpForce;\n    rb.linearVelocity = new Vector2(rb.linearVelocity.x, force);\n    jumpCount++;\n\n    if (jumpCount == 1) anim.SetInteger(\"state\", 1);\n    else if (jumpCount == 2) anim.SetInteger(\"state\", 3);\n}"
+            code: "// 달리는 속도에 비례해 발소리 Pitch 실시간 조절 (기본속도 5f 기준)\nfloat speedRatio = GameManager.globalSpeed / 5f;\nrunSource.pitch = speedRatio * runSoundSpeedMultiplier;\n\n// Trigger 대신 정수 상태값 — 중첩돼도 마지막 값만 유효\nvoid Jump()\n{\n    float force = (jumpCount == 0) ? firstJumpForce : secondJumpForce;\n    rb.linearVelocity = new Vector2(rb.linearVelocity.x, force);\n    jumpCount++;\n\n    if (jumpCount == 1)      anim.SetInteger(\"state\", 1);  // 1단 점프\n    else if (jumpCount == 2) anim.SetInteger(\"state\", 3);  // 2단 점프\n}\n\nIEnumerator PlayLandingAnimation()\n{\n    anim.SetInteger(\"state\", 2);              // 착지\n    yield return new WaitForSeconds(0.2f);\n    if (jumpCount == 0) anim.SetInteger(\"state\", 0);  // 달리기로 복귀\n}"
+          }
+        },
+        {
+          title: "완주 시 게임을 뚝 끊지 않고 '브레이크 밟듯' 감속 (SlowDownAndClearGame)",
+          problem: "700m 완주 순간 globalSpeed를 0으로 만들면 화면이 뚝 멈춰 몰입이 확 깨졌습니다. 초기 빌드에선 장애물·코인이 겹쳐 스폰돼 산만하다는 피드백도 있었습니다.",
+          solution: "완주 시 SlowDownAndClearGame 코루틴이 globalSpeed와 캐릭터 Animator.speed를 1.5초간 함께 Mathf.Lerp로 0에 수렴시켜 자동차 브레이크 같은 감속 연출을 만들었습니다. 감속 시작 시 스포너를 미리 꺼 새 장애물이 안 튀어나오게 했고, 평상시 스폰도 Physics2D.OverlapBox로 코인·장애물 겹침을 막고 거리 기반으로 밀도를 조절했습니다.",
+          images: [
+            { src: "/zabonzooET/ending.mp4", caption: "700m 완주 → globalSpeed·캐릭터 애니메이션을 함께 Lerp 감속" }
+          ],
+          codeSnippet: {
+            filename: "GameManager.cs",
+            language: "csharp",
+            code: "IEnumerator SlowDownAndClearGame()\n{\n    float duration = 1.5f;\n    float startSpeed = globalSpeed;\n    float elapsed = 0f;\n\n    Animator pAnim = FindObjectOfType<player>()?.GetComponent<Animator>();\n\n    // 감속 중 새 장애물이 튀어나오지 않게 스포너를 미리 끔\n    foreach (GameObject o in FindObjectsOfType<GameObject>())\n        if (o.name.ToLower().Contains(\"spawn\")) o.SetActive(false);\n\n    while (elapsed < duration)\n    {\n        elapsed += Time.deltaTime;\n        float t = elapsed / duration;\n\n        // 배경 스크롤과 다리 애니메이션 배속을 함께 선형 감속\n        globalSpeed = Mathf.Lerp(startSpeed, 0f, t);\n        if (pAnim != null) pAnim.speed = Mathf.Lerp(1f, 0f, t);\n\n        yield return null;\n    }\n\n    globalSpeed = 0f;\n    isGameOver = true;\n    ShowVictoryPanel();\n}"
           }
         }
       ]
@@ -228,88 +254,48 @@ export const portfolioData = {
       type: "React 실시간 웹소켓 게임",
       period: "2026.01.12 ~ 2026.02.09",
       teamSize: "6인",
-      tech: ["React", "TypeScript", "Zustand", "Vite", "Framer Motion"],
-      role: "Front-End",
+      tech: ["React", "TypeScript", "Zustand", "Vite", "Figma"],
+      role: "Front-End · UI 디자인",
       description: "웹소켓 & AI를 활용한 릴레이 스토리텔링 게임",
-      impactLine: "웹소켓 실시간 멀티플레이 게임에서 Zustand 오디오 크로스페이드와 GPU 가속 UI로 끊김 없는 60fps 클라이언트 경험 구현",
+      impactLine: "Figma 기본 디자인부터 방 만들기·로비·연출 페이즈 UI까지 직접 디자인·구현하고, 결과 발표를 상태 기반 다단계 애니메이션으로 연출한 실시간 멀티플레이 웹 게임",
       detailedDescription: "유저들이 랜덤한 이미지를 보고 즉흥적으로 스토리를 이어 적으며 기상천외한 동화책을 만들어가는 실시간 멀티플레이 웹 게임입니다. 두 팀으로 나뉘어 제한 시간 내에 창의적인 문장을 작성하며 릴레이 스토리 대결을 펼칩니다. 게임이 종료되면 AI 및 관객 심사위원의 평가를 통해 승패가 결정되며, 예측할 수 없는 유쾌한 결말을 함께 즐길 수 있습니다.",
       image: "/gaesorlay.png",
-      github: "https://github.com/kkaemong/gaesorelay",
+      github: "https://github.com/gaesorelay/frontend",
       keyResult: [
-        "Zustand 기반 전역 Audio/BGM 상태 파이프라인을 구축하여 라우트 전환 시에도 끊김 없는 페이드(Fade) 트랜지션 달성",
-        "다이내믹 투표 모달 및 실시간 타이머에 CSS GPU 하드웨어 가속을 적용하여 리플로우(Reflow) 없는 60fps 애니메이션 달성",
-        "Framer Motion과 CSS 3D Transform(rotateY)을 적극 활용하여 로비 및 카드 추첨 씬의 입체적인 화면 전환 UI 구축"
+        "Figma로 전체 화면 기본 디자인을 잡고, 방 만들기·인트로·로비·채팅 UI와 카드 셔플 → 심사위원 셔플 → 결과 발표 연출 페이즈를 직접 컴포넌트로 구현 (JudgeResultPhase 900줄, JudgeShufflePhase 900줄, CardShufflePhase 500줄)",
+        "결과 발표를 introPhase 상태값으로 7단계 전개하고, transform 기반 키프레임(elastic-zoomies·slide-in·stamp-slam)을 요소마다 다른 delay로 재생해 관객 점수 → 심사평 → 합산 → 승자 순으로 시선 유도"
       ],
       troubleshooting: [
         {
-          title: "Zustand 전역 상태 기반 BGM/SFX 파이프라인 및 페이드(Fade) 트랜지션 구축",
-          problem: "게임 몰입감을 위해 메인, 로비, 결과창 등 페이즈별 브금(BGM)과 효과음(SFX)을 적용했습니다. 그러나 React SPA 특성상 라우트가 이동할 때마다 오디오가 뚝뚝 끊기거나, 브라우저의 엄격한 오디오 자동재생(Autoplay) 정책으로 인해 소리가 재생되지 않고 겹치는 버그가 발생했습니다.",
-          solution: "단순히 컴포넌트 내부에 Audio 객체를 선언하는 대신, Zustand와 sessionStorage를 활용해 useAudioStore 전역 오디오 상태를 설계했습니다. 특히 페이지 전환 시 음악이 부자연스럽게 끊기지 않도록, setInterval을 활용해 볼륨을 50ms마다 서서히 조절하는 크로스 페이드 인/아웃(Fade in/out) 로직을 직접 구현하여 압도적인 오디오 UX를 달성했습니다.",
+          title: "결과 발표 화면을 introPhase 상태값으로 7단계 전개 (JudgeResultPhase)",
+          problem: "게임 종료 후 팀별 관객 점수·AI 심사평·1차 합산·최종 승자를 한 화면에 쏟아내니 밋밋하고, 무엇을 먼저 봐야 할지 헷갈렸습니다.",
+          solution: "900줄 컴포넌트에서 introPhase useState를 1~7로 두고 setTimeout으로 단계를 전개했습니다. A팀 관객 점수(2) → B팀 관객 점수(3) → 1차 합산(4) → A팀 AI 심사(5) → B팀 AI 심사(6) → 최종 합산·승자(7). 각 단계에서 점수 카운트업과 요소 등장을 트리거하고, 등장 애니메이션은 transform: scale()/translateX() 키프레임에 요소 인덱스별 animation-delay를 줘 한꺼번에 몰리지 않게 순차 재생했습니다.",
+          images: [
+            { src: "/gaesorelay/judge-result.gif", caption: "관객 점수 → AI 심사위원 → 최종 합산 순차 발표" }
+          ],
           codeSnippet: {
-            filename: "useAudioStore.ts",
+            filename: "JudgeResultPhase.tsx",
             language: "typescript",
-            code: "      stopBGM: (callback) => {\n        const { bgmAudio, fadeInterval } = get();\n        if (fadeInterval) clearInterval(fadeInterval);\n        if (!bgmAudio) return callback?.();\n\n        let vol = bgmAudio.volume;\n        // ⭐️ 곡이 전환될 때 뚝 끊기지 않도록 부드러운 페이드 아웃(Fade-out) 적용\n        const interval = window.setInterval(() => {\n          vol -= 0.05;\n          if (vol <= 0) {\n            bgmAudio.pause();\n            clearInterval(interval);\n            if (callback) callback(); // 완전히 꺼지면 다음 BGM 자연스럽게 재생\n          } else {\n            bgmAudio.volume = Math.max(0, vol);\n          }\n        }, 50);\n        set({ fadeInterval: interval });\n      },"
+            code: "const [introPhase, setIntroPhase] = useState(1);\n\nuseEffect(() => {\n  // 발표를 7단계로 전개 — 각 단계에서 점수 카운트업·요소 등장을 트리거\n  const timers = [\n    setTimeout(() => setIntroPhase(2), 0),      // A팀 관객 점수\n    setTimeout(() => setIntroPhase(3), 5000),   // B팀 관객 점수\n    setTimeout(() => setIntroPhase(4), 10000),  // 1차 합산\n    setTimeout(() => setIntroPhase(5), 16000),  // A팀 AI 심사\n    setTimeout(() => setIntroPhase(6), 27000),  // B팀 AI 심사\n    setTimeout(() => setIntroPhase(7), 38000),  // 최종 합산 · 승자\n  ];\n  return () => timers.forEach(clearTimeout);\n}, []);\n\n// 등장 애니메이션은 transform 키프레임 + 인덱스별 delay로 순차화\n{judges.map((j, i) => (\n  <img key={j.id} src={j.profile}\n       style={{ animation: `elastic-zoomies 0.5s ${i * 0.1}s both` }} />\n))}"
           }
         },
         {
-          title: "CSS 레이아웃 리플로우(Reflow) 방어 및 타이머 애니메이션 최적화",
-          problem: "제가 담당한 심사 결과 페이지에서, 게임 종료 후 대량의 데이터(팀별 스토리, AI 심사평, 실시간 투표 상태)가 한 번에 렌더링될 때 복잡한 타이머 애니메이션과 DOM 업데이트가 충돌하면서 심각한 레이아웃 리플로우(Reflow) 및 렌더링 버벅임 현상이 발생했습니다.",
-          solution: "리플로우를 유발하는 기하학적 속성 대신, GPU 하드웨어 가속을 온전히 지원하는 transform: translate3d() 속성으로 타이머와 모달의 위치 이동 애니메이션을 전면 수정했습니다. 추가로 will-change 속성을 부여해 브라우저 엔진에 렌더링 힌트를 제공함으로써 페인팅 부하를 최소화하고 부드러운 60fps 애니메이션을 확보했습니다.",
-          codeSnippet: {
-            filename: "JudgeResultPhase.css",
-            language: "css",
-            code: "/* ✅ Reflow(레이아웃 재계산)를 유발하지 않는 GPU 가속 기반 애니메이션 최적화 */\n@keyframes elastic-zoomies {\n  0% { transform: scale(0); opacity: 0; }\n  60% { transform: scale(1.1); opacity: 1; }\n  100% { transform: scale(1); opacity: 1; }\n}\n\n@keyframes slide-in-right {\n  0% { transform: translateX(100%) scale(0.5); opacity: 0; }\n  100% { transform: translateX(0) scale(1); opacity: 1; }\n}\n\n.judge-card-mini {\n  /* will-change로 브라우저 엔진에 렌더링 힌트 제공 */\n  will-change: transform, opacity;\n  animation: elastic-zoomies 0.5s both;\n}"
-          }
-        }
-      ]
-    },
-    {
-      id: "ssaiet",
-      title: "SSAIET",
-      type: "Django · Vue 풀스택 웹",
-      period: "2025.12.01 ~ 2025.12.26",
-      teamSize: "2인",
-      tech: ["Vue.js", "Pinia", "Python", "Django DRF", "JWT", "Kakao Map API"],
-      role: "FE/BE 풀스택 개발 (회원, 커뮤니티, 카카오맵)",
-      description: "Django와 Vue.js를 활용한 사용자 맞춤형 식단 관리 및 커뮤니티 플랫폼",
-      impactLine: "JWT 인증 파이프라인 설계로 IDOR 취약점을 원천 방어하고, 카카오맵 SDK 비동기 메모리 누수를 직접 해결한 헬스케어 서비스",
-      detailedDescription: "사용자가 당일 섭취한 칼로리 데이터를 기반으로 맞춤형 저녁 식단을 추천하고 관리해주는 개인 맞춤형 헬스케어 서비스입니다. Vue.js를 활용하여 브랜드 톤앤매너에 맞춘 메인 UI를 기획/구현했으며, Kakao Map API를 연동해 주변 건강 식당 탐색 기능을 개발했습니다. 백엔드(Django)에서는 회원 도메인과 커뮤니티를 전담 구축하고 전체 시스템의 JWT 인증 및 권한(Authorization) 흐름을 상세하게 설계했습니다.",
-      image: "/SSAIETMAIN.png",
-      github: "https://github.com/kkaemong/SSAIET",
-      keyResult: [
-        "보안 규격(JWT)에 기반한 강력한 사용자 인증-인가 체계를 서버 중심 설계로 구축하여 데이터 권한 상승 취약점(IDOR) 원천 방어",
-        "다형성 관계의 중첩 데이터 구조(Nested JSON)를 안정적으로 생성/수정하기 위해 커스텀 Writable Serializer 파이프라인 구현",
-        "SPA 특유의 SDK 비동기 로딩 레이스 컨디션 해결 및 가비지 컬렉션 강제를 통해 브라우저 메모리 누수 방어"
-      ],
-      troubleshooting: [
-        {
-          title: "JWT 인증 파이프라인 흐름 제어 및 권한 우회(IDOR) 차단",
-          problem: "사용자가 회원가입을 마치면 곧바로 신체 구조(키, 몸무게 등)를 입력하는 온보딩 페이지로 넘어가야 했으나, 토큰만 발급된 채 메인화면으로 우회되는 흐름 에러가 발생했습니다. 또한, 단순 API 파라미터만 변조하면 다른 유저의 신체 정보나 게시글까지 수정할 수 있는 IDOR(수직/수평 권한 상승) 취약점이 확인되었습니다.",
-          solution: "클라이언트 단(Vue)에서는 Pinia와 Router Guard를 연동하여 '프로필 미완성 상태'인 유저는 무조건 온보딩으로 강제 이동되도록 인증 흐름을 재설계했습니다. 서버 단(Django)에서는 파라미터가 아닌, 검증된 JWT 토큰 내부의 request.user 객체를 추출하여 수정하려는 데이터의 소유권(Owner ID)과 교차 검증하는 시큐어 코딩을 전면 도입했습니다.",
-          codeSnippet: {
-            filename: "views.py",
-            language: "python",
-            code: "from rest_framework.permissions import IsAuthenticated\nfrom rest_framework.response import Response\nfrom rest_framework.decorators import api_view, permission_classes\n\n@api_view(['PUT'])\n@permission_classes([IsAuthenticated])\ndef update_body_info(request):\n    # JWT 토큰을 통해 무결성이 검증된 request.user 객체를 신뢰 객체로 사용\n    user = request.user\n    \n    # 클라이언트가 보낸 Body ID 파라미터에 의존하지 않고, 직접 접속된 user 인스턴스를 업데이트 (IDOR 방어)\n    user.height = request.data.get('height')\n    user.weight = request.data.get('weight')\n    user.save()\n    \n    return Response({\"message\": \"신체 정보가 안전하게 업데이트되었습니다.\", \"user_id\": user.id})"
-          }
+          title: "Figma 시안을 반응형 게임 UI로 구현 (방 만들기 · 로비)",
+          problem: "Figma에서 잡은 방 만들기·대기실 화면을 실제 컴포넌트로 옮기면서, 소켓으로 실시간 들어오는 유저 목록·팀 배정·방장 여부·준비 상태를 UI에 자연스럽게 반영해야 했습니다.",
+          solution: "시안의 레이아웃·타이포(눈누 귀염발랄체)·색을 CSS Module로 옮기고, 소켓 상태를 조건부 렌더링으로 붙였습니다. 방 만들기 페이지는 초안 → 2차 보완 → 구현으로 다듬었고, 로비는 팀 슬롯·강퇴·준비 표시가 한눈에 들어오도록 전면 재배치했습니다.",
+          images: [
+            { src: "/gaesorelay/create-room.gif", caption: "방 만들기 페이지" },
+            { src: "/gaesorelay/lobby.gif", caption: "대기실 (로비) — 팀 배정·준비 상태" }
+          ]
         },
         {
-          title: "다형성(Polymorphic) 관계의 Writable Nested Serializer 오버라이딩",
-          problem: "커뮤니티 게시글 등록 시 식당추천, 변화후기 등 카테고리별로 상이한 상세 정보가 하위 JSON 데이터 형태로 인입되었습니다. 그러나 DRF의 기본 ModelSerializer는 이와 같이 계층화된 중첩(Nested) 객체를 자동으로 생성해주지 못하고 TypeError를 던지며 등록에 실패하는 구조적 한계가 발생했습니다.",
-          solution: "CommunityPostSerializer 내부의 create()와 update() 라이프사이클 메서드를 직접 커스텀 오버라이딩하여 해결했습니다. 상위 데이터 세이브 전, dict.pop() 메서드로 중첩 상세 데이터(restaurant_info, review_info)를 안전하게 추출하여 은닉했습니다. 부모 게시글이 트랜잭션으로 안전하게 저장된 것을 보장한 뒤, 분기 처리를 통해 생성된 ID와 연동되는 하위 자식 테이블 레코드를 수동으로 삽입하는 시큐어 파이프라인을 구축했습니다.",
+          title: "Zustand 전역 오디오 스토어 + 라우트 인지 BGMPlayer",
+          problem: "메인·로비·프로필 등 페이지마다 BGM·효과음을 넣었는데, React SPA라 라우트가 바뀔 때마다 Audio 객체가 새로 생성돼 소리가 겹치고, 브라우저 자동재생 정책 때문에 재생이 막혔습니다.",
+          solution: "Zustand + sessionStorage로 useAudioStore(뮤트 상태 유지)를 만들고, 화면에 안 보이는 BGMPlayer 컴포넌트가 단일 Audio 인스턴스를 관리하도록 했습니다. useLocation으로 경로를 감지해 /gameroom 진입 시 공용 BGM을 멈추고 나오면 재개하며, 최초 클릭 이벤트로 자동재생 정책을 우회했습니다.",
           codeSnippet: {
-            filename: "serializers.py",
-            language: "python",
-            code: "class CommunityPostSerializer(serializers.ModelSerializer):\n    # ... 상세 Nested Serializer 관계 설정 완료 ...\n\n    def create(self, validated_data):\n        # ❌ TypeError 방지를 위해 중첩된 하위 상세 데이터들을 먼저 pop 처리\n        restaurant_data = validated_data.pop('restaurant_info', None)\n        review_data = validated_data.pop('review_info', None)\n        \n        # ✅ 부모 엔티티(CommunityPost) 먼저 트랜잭션 세이브\n        post = CommunityPost.objects.create(**validated_data)\n        \n        # ✅ 카테고리 분기에 맞추어 하위 자식 테이블에 데이터 적재 완료\n        if post.category == 'RESTAURANT' and restaurant_data:\n            RestaurantRecommendation.objects.create(post=post, **restaurant_data)\n        elif post.category == 'REVIEW' and review_data:\n            ChangeReview.objects.create(post=post, **review_data)\n            \n        return post"
-          }
-        },
-        {
-          title: "SPA 환경의 카카오맵 비동기 렌더링 동기화 및 메모리 누수 방어",
-          problem: "단일 페이지 애플리케이션(SPA) 구조에서 브라우저가 외부 Kakao Map SDK 스크립트를 다운로드하기 전에 Vue 컴포넌트가 마운트되면서 'kakao is not defined' 런타임 에러가 발생하는 비동기 동기화 병목이 발생했습니다. 또한, 지도 검색 및 카테고리 갱신 시 기존 지도 상의 마커(Marker) 객체들이 DOM 및 그래픽 버퍼(VRAM)에서 적절히 회수되지 않고 쌓이는 메모리 누수(Memory Leak) 현상이 존재했습니다.",
-          solution: "index.html에 무조건 스크립트를 올리지 않고, KakaoMap 컴포넌트 마운트(onMounted) 훅 시점에 동적으로 script 요소를 생성하고 로드하는 방식으로 최적화했습니다. 스크립트 쿼리에 autoload=false를 장착하여 로드가 끝난 시점의 onload 콜백에서 window.kakao.maps.load()를 안전하게 실행해 동기화 꼬임 현상을 차단했습니다. 또한 마커를 갱신할 때마다 기존 마커 배열을 순회하며 setMap(null)을 호출해 브라우저 가비지 컬렉터(GC)를 유도하여 메모리 누수를 완전히 방지했습니다.",
-          codeSnippet: {
-            filename: "KakaoMap.vue",
-            language: "javascript",
-            code: "// ❌ 마커 리렌더링 시 기존 GPU 버퍼 비우기 (Garbage Collection 강제)\nconst clearMarkers = () => {\n  markers.forEach(m => m.setMap(null));\n  markers = [];\n};\n\n// ✅ Vue 라이프사이클 마운트 훅에서 비동기 SDK 스크립트 완벽 동기화\nonMounted(() => {\n  const script = document.createElement(\"script\");\n  script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${APP_KEY}&autoload=false&libraries=services`;\n  \n  script.onload = () => {\n    // 브라우저에 SDK 완벽 주입을 보장한 뒤 맵 생성 트리거\n    window.kakao.maps.load(() => {\n      map = new kakao.maps.Map(document.getElementById(\"map\"), {\n        center: new kakao.maps.LatLng(CAMPUS.lat, CAMPUS.lng),\n        level: 3\n      });\n      ps = new kakao.maps.services.Places(map);\n      filterByCategory(\"FD6\"); # 초기 리스트 렌더링\n    });\n  };\n  document.head.appendChild(script);\n});"
+            filename: "BGMPlayer.tsx",
+            language: "tsx",
+            code: "export default function BGMPlayer() {\n  const { isMuted } = useAudioStore();\n  const location = useLocation();\n  const audioRef = useRef<HTMLAudioElement | null>(null);\n\n  // 단일 Audio 인스턴스 + 자동재생 정책 우회 (최초 클릭)\n  useEffect(() => {\n    const audio = new Audio(bgmMp3);\n    audio.loop = true;\n    audioRef.current = audio;\n    const start = () => { if (!isMuted) audio.play().catch(() => {}); };\n    document.addEventListener('click', start, { once: true });\n    return () => { audio.pause(); document.removeEventListener('click', start); };\n  }, []);\n\n  // 경로 감지 — 게임방에선 공용 BGM 정지, 나오면 재개\n  useEffect(() => {\n    const audio = audioRef.current;\n    if (!audio) return;\n    if (location.pathname.startsWith('/gameroom')) audio.pause();\n    else if (!isMuted && audio.paused) audio.play().catch(() => {});\n  }, [location.pathname, isMuted]);\n\n  return null; // UI 없음\n}"
           }
         }
       ]
@@ -345,7 +331,7 @@ export const portfolioData = {
     email: "junemay31@naver.com",
     blog: "https://velog.io/@junemay31/posts",
     github: "github.com/kkaemong",
-    message: "함께 성장하며 빈틈없이 견고한 서비스를 만들어나갈 동료를 기다립니다."
+    message: "플레이어가 몰입할 수 있는 게임을 함께 만들어갈 팀을 찾고 있습니다."
   },
   certifications: []
 };

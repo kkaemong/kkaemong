@@ -10,7 +10,6 @@ const CATEGORIES = [
   { id: 'ALL', label: '전체 보기', icon: <Filter size={15} /> },
   { id: 'CSHARP', label: 'C#', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" className="w-4 h-4" /> },
   { id: 'TYPESCRIPT', label: 'TypeScript', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS" className="w-4 h-4" /> },
-  { id: 'PYTHON', label: 'Python', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" className="w-4 h-4" /> },
 ] as const;
 
 export default function Projects() {
@@ -19,14 +18,14 @@ export default function Projects() {
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
 
   const handleTabClick = (categoryId: string) => {
-    setActiveCategory(categoryId);
+    // 이미 선택된 탭을 다시 누르면 해제(전체 보기)로 되돌림
+    setActiveCategory((prev) => (prev === categoryId ? 'ALL' : categoryId));
   };
 
   const isHighlighted = (project: Project) => {
     if (activeCategory === 'ALL') return true;
     if (activeCategory === 'CSHARP') return project.tech.some(t => t.toLowerCase().includes('c#') || t.toLowerCase().includes('unity'));
     if (activeCategory === 'TYPESCRIPT') return project.tech.some(t => t.toLowerCase().includes('typescript') || t.toLowerCase().includes('react'));
-    if (activeCategory === 'PYTHON') return project.tech.some(t => t.toLowerCase().includes('python') || t.toLowerCase().includes('django'));
     return true;
   };
 
@@ -127,16 +126,18 @@ export default function Projects() {
 
                   {/* Project Image Header */}
                   <div className="h-56 relative overflow-hidden bg-slate-100 shrink-0">
-                    {project.image ? (
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center">
+                      <span className="text-3xl font-black text-primary/10 tracking-tighter uppercase">{project.title}</span>
+                    </div>
+                    {project.image && (
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                        }}
                       />
-                    ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center">
-                        <span className="text-3xl font-black text-primary/10 tracking-tighter uppercase">{project.title}</span>
-                      </div>
                     )}
 
                     {/* Type Badge */}
@@ -163,7 +164,11 @@ export default function Projects() {
                         <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1 leading-snug">
                           {project.title}
                         </h3>
-                        {project.award && (
+                        {project.wip ? (
+                          <span className="shrink-0 bg-slate-900 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                            🚧 개발중
+                          </span>
+                        ) : project.award && (
                           <span className="shrink-0 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
                             🏆 {project.award}
                           </span>

@@ -252,6 +252,9 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
                 }`}>
                   1. 게임으로 포트폴리오 보기
                 </span>
+                <span className="text-[11px] sm:text-xs font-bold px-2 py-0.5 rounded-md bg-slate-900 text-white rotate-[-2deg] whitespace-nowrap">
+                  개발중
+                </span>
               </div>
 
               {/* Action Keycap Badge */}

@@ -42,3 +42,5 @@ next-env.d.ts
 
 # etc
 my-projects
+# 포폴 원본 소스 스크린샷 덤프 (배포 불필요)
+public/porfoliogame/

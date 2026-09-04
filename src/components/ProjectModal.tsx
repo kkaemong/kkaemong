@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowUpRight, TrendingUp, Zap, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, ArrowUpRight, TrendingUp, Zap, CheckCircle2, ChevronDown, ChevronUp, ZoomIn, Download } from 'lucide-react';
 import { GithubIcon as Github } from './GithubIcon';
 import { type Project } from '@/data/portfolio';
 
@@ -25,8 +25,124 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
 };
 
+const isVideoSrc = (src: string) => /\.(mp4|webm|mov)(\?.*)?$/i.test(src);
+
+// 게임 플레이 영상 — Web Audio GainNode로 원본보다 소리를 키워서 재생
+function GameplayVideo({ src, gain = 3.0, className }: { src: string; gain?: number; className?: string }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const ctxRef = useRef<AudioContext | null>(null);
+  const wiredRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      ctxRef.current?.close().catch(() => {});
+    };
+  }, []);
+
+  const boost = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (!wiredRef.current) {
+      try {
+        const Ctx =
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        if (!Ctx) return;
+        const ctx = new Ctx();
+        const gainNode = ctx.createGain();
+        gainNode.gain.value = gain;
+        ctx.createMediaElementSource(el).connect(gainNode).connect(ctx.destination);
+        ctxRef.current = ctx;
+        wiredRef.current = true;
+      } catch {
+        /* 실패 시 브라우저 기본 음량으로 재생 */
+      }
+    }
+    ctxRef.current?.resume().catch(() => {});
+  };
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      controls
+      playsInline
+      preload="metadata"
+      onPlay={boost}
+      className={className ?? 'w-full h-auto block'}
+    />
+  );
+}
+
+// 갤러리 미디어 — .mp4/.webm 이면 소리 키운 비디오 플레이어, 아니면 클릭 확대 이미지
+function GalleryMedia({ src, alt, className, gain }: { src: string; alt: string; className?: string; gain?: number }) {
+  if (isVideoSrc(src)) {
+    return <GameplayVideo src={src} gain={gain} className={`${className ?? 'w-full h-auto block'} bg-black`} />;
+  }
+  return <ZoomableImage src={src} alt={alt} className={className} />;
+}
+
+// 썸네일을 클릭하면 전체 화면 라이트박스로 원본 크기를 볼 수 있는 이미지
+function ZoomableImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="group/zoom relative block w-full cursor-zoom-in"
+        aria-label={`${alt} 크게 보기`}
+      >
+        <img src={src} alt={alt} className={className} />
+        <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-lg bg-slate-900/70 px-2 py-1 text-[11px] font-bold text-white opacity-0 backdrop-blur-sm transition-opacity group-hover/zoom:opacity-100">
+          <ZoomIn size={12} /> 확대
+        </span>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/90 p-4 sm:p-10 cursor-zoom-out backdrop-blur-sm"
+          >
+            <img
+              src={src}
+              alt={alt}
+              className="max-h-full max-w-full rounded-xl object-contain shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); setOpen(false); }}
+              className="absolute top-5 right-5 rounded-full bg-white/10 p-3 text-white backdrop-blur-xl transition-colors hover:bg-white/20"
+            >
+              <X size={24} strokeWidth={2.5} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
 function TroubleshootingCard({ study, idx }: { study: any; idx: number }) {
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const galleryImages: { src: string; caption?: string; gain?: number }[] = study.images ?? [];
+  const isBeforeAfter = Boolean(study.beforeImageUrl || study.afterImageUrl);
+  const hasImages = Boolean(isBeforeAfter || galleryImages.length || study.imageUrl);
 
   return (
     <div className="bg-white rounded-[2rem] border border-slate-100 shadow-[0_15px_40px_rgba(15,23,42,0.02)] p-6 md:p-8 hover:shadow-[0_20px_50px_rgba(15,23,42,0.04)] transition-all duration-300">
@@ -56,84 +172,98 @@ function TroubleshootingCard({ study, idx }: { study: any; idx: number }) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden space-y-6"
           >
-            {/* Problem vs Solution Split Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-              <div className="bg-rose-50/20 border border-rose-100/40 rounded-[1.5rem] p-6 space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-4 bg-rose-400 rounded-full" />
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-rose-500">
-                    상황 및 원인 (Problem)
+            {hasImages ? (
+              /* 이미지 중심 레이아웃: 큰 사진들 먼저 → 상황·해결은 맨 밑에 */
+              <div className="space-y-6 pt-2">
+                <div className="flex items-center gap-2 px-1 md:px-3">
+                  <Zap size={15} className="text-indigo-500 fill-indigo-500" />
+                  <span className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                    {isBeforeAfter ? '변경 전/후 비교 (AS-IS vs TO-BE)' : '증명 자료 (Evidence)'}
+                  </span>
+                  <span className="ml-auto flex items-center gap-1 text-xs font-semibold text-slate-400">
+                    <ZoomIn size={13} /> 클릭하면 확대
                   </span>
                 </div>
-                <p className="text-[13.5px] leading-relaxed text-slate-700 font-semibold break-keep">
-                  {study.problem}
-                </p>
-              </div>
 
-              <div className="bg-blue-50/20 border border-blue-100/40 rounded-[1.5rem] p-6 space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-4 bg-blue-400 rounded-full" />
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-blue-500">
-                    해결 과정 (Solution)
-                  </span>
-                </div>
-                <p className="text-[13.5px] leading-relaxed text-slate-700 font-semibold break-keep">
-                  {study.solution}
-                </p>
-              </div>
-            </div>
-
-
-
-            {/* Before/After Image Set */}
-            {(study.beforeImageUrl || study.afterImageUrl) && (
-              <div className="space-y-3 pt-6 border-t border-slate-100 mt-2">
-                <div className="flex items-center gap-2 px-1">
-                  <Zap size={14} className="text-indigo-500 fill-indigo-500" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    코드 최적화 전/후 비교 (AS-IS vs TO-BE)
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {study.beforeImageUrl && (
-                    <div className="space-y-2">
-                      <div className="text-xs font-bold text-rose-500 text-center bg-rose-50 py-1.5 rounded-lg border border-rose-100">
-                        [변경 전] AS-IS
-                      </div>
-                      <div className="rounded-[1.25rem] overflow-hidden border border-slate-200/80 shadow-sm bg-slate-50 w-full flex items-center justify-center p-2">
-                        <img src={study.beforeImageUrl} alt="Before" className="w-full h-auto block rounded-xl" />
-                      </div>
+                {study.beforeImageUrl && (
+                  <figure className="space-y-2">
+                    <figcaption className="inline-block text-sm font-bold text-rose-500 bg-rose-50 py-1.5 px-4 rounded-lg border border-rose-100">
+                      [변경 전] AS-IS
+                    </figcaption>
+                    <div className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-lg bg-slate-50">
+                      <ZoomableImage src={study.beforeImageUrl} alt="변경 전" className="w-full h-auto block" />
                     </div>
-                  )}
-                  {study.afterImageUrl && (
-                    <div className="space-y-2">
-                      <div className="text-xs font-bold text-emerald-500 text-center bg-emerald-50 py-1.5 rounded-lg border border-emerald-100">
-                        [변경 후] TO-BE
-                      </div>
-                      <div className="rounded-[1.25rem] overflow-hidden border border-slate-200/80 shadow-sm bg-slate-50 w-full flex items-center justify-center p-2">
-                        <img src={study.afterImageUrl} alt="After" className="w-full h-auto block rounded-xl" />
-                      </div>
+                  </figure>
+                )}
+
+                {study.afterImageUrl && (
+                  <figure className="space-y-2">
+                    <figcaption className="inline-block text-sm font-bold text-emerald-500 bg-emerald-50 py-1.5 px-4 rounded-lg border border-emerald-100">
+                      [변경 후] TO-BE
+                    </figcaption>
+                    <div className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-lg bg-slate-50">
+                      <ZoomableImage src={study.afterImageUrl} alt="변경 후" className="w-full h-auto block" />
                     </div>
-                  )}
+                  </figure>
+                )}
+
+                {galleryImages.map((img, i) => (
+                  <figure key={i} className="space-y-2">
+                    {img.caption && (
+                      <figcaption className="inline-block text-sm font-bold text-slate-700 bg-slate-100 py-1.5 px-4 rounded-lg border border-slate-200">
+                        {img.caption}
+                      </figcaption>
+                    )}
+                    <div className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-lg bg-slate-50">
+                      <GalleryMedia src={img.src} alt={img.caption ?? `${study.title} ${i + 1}`} gain={img.gain} className="w-full h-auto block" />
+                    </div>
+                  </figure>
+                ))}
+
+                {study.imageUrl && !study.beforeImageUrl && !study.afterImageUrl && galleryImages.length === 0 && (
+                  <div className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-lg bg-slate-50">
+                    <GalleryMedia src={study.imageUrl} alt={study.title} className="w-full h-auto block" />
+                  </div>
+                )}
+
+                {/* 상황·원인 / 해결 — 사진 아래, 나눠서 표시 */}
+                <div className="flex flex-col gap-3 pt-5 border-t border-slate-100">
+                  <div className="rounded-xl bg-rose-50/40 border border-rose-100/50 px-5 py-4">
+                    <span className="text-xs font-bold uppercase tracking-wider text-rose-500">
+                      상황·원인 (Problem)
+                    </span>
+                    <p className="mt-2 text-sm md:text-[15px] leading-relaxed text-slate-600 break-keep">
+                      {study.problem}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-blue-50/40 border border-blue-100/50 px-5 py-4">
+                    <span className="text-xs font-bold uppercase tracking-wider text-blue-500">
+                      해결 (Solution)
+                    </span>
+                    <p className="mt-2 text-sm md:text-[15px] leading-relaxed text-slate-600 break-keep">
+                      {study.solution}
+                    </p>
+                  </div>
                 </div>
               </div>
-            )}
-
-            {/* Image Proof Box */}
-            {study.imageUrl && (
-              <div className="space-y-3 pt-6 border-t border-slate-100 mt-2">
-                <div className="flex items-center gap-2 px-1">
-                  <Zap size={14} className="text-indigo-500 fill-indigo-500" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    증명 자료 및 시연 결과 (Evidence)
+            ) : (
+              /* 텍스트 전용 레이아웃: 상황·원인 / 해결 카드 */
+              <div className="flex flex-col gap-3 pt-2">
+                <div className="rounded-xl bg-rose-50/40 border border-rose-100/50 px-5 py-4">
+                  <span className="text-xs font-bold uppercase tracking-wider text-rose-500">
+                    상황·원인 (Problem)
                   </span>
+                  <p className="mt-2 text-sm md:text-[15px] leading-relaxed text-slate-600 break-keep">
+                    {study.problem}
+                  </p>
                 </div>
-                <div className="rounded-[1.25rem] overflow-hidden border border-slate-200/80 shadow-sm bg-slate-50 w-full">
-                  <img
-                    src={study.imageUrl}
-                    alt={study.title}
-                    className="w-full h-auto block"
-                  />
+                <div className="rounded-xl bg-blue-50/40 border border-blue-100/50 px-5 py-4">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-500">
+                    해결 (Solution)
+                  </span>
+                  <p className="mt-2 text-sm md:text-[15px] leading-relaxed text-slate-600 break-keep">
+                    {study.solution}
+                  </p>
                 </div>
               </div>
             )}
@@ -238,6 +368,11 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                   <span className="inline-block px-4 py-1.5 bg-[#f5f5f7] text-slate-600 text-xs font-bold uppercase tracking-widest rounded-full mb-6">
                     {project.type}
                   </span>
+                  {project.wip && (
+                    <span className="inline-block ml-2 px-4 py-1.5 bg-slate-900 text-white text-xs font-bold uppercase tracking-widest rounded-full mb-6">
+                      🚧 개발중
+                    </span>
+                  )}
                   <h1 className="text-4xl md:text-6xl font-display font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
                     {project.title}
                   </h1>
@@ -304,6 +439,19 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                         );
                       })}
                     </ul>
+                  </motion.div>
+                )}
+
+                {/* Gameplay Video */}
+                {project.video && (
+                  <motion.div variants={itemVariants} className="mb-16 max-w-4xl mx-auto">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="w-1.5 h-4 bg-slate-900 rounded-full" />
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">게임 플레이 영상</h4>
+                    </div>
+                    <div className="rounded-[1.5rem] overflow-hidden border border-slate-200/80 shadow-lg bg-black">
+                      <GameplayVideo src={project.video} />
+                    </div>
                   </motion.div>
                 )}
 
@@ -386,7 +534,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
 
                   {/* Deep-Dive Troubleshooting & Code Section */}
                   {project.troubleshooting && project.troubleshooting.length > 0 && (
-                    <div className="pt-8 space-y-8">
+                    <div className="pt-8 space-y-8 md:-mx-10 lg:-mx-14">
                       <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">
                         Technical Troubleshooting &amp; Implementation
                       </h3>
@@ -399,43 +547,39 @@ export default function ProjectModal({ isOpen, onClose, project }: ModalProps) {
                     </div>
                   )}
 
-                  {/* What I Learned */}
-                  {(project as any).learned && (project as any).learned.length > 0 && (
-                    <div className="pt-8 border-t border-slate-100">
-                      <div className="flex items-center gap-2 mb-6">
-                        <span className="w-1.5 h-4 bg-accent rounded-full" />
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                          이 프로젝트에서 배운 것 (What I Learned)
-                        </h3>
-                      </div>
-                      <ul className="space-y-4">
-                        {(project as any).learned.map((item: string, idx: number) => (
-                          <li key={idx} className="flex items-start gap-3 text-slate-700 text-[15px] leading-relaxed font-medium break-keep">
-                            <span className="shrink-0 w-6 h-6 rounded-full bg-accent/10 text-accent font-bold text-xs flex items-center justify-center mt-0.5">
-                              {idx + 1}
-                            </span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
                 </motion.div>
 
-                {/* GitHub Pill Button */}
-                {project.github && (
-                  <motion.div variants={itemVariants} className="mt-16 flex justify-center">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-3 px-10 py-5 bg-slate-900 text-white rounded-full transition-all duration-300 hover:scale-105 hover:bg-black shadow-2xl shadow-slate-900/20 cursor-pointer"
-                    >
-                      <Github size={24} className="group-hover:rotate-12 transition-transform duration-300" />
-                      <span className="font-bold text-lg tracking-wide">GitHub Repository</span>
-                      <ArrowUpRight size={20} className="opacity-50 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
-                    </a>
+                {/* Action Buttons — GitHub / 다운로드 플레이 */}
+                {(project.github || project.downloadUrl) && (
+                  <motion.div variants={itemVariants} className="mt-16 flex flex-wrap justify-center gap-4">
+                    {project.downloadUrl && (
+                      <a
+                        href={project.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center gap-3 px-10 py-5 bg-slate-900 text-white rounded-full transition-all duration-300 hover:scale-105 hover:bg-black shadow-2xl shadow-slate-900/20 cursor-pointer"
+                      >
+                        <Download size={24} className="group-hover:translate-y-0.5 transition-transform duration-300" />
+                        <span className="font-bold text-lg tracking-wide">다운로드해서 게임 해보기</span>
+                        <ArrowUpRight size={20} className="opacity-50 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                      </a>
+                    )}
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`group flex items-center gap-3 px-10 py-5 rounded-full transition-all duration-300 hover:scale-105 cursor-pointer ${
+                          project.downloadUrl
+                            ? 'bg-white text-slate-900 border-2 border-slate-900 hover:bg-slate-50'
+                            : 'bg-slate-900 text-white hover:bg-black shadow-2xl shadow-slate-900/20'
+                        }`}
+                      >
+                        <Github size={24} className="group-hover:rotate-12 transition-transform duration-300" />
+                        <span className="font-bold text-lg tracking-wide">GitHub Repository</span>
+                        <ArrowUpRight size={20} className="opacity-50 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                      </a>
+                    )}
                   </motion.div>
                 )}
 
