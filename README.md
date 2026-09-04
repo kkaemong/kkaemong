@@ -73,7 +73,7 @@
 
 | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/Gifted.png?v=1" width="100%" alt="GIFTED cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/jabonju.png?v=1" width="100%" alt="zabonzooET cover" /> |
 | :---: | :---: |
-| **[GIFTED](https://github.com/gifted-hamyeonham/gifted)** | **[자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)** |
+| **[GIFTED](https://portpolio-ruddy-beta.vercel.app/)** <sub>(Private repo)</sub> | **[자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)** |
 | Unity 3D 포장 액션 캐주얼 게임 · 상호작용 오브젝트(상자·어항·썰매·디스펜서) 개발 | Unity 2D 러너 금융 게임 · 인게임 플레이 단독 개발 · 핀테크 트랙 우수상 |
 | ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white) ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) | ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white) ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) |
 | | |
