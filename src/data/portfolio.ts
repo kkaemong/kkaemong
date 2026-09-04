@@ -228,7 +228,8 @@ export const portfolioData = {
       github: "https://github.com/kkaemong/zabonzooET",
       keyResult: [
         "게임의 '속도감'을 static globalSpeed 값 하나로 모으고, 배경·코인·장애물·캐릭터 애니메이션 배속이 전부 이 값을 따르게 설계 — 퀴즈 정지도, 완주 시 시네마틱 감속도, 난이도 곡선도 이 한 값만 조절하면 됨",
-        "'달리는 화면이 산만하다'는 피드백을, 코인·장애물 스포너가 static 플래그로 서로의 상태를 알고 겹치지 않게 양보하는 방식으로 해결 (+ 코인은 점프 사거리 안 높이로만 스폰)"
+        "'달리는 화면이 산만하다'는 피드백을, 코인·장애물 스포너가 static 플래그로 서로의 상태를 알고 겹치지 않게 양보하는 방식으로 해결 (+ 코인은 점프 사거리 안 높이로만 스폰)",
+        "Spring Boot 백엔드와의 통신을 콜백 기반 비동기로 처리 — 판 시작 시 runId 응답을 기다리는 동안만 정지시키고, 실패해도 로컬로 진행되는 폴백을 둬 네트워크 장애가 플레이를 막지 않게 설계"
       ],
       troubleshooting: [
         {
@@ -279,6 +280,16 @@ export const portfolioData = {
             filename: "GameManager.cs",
             language: "csharp",
             code: "IEnumerator SlowDownAndClearGame()\n{\n    float duration = 1.5f;\n    float startSpeed = globalSpeed;\n    float elapsed = 0f;\n\n    Animator pAnim = FindObjectOfType<player>()?.GetComponent<Animator>();\n\n    // 감속 중 새 장애물이 튀어나오지 않게 스포너를 미리 끔\n    foreach (GameObject o in FindObjectsOfType<GameObject>())\n        if (o.name.ToLower().Contains(\"spawn\")) o.SetActive(false);\n\n    while (elapsed < duration)\n    {\n        elapsed += Time.deltaTime;\n        float t = elapsed / duration;\n\n        // 배경 스크롤과 다리 애니메이션 배속을 함께 선형 감속\n        globalSpeed = Mathf.Lerp(startSpeed, 0f, t);\n        if (pAnim != null) pAnim.speed = Mathf.Lerp(1f, 0f, t);\n\n        yield return null;\n    }\n\n    globalSpeed = 0f;\n    isGameOver = true;\n    ShowVictoryPanel();\n}"
+          }
+        },
+        {
+          title: "서버 응답을 기다리는 동안 게임이 멈추지 않게 — 콜백 기반 비동기 네트워크 처리",
+          problem: "게임 시작 시 Spring Boot 백엔드에서 판(run) 고유 ID를 받아와야 이후 퀴즈 채점·결과 제출 API가 정상 동작하는데, 응답이 오기 전에 캐릭터가 먼저 달리면 API 호출 순서가 꼬입니다. 반대로 응답을 무한정 기다리면 네트워크가 불안정할 때 게임이 아예 시작을 못 하고 멈춰버립니다.",
+          solution: "API 요청 직후 IsGamePaused를 true로 걸어 응답 전까지 스크롤 자체를 멈추고, UnityWebRequest 콜백을 성공/실패로 나눠 처리했습니다 — 성공하면 runId를 저장하고 재개, 실패해도 로컬 동작으로 재개해 네트워크 장애가 플레이를 막지 않게 폴백을 뒀습니다. 반대로 게임 종료 시 결과 제출(SendGameResult)은 승리/패배 화면을 먼저 띄우고 응답은 백그라운드 콜백으로 받아, 플레이어가 네트워크 왕복을 기다리며 빈 화면을 보지 않게 했습니다.",
+          codeSnippet: {
+            filename: "GameManager.cs",
+            language: "csharp",
+            code: "// 게임 시작 — 응답 전까지 정지, 성공/실패 모두 재개(끊겨도 로컬로 진행)\nIsGamePaused = true;  // API 응답이 올 때까지 잠시 정지\n\nif (APIManager.Instance != null)\n{\n    APIManager.Instance.StartGame(currentStageCode, (res) => {\n        currentRunId = res.runId;\n        IsGamePaused = false;   // 받아오면 출발\n    }, (err) => {\n        IsGamePaused = false;   // 실패해도 로컬 동작으로 출발 — 네트워크 장애가 플레이를 막지 않게\n    });\n}\nelse\n{\n    IsGamePaused = false;\n}\n\n// 게임 종료 — 결과 제출 응답을 기다리지 않고 화면부터 보여줌 (백그라운드 비동기)\npublic void ShowVictoryPanel()\n{\n    if (APIManager.Instance != null && currentRunId != -1)\n    {\n        APIManager.Instance.SendGameResult(\n            currentRunId, coinCount, Mathf.FloorToInt(distanceTraveled), hp, true,\n            ResolveCurrentStageCode(), \"NONE\",\n            FinanceFlowContext.ApplyRunResult,      // 성공 콜백\n            FinanceFlowContext.SetRunResultError);  // 실패 콜백\n    }\n\n    victoryPanel.SetActive(true);   // 응답 기다리지 않고 바로 표시\n    StartCoroutine(CountUpCoins(victoryCoinText, coinCount));\n}"
           }
         }
       ]
