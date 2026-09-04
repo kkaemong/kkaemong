@@ -46,14 +46,10 @@
 ![Unity](https://img.shields.io/badge/Unity-222C37?style=for-the-badge&logo=unity&logoColor=white)
 ![Unity WebGL](https://img.shields.io/badge/Unity%20WebGL-000000?style=for-the-badge&logo=unity&logoColor=white)
 
-<sub>FSM 상태 관리 · 인터페이스 기반 오브젝트 상호작용 · 애니메이터 상태 제어 · 코루틴 생명주기 · 물리(Rigidbody / OverlapBox)</sub>
-
 ### Web / Front-End
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Zustand](https://img.shields.io/badge/Zustand-2D3748?style=for-the-badge&logo=react&logoColor=white)
-
-<sub>실시간 웹소켓 게임의 연출 페이즈 · transform 기반 UI 애니메이션 · 상태 기반 시퀀스</sub>
 
 ### Back-End
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
