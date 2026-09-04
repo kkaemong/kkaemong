@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowUpRight, TrendingUp, Zap, CheckCircle2, ChevronDown, ChevronUp, ZoomIn, Download } from 'lucide-react';
+import { X, ArrowUpRight, TrendingUp, Zap, CheckCircle2, ChevronDown, ChevronUp, ZoomIn, Download, Code2 } from 'lucide-react';
 import { GithubIcon as Github } from './GithubIcon';
 import { type Project } from '@/data/portfolio';
 
@@ -26,6 +26,50 @@ const itemVariants = {
 };
 
 const isVideoSrc = (src: string) => /\.(mp4|webm|mov)(\?.*)?$/i.test(src);
+
+// 라이브러리 없이 최소 문법 하이라이팅 (C# / TS / JS / CSS)
+const CODE_KEYWORDS =
+  'public|private|protected|internal|static|readonly|abstract|override|virtual|sealed|partial|' +
+  'void|bool|int|float|double|string|object|var|new|return|if|else|for|foreach|while|do|switch|case|break|continue|' +
+  'class|struct|enum|interface|namespace|using|const|let|function|import|from|export|default|extends|implements|' +
+  'true|false|null|undefined|this|base|async|await|yield|in|is|as|typeof|out|ref|get|set|IEnumerator|useState|useEffect|useMemo|useRef';
+
+const CODE_TOKEN_RE = new RegExp(
+  '(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)' + // 1 comment
+    "|(\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'|`(?:[^`\\\\]|\\\\.)*`)" + // 2 string
+    '|(\\b\\d[\\d._]*f?\\b)' + // 3 number
+    '|\\b(' + CODE_KEYWORDS + ')\\b' + // 4 keyword
+    '|([A-Z][A-Za-z0-9_]*)', // 5 Type / Component
+  'g'
+);
+
+function highlightCode(code: string) {
+  const out: React.ReactNode[] = [];
+  let last = 0;
+  let m: RegExpExecArray | null;
+  CODE_TOKEN_RE.lastIndex = 0;
+  let k = 0;
+  while ((m = CODE_TOKEN_RE.exec(code)) !== null) {
+    if (m.index > last) out.push(code.slice(last, m.index));
+    const cls = m[1]
+      ? 'text-slate-500 italic'
+      : m[2]
+        ? 'text-emerald-300'
+        : m[3]
+          ? 'text-orange-300'
+          : m[4]
+            ? 'text-violet-300'
+            : 'text-sky-300';
+    out.push(
+      <span key={k++} className={cls}>
+        {m[0]}
+      </span>
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < code.length) out.push(code.slice(last));
+  return out;
+}
 
 // 게임 플레이 영상 — Web Audio GainNode로 원본보다 소리를 키워서 재생
 function GameplayVideo({ src, gain = 3.0, className }: { src: string; gain?: number; className?: string }) {
@@ -264,6 +308,41 @@ function TroubleshootingCard({ study, idx }: { study: any; idx: number }) {
                   <p className="mt-2 text-sm md:text-[15px] leading-relaxed text-slate-600 break-keep">
                     {study.solution}
                   </p>
+                </div>
+              </div>
+            )}
+
+            {/* Code Snippet */}
+            {study.codeSnippet && (
+              <div className="pt-6 border-t border-slate-100 mt-2">
+                <div className="flex items-center gap-2 px-1 mb-3">
+                  <Code2 size={14} className="text-indigo-500" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    {study.codeSnippet.before ? '코드 — 수정 전 / 후' : '코드'}
+                  </span>
+                  <span className="ml-auto text-xs font-mono font-semibold text-slate-500">
+                    {study.codeSnippet.filename}
+                  </span>
+                </div>
+
+                {study.codeSnippet.before && (
+                  <div className="rounded-2xl overflow-hidden border border-rose-900/60 shadow-lg mb-3">
+                    <div className="bg-rose-950/60 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-rose-300 border-b border-rose-900/50">
+                      Before
+                    </div>
+                    <pre className="bg-slate-950 text-slate-300 text-[13px] sm:text-sm leading-[1.7] p-4 sm:p-5 overflow-x-auto opacity-90">
+                      <code className="font-mono whitespace-pre">{highlightCode(study.codeSnippet.before)}</code>
+                    </pre>
+                  </div>
+                )}
+
+                <div className="rounded-2xl overflow-hidden border border-emerald-900/60 shadow-lg">
+                  <div className={`px-4 py-2 text-[11px] font-bold uppercase tracking-wider border-b ${study.codeSnippet.before ? 'bg-emerald-950/60 text-emerald-300 border-emerald-900/50' : 'bg-slate-900 text-slate-400 border-slate-800'}`}>
+                    {study.codeSnippet.before ? 'After' : study.codeSnippet.language}
+                  </div>
+                  <pre className="bg-slate-950 text-slate-300 text-[13px] sm:text-sm leading-[1.7] p-4 sm:p-5 overflow-x-auto">
+                    <code className="font-mono whitespace-pre">{highlightCode(study.codeSnippet.code)}</code>
+                  </pre>
                 </div>
               </div>
             )}

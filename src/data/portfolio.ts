@@ -5,7 +5,8 @@ export interface TroubleShooting {
   codeSnippet?: {
     language: string;
     filename: string;
-    code: string;
+    before?: string;   // 수정 전 코드 (있으면 before/after 2단으로 표시)
+    code: string;       // 수정 후 (또는 단일 스니펫)
   };
   imageUrl?: string;
   images?: { src: string; caption?: string; gain?: number }[];   // 증명 이미지·영상 (갤러리) — gain: 영상 음량 배수(기본 3)
@@ -146,43 +147,66 @@ export const portfolioData = {
       period: "2026.04.05 ~ 2026.05.21",
       teamSize: "6인",
       tech: ["Unity", "C#", "FSM", "Interface", "ScriptableObject", "Git"],
-      role: "Unity 클라이언트 오브젝트 & 상호작용 로직 개발",
+      role: "인게임 상호작용 오브젝트 개발 (상자·포장·어항·썰매·디스펜서)",
       description: "Unity 기반 포장 액션 캐주얼 게임",
-      impactLine: "임포트 3D 에셋을 부모화해 Pivot·Scale을 규격화하고, 상자의 포장 공정을 상태머신 + 공통 인터페이스로 설계한 포장 액션 게임",
+      impactLine: "임포트 에셋을 규칙과 에디터 툴로 규격화하고, '받을 수 있는 아이템'을 인터페이스 계약으로 통일해 상자·어항·썰매를 한 패턴으로 다룬 포장 액션 게임",
       detailedDescription: "산타와 엘프가 협력해 정해진 시간 안에 선물 주문을 처리하는 Windows 스탠드얼론 포장 액션 캐주얼 게임입니다. 상자에 선물을 담고 규격에 맞는 포장지와 리본으로 포장한 뒤 썰매에 적재해 배송하며, 일반·할로윈·케이크 등 테마별 상자와 어항 같은 특수 용기, 훼방 놓는 쥐 등 다양한 오브젝트가 등장합니다.",
       image: "/Gifted.png",
       downloadUrl: "https://drive.google.com/file/d/1HJR-3l0KuqCQ_fLprLA6EK1T_0ZcS3cR/view",
       keyResult: [
-        "임포트 3D 에셋을 빈 부모 오브젝트로 래핑하고 자식 Transform만 보정해, Pivot·Scale이 달라도 충돌·상호작용 판정이 일관되게 동작하도록 규격화",
-        "포장 공정(열림→선물→포장→리본→완성)을 BoxState 상태머신으로 분리하고 IInteractable·IItemReceiver·IHoldInteractable로 구현해, 썰매·디스펜서도 동일 패턴으로 확장"
+        "썰매 이중 적재·리본 작업대 크기 왜곡·이름 기반 판별 같은 Unity 함정을 플레이테스트에서 하나씩 잡아 수정 — 프레임 타이밍(Destroy), 부모-자식 스케일 상속, 데이터 vs 문자열",
+        "상자를 '열림→선물→포장→리본→완성' 상태머신으로 만들고, InsertGift 한 메서드가 아이템 타입 × 현재 상태를 함께 봐 맞는 조합에서만 전이하도록 설계",
+        "6인 팀에서 백엔드와 충돌하지 않게 BoxManager의 GetAllBoxData() 함수 하나만 경계로 노출하고, 임포트 에셋은 부모화 규칙 + UV 생성 에디터 툴로 규격화"
       ],
       troubleshooting: [
         {
-          title: "임포트 3D 에셋의 Pivot·Scale 불일치를 부모 오브젝트로 규격화",
-          problem: "임포트한 외부 3D 에셋들은 크기(Scale)와 피벗(Pivot) 기준이 제각각이라, 씬에 그대로 두면 캐릭터가 상호작용할 때 높이가 안 맞고 충돌 판정이 어긋났습니다.",
-          solution: "에셋을 씬에 직접 두지 않고 공통 규격의 빈 부모 오브젝트로 감싼 뒤(부모화), 자식 에셋은 부모 기준에 맞춰 Scale·위치만 보정했습니다. devil_doll도 real_devildoll 부모를 만들어 캐릭터 눈높이와 상호작용 범위에 맞게 조절했습니다. 콜라이더와 상호작용 컴포넌트는 부모에 붙이고 자식 모델의 스크립트는 제거해, 자식 에셋의 Transform이 무엇이든 충돌·상호작용 판정이 흔들리지 않게 했습니다.",
-          beforeImageUrl: "/gifted-asset-before.png",
-          afterImageUrl: "/gifted-asset-after.png",
+          title: "썰매 이중 적재 — Destroy를 기다리지 말고 상태로 즉시 락",
+          problem: "상자를 썰매에 넣는 순간 빠르게 한 번 더 입력하면 같은 상자가 두 번 적재됐습니다 (점수 2배, 적재 리스트 중복). LoadBox가 '결과 생성 → 제출 → 리스트 추가 → Destroy' 순으로 도는데, Unity의 Destroy는 프레임 끝에 처리되니 그 사이 두 번째 입력이 CanReceiveItem을 그대로 통과했습니다.",
+          solution: "LoadBox 진입 첫 줄에서 상자 상태를 즉시 Submitted로 바꾸고 SetActive(false)로 비활성화 — 파괴를 기다리지 않고 상태로 락을 겁니다. CanReceiveItem에도 'Submitted면 거부' 가드를 추가해, 어느 경로로 들어와도 이중 적재가 막히게 했습니다.",
           codeSnippet: {
-            filename: "BoxStateController.cs",
+            filename: "SleighController.cs",
             language: "csharp",
-            code: "// 임포트한 모델 프리팹을 부모(this)의 자식으로 붙이고,\n// 자식에 딸려온 스크립트는 전부 제거 — 부모만 로직·충돌 판정을 책임진다\nprivate GameObject InstantiateModel(GameObject prefab, string name)\n{\n    if (prefab == null) return null;\n    GameObject instance = Instantiate(prefab, transform);\n    instance.name = name;\n\n    // 외부 에셋에 붙어 있던 컴포넌트가 상호작용을 방해하지 않도록 정리\n    MonoBehaviour[] scripts = instance.GetComponentsInChildren<MonoBehaviour>(true);\n    foreach (var script in scripts)\n        if (Application.isPlaying) Destroy(script); else DestroyImmediate(script);\n\n    return instance;\n}"
+            before: "private void LoadBox(BoxStateController box)\n{\n    var result = new WrappingResult { ... };\n    GameManager.Instance.SubmitResult(result);\n    loadedBoxDataList.Add(box.Data);\n\n    Destroy(box.gameObject);   // 프레임 끝에 파괴 — 그 전에 재입력이 통과함\n}",
+            code: "private void LoadBox(BoxStateController box)\n{\n    // 중복 적재 방지: 파괴를 기다리지 않고 상태로 즉시 락\n    box.Data.state = BoxState.Submitted;\n    box.gameObject.SetActive(false);\n\n    var result = new WrappingResult { ... };\n    GameManager.Instance.SubmitResult(result);\n    loadedBoxDataList.Add(box.Data);\n    Destroy(box.gameObject);\n}\n\n// CanReceiveItem 에도 가드\nif (box.Data.state == BoxState.Submitted) return false;"
           }
         },
         {
-          title: "상자 포장 공정을 상태머신 + ScriptableObject 템플릿으로 통합",
-          problem: "상자는 열림→선물→포장→리본→완성까지 여러 단계를 거치고, 단계마다 받을 수 있는 아이템(선물·포장지·리본)과 가능한 상호작용이 달랐습니다. 게다가 일반·할로윈·케이크 등 상자 종류마다 비주얼과 허용 포장지가 달라 조건 분기가 빠르게 얽혔습니다.",
-          solution: "단계를 BoxState enum으로 분리하고, '이 상태에서 이 아이템을 받을 수 있는가'를 IItemReceiver·IHoldInteractable 계약으로 통일했습니다. 상태별 모델(열림/닫힘/포장·완성 각 3종)은 BoxVisualTemplate(ScriptableObject)로 주입해 상자 3종을 컴포넌트 하나로 처리하고, WrappingGroup enum으로 상자별 허용 포장지를 제한했습니다. 어항은 별도 FishBowlController지만 같은 상호작용 컴포넌트(Grabbable·InteractHighlight·BoxItemIdentifier)를 그대로 재사용했습니다.",
+          title: "리본 작업대에 올리면 상자 크기가 변하는 버그 — 부모 스케일 상속 차단",
+          problem: "상자를 리본 작업대에 올리면 크기가 갑자기 커지거나 작아졌습니다. 상자를 작업대 부모의 자식으로 붙였는데(SetParent), 그 부모에 스케일이 걸려 있어 상자가 왜곡을 상속받았습니다. 게다가 '상자가 작업대를 떠났는지'를 부모 비교로 체크해서, 부모가 바뀌는 경우 판정이 깨졌습니다.",
+          solution: "상자를 자식으로 넣지 않고 SetParent(null)로 월드 루트에 둔 채 위치만 추적하게 바꿔 부모 스케일 영향을 끊었습니다. 이탈 판정도 '부모가 뭔지(구조)'가 아니라 상자 자신의 IsAtRibbonStation 상태 변수로 바꿔, 부모가 어떻게 되든 안 깨지게 했습니다.",
+          codeSnippet: {
+            filename: "RibbonStation.cs",
+            language: "csharp",
+            before: "// 작업대 부모의 자식으로 → 부모 스케일 왜곡을 상속받음\nbox.transform.SetParent(transform.parent, true);\n\n// ...\n\n// 부모 비교로 이탈 체크 — 부모가 바뀌면 깨짐\nif (currentBox.transform.parent != transform.parent)\n    currentBox = null;",
+            code: "// 월드 루트로 — 부모 스케일 영향 차단, 위치만 추적\nbox.transform.SetParent(null, true);\n\n// ...\n\n// 상자 자체의 상태 변수로 이탈 체크 — 부모와 무관하게 안정\nif (!currentBox.IsAtRibbonStation)\n    currentBox = null;"
+          }
+        },
+        {
+          title: "물고기 종류를 오브젝트 이름이 아니라 데이터로 판별",
+          problem: "어항에 물고기를 넣을 때 item.name.Contains(\"2\")로 종류를 판별했습니다. 프리팹 이름이 바뀌거나 Instantiate 시 '(Clone)'이 붙으면 오작동했고, 상자와 어항이 서로 다른 방식으로 종류를 들고 있어 주문 매칭 단계에서 어긋났습니다.",
+          solution: "이름 기반 판별을 전부 제거하고 아이템의 고유 designIndex(데이터)만 쓰도록 통일했습니다. 넣은 물고기 종류에 맞춰 어항 자체의 데이터도 갱신하고, 상자도 InsertGift 시점에 선물의 designIndex를 상자 데이터로 복사하게 해서, 이후 주문 매칭이 한 값만 보면 되도록 했습니다.",
+          codeSnippet: {
+            filename: "FishBowlController.cs",
+            language: "csharp",
+            before: "int fishIndex = 0;\nif (item.name.Contains(\"2\")) fishIndex = 1;              // 이름 문자열로 판별\nif (identifier.designIndex > 0) fishIndex = identifier.designIndex;",
+            code: "// 이름 기반 제거 — 아이템의 고유 인덱스(데이터)만 사용\nint fishIndex = identifier.designIndex;\n\nhasFish = true;\nactiveFishIndex = fishIndex;\nbowlIdentifier.designIndex = fishIndex;   // 어항 데이터도 함께 갱신"
+          }
+        },
+        {
+          title: "상자 상태머신 — 포장 단계에서 모델 스케일이 튀는 버그 + 다중 타입 단일 진입",
+          problem: "상자를 열림→선물→포장→리본→완성으로 만드는데, 각 단계에서 받을 수 있는 아이템(선물만/포장지만/리본만)이 다르고, 포장 단계로 넘어가며 모델을 새로 만들 때 스케일이 강제로 1이 돼서 상자 크기가 튀었습니다. 또 프리팹이 재활성화되면 ApplyTemplate이 다시 돌아 모델이 중복 생성됐습니다.",
+          solution: "InsertGift 한 메서드가 아이템 타입과 현재 BoxState를 함께 봐 맞는 조합에서만 SetState로 전이하도록 했습니다(포장지는 상자 그룹까지 일치해야 함). 모델 인스턴스의 스케일은 강제로 1로 두지 않고 프리팹 원본 스케일을 쓰게 고쳤고, 이미 생성된 모델이 있으면(openedBox != null) ApplyTemplate을 다시 돌리지 않게 가드를 넣었습니다.",
           images: [
             { src: "/Gifted/normalbox.png", caption: "기본맵 박스" },
             { src: "/Gifted/halloweenbox.png", caption: "할로윈 박스" },
             { src: "/Gifted/cakebox.png", caption: "케이크 박스" },
-            { src: "/Gifted/icebowl.png", caption: "얼음맵 박스" }
+            { src: "/Gifted/icebowl.png", caption: "얼음맵 어항" }
           ],
           codeSnippet: {
             filename: "BoxStateController.cs",
             language: "csharp",
-            code: "public class BoxStateController : MonoBehaviour,\n    IInteractable, IItemReceiver, IHoldInteractable, IRatTarget\n{\n    public enum BoxState\n    {\n        EmptyOpened,      // 빈 상자 (선물 넣기 가능)\n        ClosedWithGift,   // 선물 들어있음 (포장 전)\n        Wrapped,          // 포장지 씌움 (마무리 전)\n        Finished,         // 최종 완성 (리본 등 완료)\n        Submitted         // 썰매 적재 완료 (상호작용 불가)\n    }\n\n    // 현재 상태에서 이 아이템을 받을 수 있는지 인터페이스 계약으로 판단\n    public bool CanReceiveItem(GameObject item)\n    {\n        var identifier = item.GetComponent<BoxItemIdentifier>();\n        if (identifier == null) return false;\n\n        if (identifier.ItemType == BoxItemType.WrappingPaper)\n            return CanWrap && (identifier.wrappingGroup == allowedWrappingGroup);\n        else if (identifier.ItemType == BoxItemType.Ribbon)\n            return CanFinish;\n        else if (identifier.ItemType == BoxItemType.Box)\n            return false;\n\n        return CanInsertGift;\n    }\n}"
+            before: "// 모델 인스턴스 스케일을 강제로 1 — 프리팹 원본 크기 무시\ninstance.transform.localScale = Vector3.one;\n\n// 재활성화될 때마다 무조건 다시 생성\nif (visualTemplate != null) ApplyTemplate();",
+            code: "// 프리팹 원본 스케일 유지 — 상자 크기가 안 튐\ninstance.transform.localScale = prefab.transform.localScale;\n\n// 이미 만들어진 모델이 있으면 재생성 안 함\nif (visualTemplate != null && openedBox == null) ApplyTemplate();\n\n// InsertGift — 아이템 타입 × 현재 상태가 맞을 때만 전이\nif (id.ItemType == BoxItemType.WrappingPaper && state == ClosedWithGift\n    && id.wrappingGroup == allowedWrappingGroup)   { SetWrappedDesign(id.designIndex); }\nelse if (id.ItemType == BoxItemType.Ribbon && state == Wrapped)  { Finish(); }\nelse if (state == EmptyOpened)  { containedItemType = id.ItemType; SetState(ClosedWithGift); }"
           }
         }
       ]
@@ -194,23 +218,23 @@ export const portfolioData = {
       period: "2026.02.16 ~ 2026.04.03",
       teamSize: "6인",
       tech: ["Unity WebGL", "C#", "FSM", "Animator", "Coroutine"],
-      role: "Unity 인게임 플레이 개발 (단독)",
+      role: "Unity 인게임 플레이 단독 개발 (플레이어·스폰·퀴즈 연동·애니메이션)",
       description: "Unity 2D 러너 금융 학습 게임",
-      impactLine: "플레이어·스폰·애니메이션·퀴즈 연동까지 인게임 전체를 단독 구현하고, 상태머신·속도 동기화·스폰 밸런싱으로 러너 감각을 완성해 핀테크 트랙 우수상 수상",
+      impactLine: "게임 속도를 값 하나(globalSpeed)로 통제해 정지·감속·난이도를 한 곳에서 다루고, 코인·장애물 스포너가 서로 양보하게 만들어 러너 감각을 완성 — 핀테크 트랙 우수상 수상",
       award: "우수상",
       detailedDescription: "지구에 불시착한 외계인 E.T.가 1980·2000·2020년대 대한민국 경제 격변기를 달리며 시대별 금융 상식을 배우는 2D 러너 게임입니다. 달리는 중 등장하는 속보 퀴즈를 맞히면 무적 방어막을 얻고, 코인을 모으며 700m 결승선에 도달하면 클리어됩니다. SSAFY 특화 프로젝트 핀테크 트랙 우수상 수상작입니다.",
       image: "/jabonju.png",
       video: "/zabonzooET/gameplay.mp4",
       github: "https://github.com/kkaemong/zabonzooET",
       keyResult: [
-        "player.cs·GameManager.cs·QuizManager.cs와 모든 스포너를 직접 작성하고 3개 시대 애니메이터를 제작 — 사용자에게 보이는 인게임 플레이 전체를 단독 구현",
-        "'장애물이 겹쳐 어지럽다'는 플레이테스트 피드백을 OverlapBox 스폰 가드 + 거리 기반 밀도 커브로 해결, 핀테크 트랙 우수상 수상"
+        "게임의 '속도감'을 static globalSpeed 값 하나로 모으고, 배경·코인·장애물·캐릭터 애니메이션 배속이 전부 이 값을 따르게 설계 — 퀴즈 정지도, 완주 시 시네마틱 감속도, 난이도 곡선도 이 한 값만 조절하면 됨",
+        "'달리는 화면이 산만하다'는 피드백을, 코인·장애물 스포너가 static 플래그로 서로의 상태를 알고 겹치지 않게 양보하는 방식으로 해결 (+ 코인은 점프 사거리 안 높이로만 스폰)"
       ],
       troubleshooting: [
         {
-          title: "거리 기반 퀴즈 트리거 → 게임 전체 정지 & 정답 시 방어막",
-          problem: "이동 거리에 맞춰 속보 퀴즈를 띄우고, 퀴즈를 푸는 동안 게임을 멈춰야 했습니다. 그런데 배경·코인·장애물·플레이어가 각자 속도를 관리하다 보니 정지시켜도 배경만 멈추고 캐릭터는 계속 달리는 식으로 어긋났습니다.",
-          solution: "static globalSpeed 하나로 모든 스크롤을 통제하는 구조를 만들고, currentDifficultySpeed를 프레임마다 올려 난이도 곡선을 잡았습니다. distanceTraveled가 목표 거리에 닿으면 퀴즈 병사를 스폰하고 QuizManager.ShowQuiz()를 호출하며, 이때 globalSpeed와 캐릭터 Animator.speed를 함께 0으로 묶어 화면 전체를 한 번에 정지시켰습니다. 정답을 맞히면 TriggerQuizInvincibility로 일정 시간 무적 방어막을 부여하고 게임을 재개했습니다.",
+          title: "게임 전체 속도를 값 하나(globalSpeed)로 — 퀴즈 정지도 이 값을 0으로",
+          problem: "이동 거리에 맞춰 속보 퀴즈를 띄우고, 퀴즈를 푸는 동안 게임을 멈춰야 했습니다. 그런데 배경·코인·장애물·플레이어가 각자 속도를 관리하다 보니 정지시켜도 배경만 멈추고 캐릭터는 계속 달리는 식으로 어긋났고, 퀴즈 팝업이 갑자기 튀어나오는 것도 러닝 흐름을 끊었습니다.",
+          solution: "static globalSpeed 하나로 모든 스크롤을 통제하는 구조를 만들고, currentDifficultySpeed를 프레임마다 올려 난이도 곡선을 잡았습니다. 퀴즈는 팝업을 바로 띄우지 않고 화면 밖에서 병사를 스폰해 '달려오는 걸 보고' 부딪히면 시작되게 바꿨고(예외 시 팝업 폴백), 시작 순간 globalSpeed와 캐릭터 Animator.speed를 함께 0으로 묶어 화면 전체를 한 번에 정지시켰습니다. 정답을 맞히면 TriggerQuizInvincibility로 일정 시간 무적 방어막을 부여하고 게임을 재개했습니다.",
           images: [
             { src: "/zabonzooET/quiz.mp4", caption: "퀴즈 병사 만남 → 팝업 + 게임 전체 정지 → 정답 시 방어막(무적)" }
           ],
@@ -221,22 +245,33 @@ export const portfolioData = {
           }
         },
         {
-          title: "다중 점프 애니메이션 꼬임을 정수 상태값으로 해결 + 속도 비례 발소리 Pitch",
-          problem: "2단 점프 시 Trigger가 중첩돼 점프·착지 애니메이션이 꼬였습니다. 또 주행 속도가 빨라져도 발소리 템포가 그대로여서 속도감이 밋밋하다는 피드백이 있었습니다.",
-          solution: "Trigger 대신 SetInteger(\"state\", n)으로 0 달리기 / 1 1단점프 / 2 착지 / 3 2단점프 / 4 사망을 명확히 매핑해 상태 충돌을 원천 차단했습니다. 플레이어·적·장애물·코인의 애니메이션 클립과 Animator 컨트롤러는 3개 시대에 걸쳐 직접 제작해 player.cs에서 일괄 제어했고, Update에서 speedRatio = globalSpeed / 5f로 발소리 Pitch를 실시간 조절했습니다. 피격 시엔 blink 코루틴 + CameraShake + 파티클로 타격 피드백을 줬습니다.",
+          title: "1·2단 점프가 같은 모션 + 착지 코루틴이 점프 애니메이션을 덮어쓰는 버그",
+          problem: "점프 로직을 처음 짰을 때는 몇 단 점프든 Animator state를 1로만 바꿔서 더블 점프가 눈에 티가 안 났고, 착지 코루틴(PlayLandingAnimation)이 0.2초 뒤 무조건 state를 0으로 되돌려서 — 착지 모션이 도는 도중 다시 점프하면 살아남은 코루틴이 점프 모션을 덮어썼습니다.",
+          solution: "1단·2단을 state 1·3으로 분리하고 점프 힘도 14f / 10f로 나눴습니다(2단은 약하게 — 공중 컨트롤 여지). 착지 코루틴은 Coroutine 핸들로 들고 있다가 새 점프가 시작되면 StopCoroutine으로 취소하고, 코루틴 끝에서도 jumpCount == 0(정말 땅에 있을 때)만 달리기로 복귀하게 가드했습니다. 바닥 감지도 Raycast → RaycastAll로 바꿔 코인·장애물 콜라이더에 가려 Ground를 놓치는 경우를 없앴습니다. 애니메이션 클립과 Animator 컨트롤러는 3개 시대에 걸쳐 직접 제작해 player.cs에서 일괄 제어했고, 피격 시엔 blink 코루틴 + CameraShake로 타격 피드백을 줬습니다.",
           images: [
             { src: "/zabonzooET/doublejump.mp4", caption: "1단 → 2단 점프 → 착지, 피격 시 blink + 카메라 흔들림", gain: 1.4 }
           ],
           codeSnippet: {
             filename: "player.cs",
             language: "csharp",
-            code: "// 달리는 속도에 비례해 발소리 Pitch 실시간 조절 (기본속도 5f 기준)\nfloat speedRatio = GameManager.globalSpeed / 5f;\nrunSource.pitch = speedRatio * runSoundSpeedMultiplier;\n\n// Trigger 대신 정수 상태값 — 중첩돼도 마지막 값만 유효\nvoid Jump()\n{\n    float force = (jumpCount == 0) ? firstJumpForce : secondJumpForce;\n    rb.linearVelocity = new Vector2(rb.linearVelocity.x, force);\n    jumpCount++;\n\n    if (jumpCount == 1)      anim.SetInteger(\"state\", 1);  // 1단 점프\n    else if (jumpCount == 2) anim.SetInteger(\"state\", 3);  // 2단 점프\n}\n\nIEnumerator PlayLandingAnimation()\n{\n    anim.SetInteger(\"state\", 2);              // 착지\n    yield return new WaitForSeconds(0.2f);\n    if (jumpCount == 0) anim.SetInteger(\"state\", 0);  // 달리기로 복귀\n}"
+            before: "void Jump()\n{\n    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);  // 1·2단 같은 힘\n    jumpCount++;\n    anim.SetInteger(\"state\", 1);          // 몇 단이든 무조건 1 — 더블 점프가 안 보임\n}\n\nIEnumerator PlayLandingAnimation()\n{\n    anim.SetInteger(\"state\", 2);\n    yield return new WaitForSeconds(0.2f);\n    anim.SetInteger(\"state\", 0);          // 무조건 복귀 — 착지 중 재점프하면 점프 모션을 덮어씀\n}",
+            code: "private Coroutine landingCoroutine;\n\nvoid Jump()\n{\n    float force = (jumpCount == 0) ? firstJumpForce : secondJumpForce;  // 2단은 더 약하게\n    rb.linearVelocity = new Vector2(rb.linearVelocity.x, force);\n    jumpCount++;\n\n    if (landingCoroutine != null) { StopCoroutine(landingCoroutine); landingCoroutine = null; }\n\n    if (jumpCount == 1)      anim.SetInteger(\"state\", 1);  // 1단 점프\n    else if (jumpCount == 2) anim.SetInteger(\"state\", 3);  // 2단 점프\n}\n\nIEnumerator PlayLandingAnimation()\n{\n    anim.SetInteger(\"state\", 2);\n    yield return new WaitForSeconds(0.2f);\n    if (jumpCount == 0) anim.SetInteger(\"state\", 0);  // 아직 공중이면 복귀 안 함\n}"
           }
         },
         {
-          title: "완주 시 게임을 뚝 끊지 않고 '브레이크 밟듯' 감속 (SlowDownAndClearGame)",
-          problem: "700m 완주 순간 globalSpeed를 0으로 만들면 화면이 뚝 멈춰 몰입이 확 깨졌습니다. 초기 빌드에선 장애물·코인이 겹쳐 스폰돼 산만하다는 피드백도 있었습니다.",
-          solution: "완주 시 SlowDownAndClearGame 코루틴이 globalSpeed와 캐릭터 Animator.speed를 1.5초간 함께 Mathf.Lerp로 0에 수렴시켜 자동차 브레이크 같은 감속 연출을 만들었습니다. 감속 시작 시 스포너를 미리 꺼 새 장애물이 안 튀어나오게 했고, 평상시 스폰도 Physics2D.OverlapBox로 코인·장애물 겹침을 막고 거리 기반으로 밀도를 조절했습니다.",
+          title: "러너 화면 가독성 — 스폰 우선순위(코인은 양보, 퀴즈 병사는 자리를 밀어냄)",
+          problem: "코인·장애물·퀴즈 병사가 각자 랜덤 위치·시점에 스폰되다 보니 서로 겹쳐 나와 화면이 어지럽고, 코인이 점프로 닿을 수 없는 높이에 뜨기도 했습니다. 그렇다고 무조건 겹치면 안 뽑으면, 게임 진행에 필수인 퀴즈 병사가 안 나오는 경우가 생겼습니다.",
+          solution: "스폰 우선순위를 정했습니다. 코인은 쿠키런식 버스트로 묶고 점프 사거리(maxYLimit) 안 높이로만 스폰하며, 장애물이 방금(1.5초 내) 나왔으면 코인 타이머를 멈추고 OverlapBox로 겹침을 검사해 겹치면 건너뜁니다. 반대로 퀴즈 병사는 필수라서, 자리에 코인·장애물이 있으면 그걸 Destroy하고 자리를 확보합니다. 장애물 간격은 목표 거리에 다가갈수록 Mathf.Lerp로 촘촘해지는 밀도 커브를 적용했습니다.",
+          codeSnippet: {
+            filename: "SoldierSpawner.cs / CoinSpawner.cs",
+            language: "csharp",
+            code: "// 코인: 겹치면 양보 (건너뜀)\nif (Time.time - spawner.lastObstacleSpawnTime < 1.5f) return;\nif (Physics2D.OverlapBox(pos, checkBoxSize, 0f, avoidLayer)) return;\nSpawnCoinSequence();   // 버스트 — 점프 사거리(maxYLimit) 안 높이로만\n\n// 퀴즈 병사: 필수라서 자리를 밀어냄\npublic void SpawnQuizSoldier()\n{\n    foreach (var h in Physics2D.OverlapBoxAll(pos, checkBoxSize, 0f))\n    {\n        var n = h.gameObject.name.ToLower();\n        if (n.Contains(\"coin\") || n.Contains(\"disturb\") || n.Contains(\"obstacle\"))\n            Destroy(h.gameObject);   // 자리 확보 — 퀴즈는 무조건 나와야 함\n    }\n    Instantiate(soldierPrefabs[Random.Range(0, soldierPrefabs.Length)], pos, Quaternion.identity);\n}"
+          }
+        },
+        {
+          title: "완주 감속 — 배경과 다리 애니메이션을 같은 곡선으로 함께 늦춤",
+          problem: "700m 완주 순간 globalSpeed를 0으로 만들면 화면이 뚝 멈춰 몰입이 확 깨졌습니다.",
+          solution: "완주 시 SlowDownAndClearGame 코루틴이 globalSpeed와 캐릭터 Animator.speed를 1.5초간 함께 Mathf.Lerp로 0에 수렴시켜 자동차 브레이크 같은 감속 연출을 만들었습니다. 감속 시작 시 모든 스포너를 미리 꺼 새 장애물이 안 튀어나오게 했습니다.",
           images: [
             { src: "/zabonzooET/ending.mp4", caption: "700m 완주 → globalSpeed·캐릭터 애니메이션을 함께 Lerp 감속" }
           ],
@@ -262,21 +297,32 @@ export const portfolioData = {
       image: "/gaesorlay.png",
       github: "https://github.com/gaesorelay/frontend",
       keyResult: [
-        "Figma로 전체 화면 기본 디자인을 잡고, 방 만들기·인트로·로비·채팅 UI와 카드 셔플 → 심사위원 셔플 → 결과 발표 연출 페이즈를 직접 컴포넌트로 구현 (JudgeResultPhase 900줄, JudgeShufflePhase 900줄, CardShufflePhase 500줄)",
-        "결과 발표를 introPhase 상태값으로 7단계 전개하고, transform 기반 키프레임(elastic-zoomies·slide-in·stamp-slam)을 요소마다 다른 delay로 재생해 관객 점수 → 심사평 → 합산 → 승자 순으로 시선 유도"
+        "Figma로 전체 화면 기본 디자인을 잡고, 인트로·방 만들기·로비·채팅과 카드 리빌 → 심사위원 셔플 → 결과 발표로 이어지는 연출 페이즈를 직접 디자인하고 컴포넌트로 구현",
+        "결과 발표를 introPhase 상태값으로 단계화하고, 카드 리빌 씬은 서버 데이터가 없어도 랜덤 폴백으로 돌아가게 설계 — 데이터 유무와 무관하게 연출이 끊기지 않음"
       ],
       troubleshooting: [
         {
-          title: "결과 발표 화면을 introPhase 상태값으로 7단계 전개 (JudgeResultPhase)",
-          problem: "게임 종료 후 팀별 관객 점수·AI 심사평·1차 합산·최종 승자를 한 화면에 쏟아내니 밋밋하고, 무엇을 먼저 봐야 할지 헷갈렸습니다.",
-          solution: "900줄 컴포넌트에서 introPhase useState를 1~7로 두고 setTimeout으로 단계를 전개했습니다. A팀 관객 점수(2) → B팀 관객 점수(3) → 1차 합산(4) → A팀 AI 심사(5) → B팀 AI 심사(6) → 최종 합산·승자(7). 각 단계에서 점수 카운트업과 요소 등장을 트리거하고, 등장 애니메이션은 transform: scale()/translateX() 키프레임에 요소 인덱스별 animation-delay를 줘 한꺼번에 몰리지 않게 순차 재생했습니다.",
+          title: "정보를 한꺼번에 쏟지 않고 — 상태값으로 단계를 나눠 시선 유도",
+          problem: "게임 종료 후 관객 점수·AI 심사평·합산·승자를 한 화면에 다 보여주니 밋밋하고, 무엇을 먼저 봐야 할지 헷갈렸습니다. 처음엔 3단계로만 끊고 마지막에 점수·승자를 한꺼번에 세팅했는데도 여전히 정보가 몰려 보였고, setTimeout을 정리하지 않아 도중에 화면을 벗어나면 콜백이 남았습니다.",
+          solution: "introPhase를 7단계로 잘게 나눠 관객 점수(A/B) → 1차 합산 게이지 → AI 심사(A/B) → 최종 합산·승자 순으로 setTimeout 전개하고, 타이머는 배열로 묶어 언마운트 시 전부 clearTimeout 했습니다. 등장 애니메이션은 transform: scale()/translateX() 키프레임에 요소 인덱스별 animation-delay를 줘 한꺼번에 몰리지 않고 순차로 나타나게 했고, 배경 파티클 배열은 slice(-20)으로 상한을 둬 무한히 쌓이지 않게 했습니다.",
           images: [
             { src: "/gaesorelay/judge-result.gif", caption: "관객 점수 → AI 심사위원 → 최종 합산 순차 발표" }
           ],
           codeSnippet: {
             filename: "JudgeResultPhase.tsx",
             language: "typescript",
-            code: "const [introPhase, setIntroPhase] = useState(1);\n\nuseEffect(() => {\n  // 발표를 7단계로 전개 — 각 단계에서 점수 카운트업·요소 등장을 트리거\n  const timers = [\n    setTimeout(() => setIntroPhase(2), 0),      // A팀 관객 점수\n    setTimeout(() => setIntroPhase(3), 5000),   // B팀 관객 점수\n    setTimeout(() => setIntroPhase(4), 10000),  // 1차 합산\n    setTimeout(() => setIntroPhase(5), 16000),  // A팀 AI 심사\n    setTimeout(() => setIntroPhase(6), 27000),  // B팀 AI 심사\n    setTimeout(() => setIntroPhase(7), 38000),  // 최종 합산 · 승자\n  ];\n  return () => timers.forEach(clearTimeout);\n}, []);\n\n// 등장 애니메이션은 transform 키프레임 + 인덱스별 delay로 순차화\n{judges.map((j, i) => (\n  <img key={j.id} src={j.profile}\n       style={{ animation: `elastic-zoomies 0.5s ${i * 0.1}s both` }} />\n))}"
+            before: "// 초기 — 3단계, 마지막에 점수·승자를 한꺼번에 세팅, 타이머 정리 없음\nuseEffect(() => {\n  setTimeout(() => setIntroPhase(2), 3000);\n  setTimeout(() => setIntroPhase(3), 8500);\n  setTimeout(() => {\n    setIntroPhase(4);\n    setScoreA(...); setScoreB(...); setFinalMent(...);   // 관객·AI·합산·승자 동시\n  }, 14000);\n}, []);",
+            code: "// 개선 — 7단계로 분리 + 언마운트 시 타이머 전부 정리\nuseEffect(() => {\n  const timers = [\n    setTimeout(() => setIntroPhase(2), 2000),   // 관객 점수 A\n    setTimeout(() => setIntroPhase(3), 6000),   // 관객 점수 B\n    setTimeout(() => setIntroPhase(4), 10000),  // 1차 합산 게이지\n    setTimeout(() => setIntroPhase(5), 17000),  // AI 심사 A\n    setTimeout(() => setIntroPhase(6), 22000),  // AI 심사 B\n    setTimeout(() => setIntroPhase(7), 27000),  // 최종 합산 게이지\n    setTimeout(() => { setIntroPhase(8); pickWinnerMent(); }, 34000),\n  ];\n  return () => timers.forEach(clearTimeout);   // 중간 이탈 시 콜백 누수 방지\n}, [totalA, totalB]);\n\n// 요소 인덱스별 delay로 한꺼번에 안 몰리게 순차 등장\n{judges.map((j, i) => (\n  <img key={j.id} src={j.profile}\n       style={{ animation: `elastic-zoomies 0.5s ${i * 0.1}s both` }} />\n))}"
+          }
+        },
+        {
+          title: "카드 리빌 씬 — 6장은 진짜, 34장은 눈속임, 서버 데이터 없으면 랜덤 폴백",
+          problem: "40장 카드가 섞였다가 6장이 뽑히는 연출을 만들어야 했는데, 뽑히는 6장만 실제 라운드 데이터(카드·심사위원)와 이어져야 하고, 서버 응답이 늦거나 비어도 씬이 멈추면 안 됐습니다.",
+          solution: "useMemo로 40장 카드 데이터를 한 번만 만들되 앞 6장만 서버의 cardIds·judges와 매핑하고 나머지 34장은 더미로 채웠습니다. 서버 judges가 6명 미만이면 Set으로 중복 없는 랜덤 강아지 ID를 채워 넣어, 데이터가 없어도 셔플 연출은 그대로 돌아가게 했습니다. scatter 좌표(랜덤 위치·회전)도 useMemo 안에서 한 번만 계산해 리렌더마다 카드가 다시 흩어지지 않게 했습니다.",
+          codeSnippet: {
+            filename: "CardShufflePhase.tsx",
+            language: "typescript",
+            code: "const cardsData = useMemo(() => {\n  const targetCardIds = roundData?.cardIds ?? [];\n\n  // 서버 심사위원이 6명 미만이면 중복 없는 랜덤 ID로 채움 (씬이 멈추지 않게)\n  let targetJudgeIds: number[] = [];\n  if (roundData?.judges && roundData.judges.length >= TARGET_COUNT) {\n    targetJudgeIds = roundData.judges.map(j => j.id);\n  } else {\n    const ids = new Set<number>();\n    while (ids.size < TARGET_COUNT) ids.add(randomAvatarId());\n    targetJudgeIds = [...ids];\n  }\n\n  return Array.from({ length: TOTAL_CARDS }).map((_, i) => ({\n    isTarget: i < TARGET_COUNT,   // 앞 6장만 진짜\n    front: getCardImage(targetCardIds[i % TARGET_COUNT]),\n    back:  getAvatarSrc(i < TARGET_COUNT ? targetJudgeIds[i] : randomAvatarId()),\n    scatterX: (Math.random() - 0.5) * 1400,   // 한 번만 계산 — 리렌더에도 안 흩어짐\n    scatterY: (Math.random() - 0.5) * 900,\n  }));\n}, [roundData]);"
           }
         },
         {
@@ -289,7 +335,7 @@ export const portfolioData = {
           ]
         },
         {
-          title: "Zustand 전역 오디오 스토어 + 라우트 인지 BGMPlayer",
+          title: "컴포넌트마다 Audio 객체 만들지 않고 — 전역 스토어 하나 + 라우트 인지",
           problem: "메인·로비·프로필 등 페이지마다 BGM·효과음을 넣었는데, React SPA라 라우트가 바뀔 때마다 Audio 객체가 새로 생성돼 소리가 겹치고, 브라우저 자동재생 정책 때문에 재생이 막혔습니다.",
           solution: "Zustand + sessionStorage로 useAudioStore(뮤트 상태 유지)를 만들고, 화면에 안 보이는 BGMPlayer 컴포넌트가 단일 Audio 인스턴스를 관리하도록 했습니다. useLocation으로 경로를 감지해 /gameroom 진입 시 공용 BGM을 멈추고 나오면 재개하며, 최초 클릭 이벤트로 자동재생 정책을 우회했습니다.",
           codeSnippet: {
