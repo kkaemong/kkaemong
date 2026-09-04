@@ -377,7 +377,7 @@ export const portfolioData = {
     email: "junemay31@naver.com",
     blog: "https://velog.io/@junemay31/posts",
     github: "github.com/kkaemong",
-    message: "플레이어가 몰입할 수 있는 게임을 함께 만들어갈 팀을 찾고 있습니다."
+    message: "Unity 게임 클라이언트 포지션으로 합류할 팀을 찾고 있습니다. 편하게 연락 주세요."
   },
   certifications: []
 };

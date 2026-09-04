@@ -132,7 +132,7 @@ export default function Hero() {
               >
                 <img
                   src="/profile.jpg"
-                  alt="Jin Jun-yeong"
+                  alt="Jiin June Young"
                   className="w-full h-full object-cover filter contrast-[1.05] transition-transform duration-1000 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent pointer-events-none" />

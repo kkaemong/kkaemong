@@ -34,7 +34,7 @@ export default function Footer() {
           {/* Subtle closing message */}
           <div className="space-y-2.5">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight relative inline-block">
-              Let's Build Something Great.
+              Contact
               <img src="/decorations/big_heart.png" alt="Big Heart" className="absolute -top-4 -right-8 w-8 h-auto pointer-events-none opacity-85" />
             </h2>
             <p className="text-slate-600 font-normal text-base sm:text-lg leading-relaxed break-keep max-w-xl mx-auto">
@@ -82,7 +82,7 @@ export default function Footer() {
           {/* Copyright */}
           <div className="pt-10 w-full flex justify-center">
             <p className="text-sm font-bold uppercase tracking-widest text-slate-400">
-              © 2026 Jin Junyoung. All rights reserved.
+              © 2026 Jiin June Young
             </p>
           </div>
         </motion.div>

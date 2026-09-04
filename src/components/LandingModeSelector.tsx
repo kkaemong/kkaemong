@@ -177,7 +177,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
       {/* ================= CENTER SKETCHBOOK TITLE & OPTIONS ================= */}
       <main className="w-full max-w-5xl mx-auto my-auto py-2 z-20 flex flex-col items-center text-center sketch-font">
         
-        {/* Main Title: JIN JUNE YOUNG PORTFOLIO */}
+        {/* Main Title: JIIN JUNE YOUNG PORTFOLIO */}
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -187,7 +187,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
           <div className="relative my-2 py-4 px-6 sm:px-10 max-w-full flex items-center justify-center">
             {/* Main Black Text */}
             <h1 className="text-slate-900 text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold sketch-font tracking-wider whitespace-nowrap drop-shadow-[2px_2px_0px_rgba(203,213,225,0.8)] py-1">
-              JIN JUNE YOUNG PORTFOLIO
+              JIIN JUNE YOUNG PORTFOLIO
             </h1>
 
             {/* Heart on Top Left */}
@@ -310,7 +310,7 @@ export default function LandingModeSelector({ onSelectMode }: LandingModeSelecto
       {/* Bottom Footer */}
       <footer className="w-full text-center text-xs text-slate-400 py-2 z-20 sketch-font flex items-center justify-center gap-2">
         <img src="/decorations/star.png" alt="Star" draggable={false} className="w-3.5 h-auto opacity-70" />
-        <span>© 2026 JIN JUNE YOUNG PORTFOLIO</span>
+        <span>© 2026 JIIN JUNE YOUNG PORTFOLIO</span>
         <img src="/decorations/star.png" alt="Star" draggable={false} className="w-3.5 h-auto opacity-70" />
       </footer>
 
