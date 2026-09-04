@@ -216,7 +216,7 @@ export const portfolioData = {
       title: "자본주 E.T.",
       type: "Unity 2D 러너 금융 게임",
       period: "2026.02.16 ~ 2026.04.03",
-      teamSize: "6인",
+      teamSize: "4인",
       tech: ["Unity WebGL", "C#", "FSM", "Animator", "Coroutine"],
       role: "Unity 인게임 플레이 단독 개발 (플레이어·스폰·퀴즈 연동·애니메이션)",
       description: "Unity 2D 러너 금융 학습 게임",
