@@ -83,7 +83,7 @@ export const portfolioData = {
         name: "C#",
         tag: "주력",
         icon: "csharp",
-        description: "Unity 핵심 스크립팅 언어. FSM 상태 관리, 인터페이스 기반 오브젝트 상호작용 설계, 애니메이터 상태 제어를 직접 구현합니다."
+        description: "Unity 핵심 스크립팅 언어. 상자 상태머신(FSM), 팀 공용 인터페이스에 맞춘 오브젝트 상호작용, 애니메이터 상태 제어를 구현했습니다."
       },
       {
         name: "Unity",
@@ -151,11 +151,11 @@ export const portfolioData = {
       tech: ["Unity", "C#", "FSM", "Interface", "ScriptableObject", "Git"],
       role: "인게임 상호작용 오브젝트 개발 (상자·포장·어항·썰매·디스펜서)",
       description: "Unity 기반 포장 액션 캐주얼 게임",
-      impactLine: "임포트 에셋을 규칙과 에디터 툴로 규격화하고, '받을 수 있는 아이템'을 인터페이스 계약으로 통일해 상자·어항·썰매를 한 패턴으로 다룬 포장 액션 게임",
+      impactLine: "Tripo로 생성한 박스 에셋을 pivot·크기 기준과 UV 생성 에디터 툴로 규격화하고, 팀 공용 아이템 수령 인터페이스에 맞춰 상자·어항·썰매의 수령 규칙을 구현한 포장 액션 게임",
       detailedDescription: "산타와 엘프가 협력해 정해진 시간 안에 선물 주문을 처리하는 Windows 스탠드얼론 포장 액션 캐주얼 게임입니다. 상자에 선물을 담고 규격에 맞는 포장지와 리본으로 포장한 뒤 썰매에 적재해 배송하며, 일반·할로윈·케이크 등 테마별 상자와 어항 같은 특수 용기, 훼방 놓는 쥐 등 다양한 오브젝트가 등장합니다.",
       image: "/Gifted.png",
       downloadUrl: "https://drive.google.com/file/d/1HJR-3l0KuqCQ_fLprLA6EK1T_0ZcS3cR/view",
-      deploymentContext: "삼성 임직원 대상 실제 배포 후 받은 피드백입니다.",
+      deploymentContext: "완성 전 삼성 임직원에게 사전 배포한 빌드에 대해 받은 피드백입니다.",
       deploymentFeedback: [
         { name: "박OO", comment: "아기자기한 크리스마스 디자인의 게임으로 가족과도 함께하고 싶어지는 느낌입니다. 약간의 물리 현상 버그만 개선하면 플레이 하는 것에 전혀 문제가 없을 정도로 완성도가 높습니다." },
         { name: "김O", comment: "처음에는 무슨 게임이지? 하면서 시작하지만 점점 몰입할 수 있었습니다. 다양한 선물 구성, 스테이지, 보상 등이 추가된다면 더 즐겁게 플레이 할 수 있을 것 같습니다." },
@@ -165,8 +165,9 @@ export const portfolioData = {
       keyResult: [
         "썰매 이중 적재·리본 작업대 크기 왜곡·이름 기반 판별 같은 Unity 함정을 플레이테스트에서 하나씩 잡아 수정 — 프레임 타이밍(Destroy), 부모-자식 스케일 상속, 데이터 vs 문자열",
         "상자를 '열림→선물→포장→리본→완성' 상태머신으로 만들고, InsertGift 한 메서드가 아이템 타입 × 현재 상태를 함께 봐 맞는 조합에서만 전이하도록 설계",
-        "6인 팀에서 백엔드와 충돌하지 않게 BoxManager의 GetAllBoxData() 함수 하나만 경계로 노출하고, 임포트 에셋은 부모화 규칙 + UV 생성 에디터 툴로 규격화",
-        "삼성 임직원 대상 실제 배포 후 받은 피드백(해상도별 UI 가림, 조작법 안내 부족)을 반영해 동적 화면 비율 보정과 조작 안내 페이지를 추가로 구현"
+        "Tripo·Meshy에 같은 참고 이미지를 넣어 비교한 뒤 Tripo 결과를 채택하고, 생성된 박스·선물 에셋의 pivot·Z축·크기를 공통 기준에 맞추고 UV가 없는 메시는 UV 생성 에디터 툴로 해결",
+        "삼성 임직원 사전 배포 피드백(초반 단조로움·선물 부족·작은 상자·물리 오류)을 받아, 팀이 스테이지를 7개로 늘리는 동안 어항·케이크 박스 등 오브젝트 추가와 상자 크기 조정, 상자 물리 버그 수정을 담당",
+        "코드는 AI 코딩 도구 Antigravity로 초안을 받아 실행 결과를 보며 수정했고, 원인 분석·구현 방향 결정·검증은 직접 담당"
       ],
       troubleshooting: [
         {
@@ -220,9 +221,9 @@ export const portfolioData = {
           }
         },
         {
-          title: "배포 후 — 모니터마다 화면 비율이 달라 UI가 잘리는 문제",
-          problem: "개발 중엔 항상 같은 해상도로만 테스트해서 몰랐는데, 실제로 배포해서 삼성 임직원분들이 다른 모니터 환경에서 플레이해보니 화면 비율이 개발 기준(16:9)과 다르면 주문서 UI 같은 화면 요소가 위아래·좌우로 잘려서 가려지는 문제가 나왔습니다.",
-          solution: "카메라의 목표 비율과 실제 화면 비율을 매 프레임 비교해, 화면이 더 길쭉하면 위아래 레터박스를, 더 넓으면 좌우 필러박스를 만들도록 Camera.rect를 동적으로 재계산했습니다. 어떤 모니터 비율에서도 목표 비율 영역 안에는 UI가 항상 온전히 들어오도록 만들어, 배포 환경에 따라 화면이 달라지는 문제를 해결했습니다.",
+          title: "배포 빌드 — 모니터마다 화면 비율이 달라 UI가 잘리는 문제",
+          problem: "개발 중엔 항상 같은 해상도로만 테스트해서 몰랐는데, 배포 빌드를 개발 기준(16:9)과 다른 비율의 모니터에서 실행하면 주문서 UI 같은 화면 요소가 위아래·좌우로 잘려서 가려지는 문제가 있었습니다.",
+          solution: "팀원이 만든 해상도 고정 매니저(ScreenFixManager)에 화면 비율 보정을 추가했습니다. 카메라의 목표 비율과 실제 화면 비율을 매 프레임 비교해, 화면이 더 길쭉하면 위아래 레터박스를, 더 넓으면 좌우 필러박스를 만들도록 Camera.rect를 동적으로 재계산해 어떤 모니터 비율에서도 목표 비율 영역 안에 UI가 온전히 들어오게 했습니다.",
           codeSnippet: {
             filename: "ScreenFixManager.cs",
             language: "csharp",
@@ -238,24 +239,24 @@ export const portfolioData = {
       period: "2026.02.16 ~ 2026.04.03",
       teamSize: "4인",
       tech: ["Unity WebGL", "C#", "FSM", "Animator", "Coroutine"],
-      role: "Unity 인게임 플레이 단독 개발 (플레이어·스폰·퀴즈 연동·애니메이션)",
+      role: "Unity 인게임 플레이 개발 (플레이어 점프·애니메이션, 코인·장애물·퀴즈 병사 스폰, 난이도 곡선, 에디터 툴)",
       description: "Unity 2D 러너 금융 학습 게임",
-      impactLine: "게임 속도를 값 하나(globalSpeed)로 통제해 정지·감속·난이도를 한 곳에서 다루고, 코인·장애물 스포너가 서로 양보하게 만들어 러너 감각을 완성 — 핀테크 트랙 우수상 수상",
+      impactLine: "게임 속도를 값 하나(globalSpeed)로 통제해 퀴즈 정지와 난이도 곡선을 한 곳에서 다루고, 코인·장애물 스포너가 서로 양보하게 만들어 러너 화면을 정리 — 팀 핀테크 트랙 우수상",
       award: "우수상",
-      detailedDescription: "지구에 불시착한 외계인 E.T.가 1980·2000·2020년대 대한민국 경제 격변기를 달리며 시대별 금융 상식을 배우는 2D 러너 게임입니다. 달리는 중 등장하는 속보 퀴즈를 맞히면 무적 방어막을 얻고, 코인을 모으며 700m 결승선에 도달하면 클리어됩니다. SSAFY 특화 프로젝트 핀테크 트랙 우수상 수상작입니다.",
+      detailedDescription: "지구에 불시착한 외계인 E.T.가 1980·2000·2020년대 대한민국 경제 격변기를 달리며 시대별 금융 상식을 배우는 2D 러너 게임입니다. 달리는 중 등장하는 속보 퀴즈를 맞히면 무적 방어막을 얻고, 코인을 모으며 700m 결승선에 도달하면 클리어됩니다. SSAFY 특화 프로젝트 핀테크 트랙 우수상 수상작입니다. 저는 인게임 플레이(플레이어 점프·애니메이션, 코인·장애물·퀴즈 병사 스폰, 난이도 곡선, 퀴즈 트리거와 방어막 효과)를 맡았고, 백엔드 API 연동·퀴즈 결과 화면·완주 연출은 팀원이 담당했습니다.",
       image: "/jabonju.png",
       video: "/zabonzooET/gameplay.mp4",
       github: "https://github.com/kkaemong/zabonzooET",
       keyResult: [
-        "게임의 '속도감'을 static globalSpeed 값 하나로 모으고, 배경·코인·장애물·캐릭터 애니메이션 배속이 전부 이 값을 따르게 설계 — 퀴즈 정지도, 완주 시 시네마틱 감속도, 난이도 곡선도 이 한 값만 조절하면 됨",
+        "게임의 '속도감'을 static globalSpeed 값 하나로 모으고 배경·코인·장애물·퀴즈 병사 스크롤이 이 값을 따르게 설계 — 퀴즈 정지(0)와 시간에 따라 오르는 속도 곡선을 이 한 값으로 조절",
         "'달리는 화면이 산만하다'는 피드백을, 코인·장애물 스포너가 static 플래그로 서로의 상태를 알고 겹치지 않게 양보하는 방식으로 해결 (+ 코인은 점프 사거리 안 높이로만 스폰)",
-        "Spring Boot 백엔드와의 통신을 콜백 기반 비동기로 처리 — 판 시작 시 runId 응답을 기다리는 동안만 정지시키고, 실패해도 로컬로 진행되는 폴백을 둬 네트워크 장애가 플레이를 막지 않게 설계"
+        "반복 세팅은 에디터 메뉴로 자동화 — 퀴즈 UI 캔버스 생성(SetupQuizUI)과 퀴즈 병사 컴포넌트 부착·프리팹화·스포너 연결(AutoConfigSoldier)을 메뉴 한 번으로"
       ],
       troubleshooting: [
         {
           title: "게임 전체 속도를 값 하나(globalSpeed)로 — 퀴즈 정지도 이 값을 0으로",
           problem: "이동 거리에 맞춰 속보 퀴즈를 띄우고, 퀴즈를 푸는 동안 게임을 멈춰야 했습니다. 그런데 배경·코인·장애물·플레이어가 각자 속도를 관리하다 보니 정지시켜도 배경만 멈추고 캐릭터는 계속 달리는 식으로 어긋났고, 퀴즈 팝업이 갑자기 튀어나오는 것도 러닝 흐름을 끊었습니다.",
-          solution: "static globalSpeed 하나로 모든 스크롤을 통제하는 구조를 만들고, currentDifficultySpeed를 프레임마다 올려 난이도 곡선을 잡았습니다. 퀴즈는 팝업을 바로 띄우지 않고 화면 밖에서 병사를 스폰해 '달려오는 걸 보고' 부딪히면 시작되게 바꿨고(예외 시 팝업 폴백), 시작 순간 globalSpeed와 캐릭터 Animator.speed를 함께 0으로 묶어 화면 전체를 한 번에 정지시켰습니다. 정답을 맞히면 TriggerQuizInvincibility로 일정 시간 무적 방어막을 부여하고 게임을 재개했습니다.",
+          solution: "static globalSpeed 하나로 모든 스크롤을 통제하는 구조를 만들고, currentDifficultySpeed를 프레임마다 올려 난이도 곡선을 잡았습니다. 퀴즈는 팝업을 바로 띄우지 않고 화면 밖에서 병사를 스폰해 '달려오는 걸 보고' 부딪히면 시작되게 바꿨고(예외 시 팝업 폴백), 시작 순간 globalSpeed와 캐릭터 Animator.speed를 함께 0으로 묶어 화면 전체를 한 번에 정지시켰습니다. 정답 시 적용되는 무적 방어막(TriggerQuizInvincibility: 깜빡임과 쉴드 이펙트)은 제가 구현했고, 퀴즈 출제·채점과 결과 화면은 팀원이 맡았습니다.",
           images: [
             { src: "/zabonzooET/quiz.mp4", caption: "퀴즈 병사 만남 → 팝업 + 게임 전체 정지 → 정답 시 방어막(무적)" }
           ],
@@ -287,29 +288,6 @@ export const portfolioData = {
             filename: "SoldierSpawner.cs / CoinSpawner.cs",
             language: "csharp",
             code: "// 코인: 겹치면 양보 (건너뜀)\nif (Time.time - spawner.lastObstacleSpawnTime < 1.5f) return;\nif (Physics2D.OverlapBox(pos, checkBoxSize, 0f, avoidLayer)) return;\nSpawnCoinSequence();   // 버스트 — 점프 사거리(maxYLimit) 안 높이로만\n\n// 퀴즈 병사: 필수라서 자리를 밀어냄\npublic void SpawnQuizSoldier()\n{\n    foreach (var h in Physics2D.OverlapBoxAll(pos, checkBoxSize, 0f))\n    {\n        var n = h.gameObject.name.ToLower();\n        if (n.Contains(\"coin\") || n.Contains(\"disturb\") || n.Contains(\"obstacle\"))\n            Destroy(h.gameObject);   // 자리 확보 — 퀴즈는 무조건 나와야 함\n    }\n    Instantiate(soldierPrefabs[Random.Range(0, soldierPrefabs.Length)], pos, Quaternion.identity);\n}"
-          }
-        },
-        {
-          title: "완주 감속 — 배경과 다리 애니메이션을 같은 곡선으로 함께 늦춤",
-          problem: "700m 완주 순간 globalSpeed를 0으로 만들면 화면이 뚝 멈춰 몰입이 확 깨졌습니다.",
-          solution: "완주 시 SlowDownAndClearGame 코루틴이 globalSpeed와 캐릭터 Animator.speed를 1.5초간 함께 Mathf.Lerp로 0에 수렴시켜 자동차 브레이크 같은 감속 연출을 만들었습니다. 감속 시작 시 모든 스포너를 미리 꺼 새 장애물이 안 튀어나오게 했습니다.",
-          images: [
-            { src: "/zabonzooET/ending.mp4", caption: "700m 완주 → globalSpeed·캐릭터 애니메이션을 함께 Lerp 감속" }
-          ],
-          codeSnippet: {
-            filename: "GameManager.cs",
-            language: "csharp",
-            code: "IEnumerator SlowDownAndClearGame()\n{\n    float duration = 1.5f;\n    float startSpeed = globalSpeed;\n    float elapsed = 0f;\n\n    Animator pAnim = FindObjectOfType<player>()?.GetComponent<Animator>();\n\n    // 감속 중 새 장애물이 튀어나오지 않게 스포너를 미리 끔\n    foreach (GameObject o in FindObjectsOfType<GameObject>())\n        if (o.name.ToLower().Contains(\"spawn\")) o.SetActive(false);\n\n    while (elapsed < duration)\n    {\n        elapsed += Time.deltaTime;\n        float t = elapsed / duration;\n\n        // 배경 스크롤과 다리 애니메이션 배속을 함께 선형 감속\n        globalSpeed = Mathf.Lerp(startSpeed, 0f, t);\n        if (pAnim != null) pAnim.speed = Mathf.Lerp(1f, 0f, t);\n\n        yield return null;\n    }\n\n    globalSpeed = 0f;\n    isGameOver = true;\n    ShowVictoryPanel();\n}"
-          }
-        },
-        {
-          title: "서버 응답을 기다리는 동안 게임이 멈추지 않게 — 콜백 기반 비동기 네트워크 처리",
-          problem: "게임 시작 시 Spring Boot 백엔드에서 판(run) 고유 ID를 받아와야 이후 퀴즈 채점·결과 제출 API가 정상 동작하는데, 응답이 오기 전에 캐릭터가 먼저 달리면 API 호출 순서가 꼬입니다. 반대로 응답을 무한정 기다리면 네트워크가 불안정할 때 게임이 아예 시작을 못 하고 멈춰버립니다.",
-          solution: "API 요청 직후 IsGamePaused를 true로 걸어 응답 전까지 스크롤 자체를 멈추고, UnityWebRequest 콜백을 성공/실패로 나눠 처리했습니다 — 성공하면 runId를 저장하고 재개, 실패해도 로컬 동작으로 재개해 네트워크 장애가 플레이를 막지 않게 폴백을 뒀습니다. 반대로 게임 종료 시 결과 제출(SendGameResult)은 승리/패배 화면을 먼저 띄우고 응답은 백그라운드 콜백으로 받아, 플레이어가 네트워크 왕복을 기다리며 빈 화면을 보지 않게 했습니다.",
-          codeSnippet: {
-            filename: "GameManager.cs",
-            language: "csharp",
-            code: "// 게임 시작 — 응답 전까지 정지, 성공/실패 모두 재개(끊겨도 로컬로 진행)\nIsGamePaused = true;  // API 응답이 올 때까지 잠시 정지\n\nif (APIManager.Instance != null)\n{\n    APIManager.Instance.StartGame(currentStageCode, (res) => {\n        currentRunId = res.runId;\n        IsGamePaused = false;   // 받아오면 출발\n    }, (err) => {\n        IsGamePaused = false;   // 실패해도 로컬 동작으로 출발 — 네트워크 장애가 플레이를 막지 않게\n    });\n}\nelse\n{\n    IsGamePaused = false;\n}\n\n// 게임 종료 — 결과 제출 응답을 기다리지 않고 화면부터 보여줌 (백그라운드 비동기)\npublic void ShowVictoryPanel()\n{\n    if (APIManager.Instance != null && currentRunId != -1)\n    {\n        APIManager.Instance.SendGameResult(\n            currentRunId, coinCount, Mathf.FloorToInt(distanceTraveled), hp, true,\n            ResolveCurrentStageCode(), \"NONE\",\n            FinanceFlowContext.ApplyRunResult,      // 성공 콜백\n            FinanceFlowContext.SetRunResultError);  // 실패 콜백\n    }\n\n    victoryPanel.SetActive(true);   // 응답 기다리지 않고 바로 표시\n    StartCoroutine(CountUpCoins(victoryCoinText, coinCount));\n}"
           }
         }
       ]
