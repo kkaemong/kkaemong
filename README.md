@@ -74,11 +74,6 @@
 | **[개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)** | **[SSAIET](https://github.com/kkaemong/Final-PJT)** |
 | React 실시간 웹소켓 게임 · Front-End · UI 디자인 · 결과 발표 연출 | Django 웹 서비스 · REST API · JWT 인증 |
 | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white) |
-| | |
-| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/AIchallange.png?v=1" width="100%" alt="AI Challenge cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/kshield.png?v=1" width="100%" alt="Web Hacking cover" /> |
-| **[SSAFY AI Challenge](https://github.com/kkaemong/SSAFY-AI-Challenge)** | **[Web Hacking Project (K-Shield Jr)](https://github.com/kkaemong/Web-Hacking-Pjt)** |
-| LoRA 파인튜닝 · 단일 GPU 제약 하 7B 모델 학습 | 웹 취약점 진단 · 모의 해킹 |
-| ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white) | ![Shell](https://img.shields.io/badge/Shell_Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white) ![Kali](https://img.shields.io/badge/Kali_Linux-blue?style=flat-square&logo=kalilinux&logoColor=white) |
 
 ---
 
