@@ -97,7 +97,7 @@ export const portfolioData = {
         name: "Python",
         tag: "보조",
         icon: "python",
-        description: "알고리즘 문제 해결과 게임 툴 자동화 스크립트, AI 모델 연동 파이프라인에 적극 활용합니다."
+        description: "알고리즘 문제 해결과, VQA 모델의 학습·추론·Kaggle 제출 파일 생성 파이프라인(AI Challenge)에 활용했습니다."
       },
       {
         name: "TypeScript",
@@ -109,7 +109,7 @@ export const portfolioData = {
         name: "Django",
         tag: "보조",
         icon: "django",
-        description: "클라이언트와의 RESTful API 통신 및 JWT 기반 인증 흐름을 직접 설계하고 구축했습니다."
+        description: "SSAIET(SSAFY 2인 프로젝트)에서 Vue 프론트와 연동되는 계정·커뮤니티·식단 REST API 일부를 작성했습니다."
       }
     ],
     exp: [
@@ -117,13 +117,13 @@ export const portfolioData = {
         name: "PyTorch & LoRA",
         tag: "경험",
         icon: "pytorch",
-        description: "단일 24GB GPU 제약에서 LoRA 기법으로 7B 거대 모델을 OOM 없이 파인튜닝하여 정확도 0.75→0.81 달성."
+        description: "이미지 기반 4지선다 VQA(4일 챌린지)에서 Qwen2.5-VL을 LoRA(PEFT)·4/8bit 양자화·bfloat16으로 미세조정해 Kaggle 정확도 0.75→0.81 달성, batch size·num_workers 조정으로 OOM 해결."
       },
       {
         name: "보안 & 모의해킹",
         tag: "경험",
         icon: "linux",
-        description: "OWASP Top 10 기반 K-Shield Jr 수료. 인증 우회, SQL 인젝션 등 4대 취약점 실증 및 보안 리포트 작성."
+        description: "K-Shield Jr 웹 모의해킹 프로젝트(팀 6인, 2023.10)에서 Burp Suite·SQLMap으로 웹 취약점 진단을 담당했습니다."
       }
     ]
   },
@@ -302,7 +302,7 @@ export const portfolioData = {
       role: "Front-End · UI 디자인",
       description: "웹소켓 & AI를 활용한 릴레이 스토리텔링 게임",
       impactLine: "Figma 기본 디자인부터 방 만들기·로비·연출 페이즈 UI까지 직접 디자인·구현하고, 결과 발표를 상태 기반 다단계 애니메이션으로 연출한 실시간 멀티플레이 웹 게임",
-      detailedDescription: "유저들이 랜덤한 이미지를 보고 즉흥적으로 스토리를 이어 적으며 기상천외한 동화책을 만들어가는 실시간 멀티플레이 웹 게임입니다. 두 팀으로 나뉘어 제한 시간 내에 창의적인 문장을 작성하며 릴레이 스토리 대결을 펼칩니다. 게임이 종료되면 AI 및 관객 심사위원의 평가를 통해 승패가 결정되며, 예측할 수 없는 유쾌한 결말을 함께 즐길 수 있습니다.",
+      detailedDescription: "유저들이 랜덤한 이미지를 보고 즉흥적으로 스토리를 이어 적으며 기상천외한 동화책을 만들어가는 실시간 멀티플레이 웹 게임입니다. 두 팀으로 나뉘어 제한 시간 내에 창의적인 문장을 작성하며 릴레이 스토리 대결을 펼칩니다. 게임이 종료되면 AI 및 관객 심사위원의 평가를 통해 승패가 결정되며, 예측할 수 없는 유쾌한 결말을 함께 즐길 수 있습니다. 프론트엔드 6인 팀에서 저는 방 만들기·로비 UI, 카드 리빌·심사위원 셔플·결과 발표 연출, 배경음악·효과음 적용을 맡았습니다(GitHub 기준 전체 약 170커밋 중 14커밋).",
       image: "/gaesorlay.png",
       github: "https://github.com/gaesorelay/frontend",
       keyResult: [
@@ -346,7 +346,7 @@ export const portfolioData = {
         {
           title: "컴포넌트마다 Audio 객체 만들지 않고 — 전역 스토어 하나 + 라우트 인지",
           problem: "메인·로비·프로필 등 페이지마다 BGM·효과음을 넣었는데, React SPA라 라우트가 바뀔 때마다 Audio 객체가 새로 생성돼 소리가 겹치고, 브라우저 자동재생 정책 때문에 재생이 막혔습니다.",
-          solution: "Zustand + sessionStorage로 useAudioStore(뮤트 상태 유지)를 만들고, 화면에 안 보이는 BGMPlayer 컴포넌트가 단일 Audio 인스턴스를 관리하도록 했습니다. useLocation으로 경로를 감지해 /gameroom 진입 시 공용 BGM을 멈추고 나오면 재개하며, 최초 클릭 이벤트로 자동재생 정책을 우회했습니다.",
+          solution: "Zustand + sessionStorage로 useAudioStore(뮤트 상태 유지)를 만들고, 화면에 안 보이는 BGMPlayer 컴포넌트가 단일 Audio 인스턴스를 관리하도록 했습니다. useLocation으로 경로를 감지해 /gameroom 진입 시 공용 BGM을 멈추고 나오면 재개하며, 최초 클릭 이벤트로 자동재생 정책을 우회했습니다. (아래 코드는 제가 구현한 초기 버전이며, 이후 팀원이 사운드 종류를 늘리며 BGM 전환 로직을 일원화했습니다.)",
           codeSnippet: {
             filename: "BGMPlayer.tsx",
             language: "tsx",

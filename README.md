@@ -72,7 +72,7 @@
 | | |
 | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/gaesorlay.png?v=1" width="100%" alt="gaesorelay cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/SSAIETMAIN.png?v=1" width="100%" alt="SSAIET cover" /> |
 | **[개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)** | **[SSAIET](https://github.com/kkaemong/Final-PJT)** |
-| React 실시간 웹소켓 게임 · Front-End · UI 디자인 · 결과 발표 연출 | Django 웹 서비스 · REST API · JWT 인증 |
+| React 실시간 웹소켓 게임 · Front-End · UI 디자인 · 결과 발표 연출 | 다이어트 식단·커뮤니티 웹 서비스 (2인) · Vue 프론트엔드 + Django REST API 일부 |
 | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white) |
 
 ---
