@@ -64,16 +64,36 @@
 
 ## Projects
 
-| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/Gifted.png?v=1" width="100%" alt="GIFTED cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/jabonju.png?v=1" width="100%" alt="zabonzooET cover" /> |
-| :---: | :---: |
-| **[GIFTED](https://portpolio-ruddy-beta.vercel.app/)** <sub>(Private repo)</sub> | **[자본주 E.T. (zabonzooET)](https://github.com/kkaemong/zabonzooET)** |
-| Unity 3D 포장 액션 캐주얼 게임 · 상호작용 오브젝트(상자·어항·썰매·디스펜서) 개발 | Unity 2D 러너 금융 게임 · 인게임 플레이 개발(플레이어·스폰·난이도) · 핀테크 트랙 우수상(팀) |
-| ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white) ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) | ![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white) ![Unity](https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white) |
-| | |
-| <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/gaesorlay.png?v=1" width="100%" alt="gaesorelay cover" /> | <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/SSAIETMAIN.png?v=1" width="100%" alt="SSAIET cover" /> |
-| **[개소릴레이 (gaesorelay)](https://github.com/gaesorelay/frontend)** | **[SSAIET](https://github.com/kkaemong/Final-PJT)** |
-| React 실시간 웹소켓 게임 · Front-End · UI 디자인 · 결과 발표 연출 | 다이어트 식단·커뮤니티 웹 서비스 (2인) · Vue 프론트엔드 + Django REST API 일부 |
-| ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB) | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white) |
+<table width="100%">
+  <tr>
+    <td width="50%" valign="top" align="center">
+      <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/readme/gifted.jpg?v=2" width="100%" alt="GIFTED cover" /><br/>
+      <b><a href="https://portpolio-ruddy-beta.vercel.app/">GIFTED</a></b> <sub>(Private repo)</sub><br/>
+      <sub>Unity 3D 포장 액션 캐주얼 게임 · 상호작용 오브젝트(상자·어항·썰매·디스펜서) 개발</sub><br/>
+      <img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white" alt="C#" /> <img src="https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white" alt="Unity" />
+    </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/readme/zabonzooet.jpg?v=2" width="100%" alt="zabonzooET cover" /><br/>
+      <b><a href="https://github.com/kkaemong/zabonzooET">자본주 E.T. (zabonzooET)</a></b><br/>
+      <sub>Unity 2D 러너 금융 게임 · 인게임 플레이 개발(플레이어·스폰·난이도) · 핀테크 트랙 우수상(팀)</sub><br/>
+      <img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white" alt="C#" /> <img src="https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white" alt="Unity" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top" align="center">
+      <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/readme/gaesorelay.jpg?v=2" width="100%" alt="gaesorelay cover" /><br/>
+      <b><a href="https://github.com/gaesorelay/frontend">개소릴레이 (gaesorelay)</a></b><br/>
+      <sub>React 실시간 웹소켓 게임 · Front-End · UI 디자인 · 결과 발표 연출</sub><br/>
+      <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" /> <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React" />
+    </td>
+    <td width="50%" valign="top" align="center">
+      <img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/readme/ssaiet.jpg?v=2" width="100%" alt="SSAIET cover" /><br/>
+      <b><a href="https://github.com/kkaemong/Final-PJT">SSAIET</a></b><br/>
+      <sub>다이어트 식단·커뮤니티 웹 서비스 (2인) · Vue 프론트엔드 + Django REST API 일부</sub><br/>
+      <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" /> <img src="https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white" alt="Django" />
+    </td>
+  </tr>
+</table>
 
 ---
 
