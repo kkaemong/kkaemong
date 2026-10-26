@@ -75,7 +75,7 @@
   </tr>
   <tr>
     <td align="center" valign="middle">Unity 3D 포장 액션 캐주얼 게임 · 상호작용 오브젝트 개발</td>
-    <td align="center" valign="middle">Unity 2D 러너 금융 게임 · 인게임 플레이 개발 핀테크 트랙 우수상(팀)</td>
+    <td align="center" valign="middle">Unity 2D 러너 금융 게임 · 인게임 플레이 개발 핀테크 트랙</td>
   </tr>
   <tr>
     <td align="center" valign="middle"><img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white" alt="C#" /> <img src="https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white" alt="Unity" /></td>
