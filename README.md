@@ -79,7 +79,7 @@
   </tr>
   <tr>
     <td align="center" valign="middle"><img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white" alt="C#" /> <img src="https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white" alt="Unity" /></td>
-    <td align="center" valign="middle"><img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white" alt="C#" /> <img src="https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white" alt="Unity" /></td>
+    <td align="center" valign="middle"><img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=csharp&logoColor=white" alt="C#" /> <img src="https://img.shields.io/badge/Unity-222C37?style=flat-square&logo=unity&logoColor=white" alt="Unity" /> <img src="https://img.shields.io/badge/Award-%ED%95%80%ED%85%8C%ED%81%AC%20%ED%8A%B8%EB%9E%99%20%EC%9A%B0%EC%88%98%EC%83%81(%ED%8C%80)-F59E0B?style=flat-square" alt="핀테크 트랙 우수상(팀)" /></td>
   </tr>
   <tr>
     <td width="50%" align="center" valign="top"><img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/readme/gaesorelay.jpg?v=2" width="100%" alt="gaesorelay cover" /></td>
