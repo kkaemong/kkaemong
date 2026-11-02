@@ -2,14 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileDown, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { goSection } from '@/lib/section';
+import Link from 'next/link';
+import ThemeToggle from './ThemeToggle';
+import { onIntent, warmAllProjects } from '@/lib/foresight';
 
 const navItems = [
-  { name: '소개', href: '#about' },
+  { name: '소개', href: '#intro' },
   { name: '프로젝트', href: '#projects' },
   { name: '경력 및 학력', href: '#experience' },
 ];
+
+const SERIF = 'font-[family-name:var(--font-noto-serif)]';
+
+const goTo = goSection;
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,100 +31,102 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // 메뉴로 마우스가 다가오면, 이동할 섹션에서 곧 필요한 것을 미리 받아 둔다
+    const offs = Array.from(document.querySelectorAll<HTMLElement>('[data-nav-target]')).map((el) =>
+      onIntent(el, `nav:${el.dataset.navTarget}`, () => {
+        if (el.dataset.navTarget === '#projects') warmAllProjects();
+      }, 30)
+    );
+    return () => offs.forEach((off) => off());
+  }, []);
+
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-8 py-3.5 print:hidden',
-        isScrolled ? 'bg-[#FAF9F6]/90 backdrop-blur-md shadow-sm border-b border-slate-200/80 py-2.5' : 'bg-[#FAF9F6]/60 backdrop-blur-xs'
+        'fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 transition-all duration-500 print:hidden',
+        isScrolled ? 'bg-white/85 py-4 backdrop-blur-md border-b border-[#111]/10' : 'bg-transparent py-7 border-b border-transparent'
       )}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        
-        {/* Brand Logo */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+      <div className="flex w-full items-center justify-between">
+        {/* 로고: 강아지 + kkaemong */}
+        <button
+          type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="cursor-pointer flex items-center gap-2"
+          aria-label="맨 위로"
+          className="group flex items-center gap-3 text-[#111]"
         >
-          <img src="/decorations/star.png" alt="Star" className="w-5 h-auto opacity-80" />
-          <span className="text-xl sm:text-2xl font-bold text-slate-900 tracking-wide">
-            진준영 <span className="text-blue-600 font-extrabold">PORTFOLIO</span>
-          </span>
-        </motion.div>
+          <svg viewBox="0 0 48 48" className="h-9 w-9 transition-transform duration-300 group-hover:-rotate-6 sm:h-10 sm:w-10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            {/* 길게 늘어진 귀털 */}
+            <path d="M12 20 C5 24 5 38 9 44 L12 40 L15 45 L18 38 C20 32 19 26 17 21 Z" fill="#fff" />
+            <path d="M36 20 C43 24 43 38 39 44 L36 40 L33 45 L30 38 C28 32 29 26 31 21 Z" fill="#fff" />
+            {/* 얼굴 */}
+            <circle cx="24" cy="24" r="12.5" fill="#fff" />
+            {/* 윗머리 묶음과 리본 */}
+            <path d="M22 12 C21 6 27 6 26 12" />
+            <path d="M24 8 L19 5 L20 10 Z M24 8 L29 5 L28 10 Z" fill="currentColor" />
+            {/* 눈, 코, 입 */}
+            <circle cx="19" cy="22" r="1.7" fill="currentColor" stroke="none" />
+            <circle cx="29" cy="22" r="1.7" fill="currentColor" stroke="none" />
+            <ellipse cx="24" cy="28" rx="4.6" ry="3.4" fill="#fff" />
+            <circle cx="24" cy="26.8" r="1.7" fill="currentColor" stroke="none" />
+            <path d="M22 30 Q24 32 26 30" />
+          </svg>
+          <span className="text-lg font-medium tracking-[0.12em] sm:text-xl">kkaemong</span>
+        </button>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-3 text-sm">
-          {navItems.map((item, i) => (
-            <motion.button
+        {/* 데스크톱 메뉴 */}
+        <div className="hidden items-center gap-10 md:flex">
+          {navItems.map((item) => (
+            <button
               key={item.name}
-              onClick={() => {
-                const el = document.querySelector(item.href);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              className="text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors px-2 py-1 cursor-pointer"
+              type="button"
+              data-nav-target={item.href}
+              onClick={() => goTo(item.href)}
+              className="group relative text-[13px] font-medium tracking-[0.12em] text-[#6b6862] transition-colors hover:text-[#111]"
             >
               {item.name}
-            </motion.button>
+              <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[#111] transition-transform duration-300 group-hover:scale-x-100" />
+            </button>
           ))}
-
-          <motion.button
-            onClick={() => window.print()}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="px-3.5 py-1.5 rounded-xl bg-slate-800 text-white hover:bg-slate-900 text-sm font-bold flex items-center gap-1.5 shadow-xs cursor-pointer"
-          >
-            <FileDown size={15} />
-            <span>CV Download</span>
-          </motion.button>
+          <Link href="/simple" className="border-b border-[#111]/30 pb-0.5 text-[13px] font-medium tracking-[0.12em] text-[#111] transition-colors hover:border-[#111]">
+            일반 버전 ↗
+          </Link>
+          <ThemeToggle />
         </div>
 
-        {/* Mobile menu button */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-slate-800"
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* 모바일: 나이트 모드 + 메뉴 버튼 */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button type="button" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-[#111]" aria-label="메뉴">
+            {mobileMenuOpen ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Nav Overlay */}
+      {/* 모바일 메뉴 */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#FAF9F6] border-b border-slate-200 absolute top-full left-0 right-0 overflow-hidden"
+            className="absolute left-0 right-0 top-full overflow-hidden border-b border-[#111]/10 bg-white md:hidden"
           >
-            <div className="flex flex-col p-6 space-y-4">
+            <div className="flex flex-col gap-6 px-6 py-8">
               {navItems.map((item) => (
-                <a
+                <button
                   key={item.name}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-lg font-bold text-slate-800 hover:text-blue-600 transition-colors"
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    goTo(item.href);
+                  }}
+                  className={`text-left text-2xl font-light tracking-wide text-[#111] ${SERIF}`}
                 >
                   {item.name}
-                </a>
+                </button>
               ))}
-              <button 
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setTimeout(() => window.print(), 300);
-                }}
-                className="w-full py-2.5 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center gap-2 shadow-xs"
-              >
-                <FileDown size={18} />
-                <span>CV Download</span>
-              </button>
             </div>
           </motion.div>
         )}

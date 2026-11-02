@@ -78,3 +78,87 @@ a, button, [role="button"], select, input[type="submit"], input[type="button"], 
     padding-bottom: 1rem !important;
   }
 }
+/* ---------- 나이트 모드 ----------
+   페이지 전체를 반전시킨다(흰 바탕 -> 어두운 바탕, 검정 글씨 -> 흰 글씨). 반전은 대비를 그대로 유지하므로 또렷하다.
+   바탕은 반전을 거치면 푸른 회색(#637a9e)이 되도록 #738aae를 넣고, 흰 배경의 요소(헤더 등)도 같은 색으로 맞춘다.
+   사진·영상·코드 블록은 한 번 더 반전해서 원래 색으로 돌려놓는다. 첫 화면은 아래에서 따로 처리한다. */
+html.dark {
+  filter: invert(1) hue-rotate(180deg);
+}
+html.dark body {
+  background-color: #738aae;
+}
+html.dark [class*="bg-white"] {
+  background-color: rgba(115, 138, 174, 0.92) !important;
+}
+/* 연한 회색 보조 글씨는 반전되면 푸른 바탕에 묻히므로, 나이트 모드에서는 더 진하게(반전 후 밝게) 바꾼다 */
+html.dark [class*="text-[#8a8780]"],
+html.dark [class*="text-[#6b6862]"] {
+  color: #262626 !important;
+}
+html.dark [class*="text-[#3a3834]"],
+html.dark [class*="text-[#4a4843]"] {
+  color: #111111 !important;
+}
+html.dark img,
+html.dark video,
+html.dark picture,
+html.dark pre,
+html.dark iframe {
+  filter: invert(1) hue-rotate(180deg);
+}
+@media print {
+  html.dark {
+    filter: none;
+  }
+}
+
+
+/* ---------- 첫 화면의 나이트 모드 ----------
+   색 필터로는 사진의 어두운 색이 살아나지 않아서, 첫 화면에서만 필터를 끄고 이 화면의 색을 직접 바꾼다.
+   바탕은 같은 푸른 회색(#637a9e)이고, 서명·글씨는 밝은 색이 되며, 덩어리 안의 이미지는 원래 색 그대로 둔다. */
+:root {
+  --l-ink: #1c1b19;
+  --l-muted: #8a8780;
+  --l-sub: #4a4843; /* 소개 글처럼 꼭 읽혀야 하는 보조 글씨(배경과 대비를 크게) */
+  --l-accent: #e4572e; /* 강조색 하나 */
+  --l-line: #e6e3dd;
+  --l-bg: #ffffff;
+}
+html.dark:has(.landing-root) {
+  --l-ink: #f3f5f9;
+  --l-muted: #c3cde0;
+  --l-sub: #eef2f8;
+  --l-accent: #ffb066;
+  --l-line: rgba(255, 255, 255, 0.24);
+  --l-bg: #637a9e;
+  filter: none;
+}
+html.dark:has(.landing-root) body {
+  background-color: #637a9e;
+}
+html.dark:has(.landing-root) img {
+  filter: none;
+}
+html.dark:has(.landing-root) .landing-toggle {
+  color: #f3f5f9;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+html.dark:has(.landing-root) .landing-toggle:hover {
+  background-color: #f3f5f9;
+  color: #637a9e;
+}
+
+
+
+
+
+
+
+
+/* 손 그림은 나이트 모드에서도 흰 손에 검은 선 그대로 보이게 한다(반전하지 않는다) */
+html.dark .hand-img,
+html.dark:has(.landing-root) .hand-img {
+  filter: none !important;
+}
+

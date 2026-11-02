@@ -361,7 +361,7 @@ export const portfolioData = {
       id: 1,
       title: "SSAFY AI 아카데미 14기",
       period: "2025.07 ~ 2026.06",
-      content: "Python 트랙 수료 및 게임 클라이언트/웹 부문 프로젝트 전 과정 이수 완료"
+      content: "Python 트랙 수료 코딩 및 알고리즘 자기주도형 SW 프로젝트 수행"
     },
     {
       id: 2,

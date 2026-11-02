@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, Gaegu, Single_Day } from "next/font/google";
+import { Inter, Outfit, Noto_Serif_KR, Poor_Story } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -12,17 +12,21 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
-const gaegu = Gaegu({
-  weight: ["400", "700"],
+const notoSerif = Noto_Serif_KR({
+  weight: ["300", "400", "600"],
   subsets: ["latin"],
-  variable: "--font-gaegu",
+  variable: "--font-noto-serif",
   display: "swap",
+  preload: false,
 });
 
-const singleDay = Single_Day({
-  weight: ["400"],
-  variable: "--font-single-day",
+// 심플 이력서를 뺀 나머지 화면에 쓰는, 사람이 손으로 쓴 듯한 글씨체
+const hand = Poor_Story({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-hand",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -36,16 +40,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="scroll-smooth">
+    <html lang="ko" className="scroll-smooth" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Single+Day&display=swap" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/raqsonu/galmuri/dist/galmuri.css" />
+        {/* 저장된 나이트 모드 선택을 첫 화면이 그려지기 전에 적용해서 깜빡임을 막는다 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
+          }}
+        />
       </head>
       <body
-        className={`${inter.variable} ${outfit.variable} ${gaegu.variable} ${singleDay.variable} antialiased`}
+        className={`${inter.variable} ${outfit.variable} ${notoSerif.variable} ${hand.variable} antialiased`}
       >
+        {/* 나이트 모드 색 변환: 흰색 -> 푸른 회색(#637a9e), 검정 -> 밝은 회색. 채널마다 out = L - (L - T) * in */}
+        <svg aria-hidden width="0" height="0" style={{ position: "absolute" }}>
+          <defs>
+            <filter id="night" colorInterpolationFilters="sRGB">
+              <feColorMatrix type="matrix" values="-0.572 0 0 0 0.96  0 -0.485 0 0 0.96  0 0 -0.35 0 0.97  0 0 0 1 0" />
+            </filter>
+            <filter id="night-inv" colorInterpolationFilters="sRGB">
+              <feColorMatrix type="matrix" values="-1.748 0 0 0 1.678  0 -2.062 0 0 1.979  0 0 -2.857 0 2.771  0 0 0 1 0" />
+            </filter>
+          </defs>
+        </svg>
         {children}
       </body>
     </html>

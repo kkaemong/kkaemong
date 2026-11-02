@@ -1,214 +1,122 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { onIntent, warmProject } from '@/lib/foresight';
 import { motion } from 'framer-motion';
 import { portfolioData, Project } from '@/data/portfolio';
-import { ArrowUpRight, Sparkles, Filter } from 'lucide-react';
-import ProjectModal from './ProjectModal';
+import { ArrowUpRight } from 'lucide-react';
 
-const CATEGORIES = [
-  { id: 'ALL', label: '전체 보기', icon: <Filter size={15} /> },
-  { id: 'CSHARP', label: 'C#', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" className="w-4 h-4" /> },
-  { id: 'TYPESCRIPT', label: 'TypeScript', icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS" className="w-4 h-4" /> },
-] as const;
+// 상세 모달은 무겁기 때문에 처음에는 불러오지 않는다.
+// ForesightJS가 "곧 이 줄을 누르겠구나"를 마우스 궤적으로 예측하면, 클릭 전에 모달 코드와 안의 이미지·영상을 전부 받아 둔다.
+const ProjectModal = dynamic(() => import('./ProjectModal'), { ssr: false });
+
+const SERIF = 'font-[family-name:var(--font-noto-serif)]';
 
 export default function Projects() {
   const { projects } = portfolioData;
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>('ALL');
 
-  const handleTabClick = (categoryId: string) => {
-    // 이미 선택된 탭을 다시 누르면 해제(전체 보기)로 되돌림
-    setActiveCategory((prev) => (prev === categoryId ? 'ALL' : categoryId));
-  };
-
-  const isHighlighted = (project: Project) => {
-    if (activeCategory === 'ALL') return true;
-    if (activeCategory === 'CSHARP') return project.tech.some(t => t.toLowerCase().includes('c#') || t.toLowerCase().includes('unity'));
-    if (activeCategory === 'TYPESCRIPT') return project.tech.some(t => t.toLowerCase().includes('typescript') || t.toLowerCase().includes('react'));
-    return true;
-  };
+  useEffect(() => {
+    // 프로젝트마다 예측 등록 (마우스가 다가오는 중에 미리 준비)
+    const offs = (projects as Project[]).map((project) => {
+      const el = document.querySelector<HTMLElement>(`[data-project-id="${project.id}"]`);
+      return el ? onIntent(el, `project:${project.title}`, () => warmProject(project), 60) : () => {};
+    });
+    return () => offs.forEach((off) => off());
+  }, [projects]);
 
   return (
-    <section id="projects" className="py-24 bg-[#FAF9F6] text-slate-900 relative border-t border-slate-200/60 overflow-hidden font-sans">
-      {/* Background Graph Lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:2.2rem_2.2rem] opacity-40 pointer-events-none" />
+    <section id="projects" className="relative border-t border-[#111]/15 pt-28 text-[#111] sm:pt-40">
+      <div className="mx-auto max-w-[1500px] px-6 sm:px-12">
+        {/* 머리말 */}
+        <div className="mb-16 print:hidden sm:mb-24">
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="mb-12 text-xs font-medium uppercase tracking-[0.45em] text-[#8a8780] sm:text-sm"
+          >
+            Selected Works
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 48, filter: 'blur(10px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: true, margin: '-8% 0px' }}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+          >
+            <h2 className={`mb-8 text-[clamp(3rem,8vw,8.5rem)] font-light leading-[1.2] tracking-tight ${SERIF}`}>Projects</h2>
+            <p className="max-w-[60ch] break-keep text-[clamp(1.15rem,1.3vw,1.6rem)] leading-loose text-[#6b6862]">
+              플레이어에게 보이는 인게임 로직·애니메이션·연출을 직접 구현한 게임 프로젝트입니다. 줄에 마우스를 올리면 제가 한 일이 보이고, 누르면 자세한 내용이 열립니다.
+            </p>
+          </motion.div>
+        </div>
 
-      {/* Sketchbook Point Decorators */}
-      <motion.img
-        animate={{ rotate: [0, 10, 0], y: [0, -5, 0] }}
-        transition={{ duration: 5, repeat: Infinity }}
-        src="/decorations/pencil_green.png"
-        alt="Green Pencil"
-        className="absolute top-16 right-10 w-16 h-auto z-10 hidden lg:block opacity-75 pointer-events-none"
-      />
-
-      <div className="section-container relative z-10">
-        {/* Wrapped Notebook Sketchbook Card Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-[3rem] md:rounded-[3.5rem] border-2 border-slate-200/90 shadow-xl p-8 sm:p-12 md:p-14 relative"
-        >
-          {/* Top Tape Accent Sticker */}
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#e2e8f0] text-slate-700 text-sm font-bold px-9 py-1.5 rounded-sm rotate-[-1deg] shadow-xs uppercase tracking-widest border border-slate-300 z-20">
-            Projects Notes
-          </div>
-
-          {/* Header */}
-          <div className="text-center mb-12 print:hidden relative">
-            <div>
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <span className="w-8 h-[3px] bg-blue-500/40 rounded-full" />
-                <span className="text-blue-600 text-sm font-bold uppercase tracking-widest">
-                  Featured Works
-                </span>
-                <span className="w-8 h-[3px] bg-blue-500/40 rounded-full" />
+        {/* 프로젝트 목록: 한 줄씩 */}
+        <div className="border-b border-[#111]/15 pb-4">
+          {(projects as Project[]).map((project, i) => (
+            <motion.article
+              key={project.id}
+              initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true, margin: '-6% 0px' }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+              onClick={() => setSelectedProject(project)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setSelectedProject(project);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`${project.title} 자세히 보기`}
+              data-project-id={project.id}
+              className="group cursor-pointer border-t border-[#111]/15 py-9 outline-none sm:py-12"
+            >
+              <div className="flex items-center justify-between gap-6">
+                <div className="flex min-w-0 items-center gap-5 sm:gap-10">
+                  <span className="shrink-0 text-xs font-medium tracking-[0.3em] text-[#8a8780] sm:text-sm">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className={`min-w-0 break-keep text-[clamp(1.7rem,3.6vw,5rem)] font-light leading-[1.2] tracking-tight transition-transform duration-500 md:whitespace-nowrap group-hover:translate-x-3 group-focus-visible:translate-x-3 ${SERIF}`}>
+                    {project.title}
+                  </h3>
+                </div>
+                <div className="hidden shrink-0 items-center gap-6 text-sm tracking-[0.1em] text-[#8a8780] md:flex">
+                  <span>{project.type}</span>
+                  {project.wip ? <span>개발중</span> : project.award && <span className="text-[#a8742a]">{project.award}</span>}
+                  <ArrowUpRight size={26} className="transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1" />
+                </div>
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight relative inline-block">
-                Projects
-                <img src="/decorations/heart.png" alt="Heart" className="absolute -top-3 -right-7 w-7 h-auto pointer-events-none" />
-              </h2>
-              <p className="text-slate-600 text-base sm:text-lg font-normal max-w-2xl mx-auto leading-relaxed">
-                플레이어에게 보이는 인게임 로직·애니메이션·연출을
-                <br />
-                직접 구현한 게임 프로젝트입니다.
-              </p>
-            </div>
 
-            {/* Category Filter Tabs */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
-              {CATEGORIES.map((tab) => {
-                const isActive = activeCategory === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabClick(tab.id)}
-                    className={`inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 shadow-xs cursor-pointer border ${
-                      isActive
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-md scale-105'
-                        : 'bg-[#FAF9F6] text-slate-700 border-slate-200/80 hover:bg-slate-100 hover:text-slate-900'
-                    }`}
-                  >
-                    {tab.icon}
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-            {projects.map((project, i) => {
-              const highlighted = isHighlighted(project as Project);
-              const isFiltering = activeCategory !== 'ALL';
-
-              return (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  onClick={() => setSelectedProject(project as Project)}
-                  className={`group cursor-pointer bg-[#FAF9F6] rounded-[2rem] overflow-hidden transition-all duration-500 border flex flex-col relative h-full ${
-                    isFiltering
-                      ? highlighted
-                        ? 'opacity-100 border-2 border-blue-600 ring-8 ring-blue-500/20 shadow-2xl -translate-y-2.5 scale-[1.02] z-10'
-                        : 'opacity-25 grayscale-[70%] border-slate-200/30 hover:opacity-60 scale-[0.96]'
-                      : 'opacity-100 shadow-sm hover:shadow-xl border-slate-200/90 hover:border-blue-400/50 hover:-translate-y-1.5'
-                  }`}
-                >
-                  {/* Top Highlight Accent Bar */}
-                  {isFiltering && highlighted && (
-                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 z-20" />
-                  )}
-
-                  {/* Project Image Header */}
-                  <div className="h-56 relative overflow-hidden bg-slate-100 shrink-0">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center">
-                      <span className="text-3xl font-black text-primary/10 tracking-tighter uppercase">{project.title}</span>
+              {/* 마우스를 올리면 아래로 살짝 펼쳐지는 "내가 한 일" (터치 화면에서는 항상 보임) */}
+              <div className="grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out md:grid-rows-[0fr] md:group-hover:grid-rows-[1fr] md:group-focus-visible:grid-rows-[1fr]">
+                <div className="overflow-hidden">
+                  <div className="grid items-start gap-8 pt-7 opacity-100 transition-opacity duration-500 md:grid-cols-[1.3fr_1fr] md:pl-[4.5rem] md:opacity-0 md:delay-100 md:group-hover:opacity-100 md:group-focus-visible:opacity-100 lg:pl-[6.5rem]">
+                    <div>
+                      <p className="mb-3 text-xs font-medium tracking-[0.3em] text-[#8a8780] sm:text-sm">내가 한 일</p>
+                      {project.role && <p className={`mb-4 break-keep text-[clamp(1.2rem,1.7vw,2.1rem)] font-light leading-snug ${SERIF}`}>{project.role}</p>}
+                      <p className="break-keep text-[clamp(1.05rem,1.15vw,1.4rem)] leading-loose text-[#6b6862]">{project.impactLine ?? project.description}</p>
+                      <p className="mt-5 text-sm tracking-wide text-[#8a8780]">{project.tech.join(' · ')}</p>
                     </div>
                     {project.image && (
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).style.display = 'none';
-                        }}
-                      />
-                    )}
-
-                    {/* Type Badge */}
-                    <div className="absolute top-4 left-4 z-10 print:hidden">
-                      <span className={`backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-semibold tracking-wider uppercase shadow-sm ${
-                        highlighted ? 'bg-slate-900/90 text-white' : 'bg-slate-600/70 text-slate-200'
-                      }`}>
-                        {project.type}
-                      </span>
-                    </div>
-
-                    {/* Hover Overlay Button */}
-                    <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-full flex items-center gap-2 text-sm shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        상세 정보 보기 <ArrowUpRight size={18} />
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Project Body */}
-                  <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex justify-between items-start mb-2.5 gap-2">
-                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1 leading-snug">
-                          {project.title}
-                        </h3>
-                        {project.wip ? (
-                          <span className="shrink-0 bg-slate-900 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                            🚧 개발중
-                          </span>
-                        ) : project.award && (
-                          <span className="shrink-0 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                            🏆 {project.award}
-                          </span>
-                        )}
+                      <div className="relative aspect-[16/10] w-full max-w-xl justify-self-end overflow-hidden bg-[#f4f2ee]">
+                        <Image src={project.image} alt={project.title} fill sizes="(min-width: 768px) 32vw, 90vw" quality={78} className="object-cover" />
                       </div>
-
-                      <p className="text-slate-600 text-sm sm:text-base font-normal mb-5 leading-relaxed break-keep line-clamp-2">
-                        {project.description}
-                      </p>
-                    </div>
-
-                    {/* Tech Stack Pills */}
-                    <div className="flex flex-wrap gap-1.5 pt-3.5 border-t border-slate-200/60 mt-auto">
-                      {project.tech.map((t) => (
-                        <span
-                          key={t}
-                          className={`px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-medium tracking-wide uppercase ${
-                            highlighted ? 'bg-white text-slate-700 border border-slate-200/80 shadow-2xs' : 'bg-slate-100/60 text-slate-500'
-                          }`}
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
+                    )}
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
       </div>
 
+      <div className="h-28 sm:h-40" />
+
       {/* Project Detail Modal */}
-      <ProjectModal
-        isOpen={!!selectedProject}
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      <ProjectModal isOpen={!!selectedProject} project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>
   );
 }
