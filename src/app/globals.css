@@ -162,3 +162,20 @@ html.dark:has(.landing-root) .hand-img {
   filter: none !important;
 }
 
+
+/* 인터랙티브 첫 화면의 "스크롤해 주세요" 안내: 마우스 휠이 아래로 굴러가는 점 */
+@keyframes scroll-dot {
+  0% { transform: translateY(0); opacity: 1; }
+  65% { transform: translateY(16px); opacity: 0; }
+  100% { transform: translateY(16px); opacity: 0; }
+}
+.scroll-dot { animation: scroll-dot 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .scroll-dot { animation: none; } }
+
+/* 농구공 안내: 공 둘레의 원이 커졌다 사라진다 */
+@keyframes ball-pulse {
+  0% { transform: scale(0.85); opacity: 0.9; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+.ball-pulse { transform-box: fill-box; transform-origin: center; animation: ball-pulse 1.4s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) { .ball-pulse { animation: none; } }
