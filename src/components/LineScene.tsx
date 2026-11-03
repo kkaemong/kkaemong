@@ -25,11 +25,12 @@ const HAND_TIP = { x: 144, y: 214 }; // hand-pen.png(1400 x 2600) 안의 연필 
 // 캐릭터 몸 윤곽(그림 좌표)
 const BODY_LEFT_X = 166;
 const HAIR = 'M196 132 C206 100 256 92 290 122 C262 108 232 114 212 142 C206 144 200 138 196 132 Z';
-const EYE_L = 'M226 152 L226.2 152';
-const EYE_R = 'M262 150 L262.2 150';
-const BROW_L = 'M212 138 C218 134 230 134 238 138';
-const BROW_R = 'M250 136 C256 132 268 132 276 136';
-const SMILE = 'M232 182 C242 192 260 192 270 180';
+const EYES = [
+  { x: 237.7, y: 146.2 },
+  { x: 274, y: 137.9 },
+] as const; // 눈(굵은 점): 슛 자세 그림의 얼굴과 같은 자리
+const EYE_R = 3.4;
+const SMILE = 'M250.5 166.5 C254 176 266 176 273 163';
 const TUFT = 'M232 98 C226 76 250 68 258 84';
 const BODY_RIGHT_X = 300; // 몸의 오른쪽 아래 끝(여기서부터 오른쪽 땅이 시작된다)
 const BODY_FWD = 'M166 384 C174 336 178 284 172 232 C166 196 172 156 196 130 C214 110 262 104 288 128 C306 146 306 188 298 232 C292 280 292 340 300 384';
@@ -67,13 +68,9 @@ const RAW_PIECES: Piece[] = [
   { d: ARM_R1, local: true, from: 0.51, to: 0.56 },
   { d: ARM_R2, local: true, from: 0.56, to: 0.59 },
   { d: HAND_R, local: true, from: 0.59, to: 0.64 },
-  // 얼굴도 손이 그린다: 앞머리 -> 눈 -> 눈썹 -> 웃는 입 -> 삐죽한 머리카락
+  // 얼굴도 손이 그린다: 앞머리 -> 눈 -> 웃는 입 -> 삐죽한 머리카락
   { d: HAIR, local: true, from: 0.64, to: 0.68 },
-  { d: EYE_L, local: true, from: 0.68, to: 0.69 },
-  { d: EYE_R, local: true, from: 0.69, to: 0.7 },
-  { d: BROW_L, local: true, from: 0.7, to: 0.71 },
-  { d: BROW_R, local: true, from: 0.71, to: 0.72 },
-  { d: SMILE, local: true, from: 0.72, to: 0.74 },
+  { d: SMILE, local: true, from: 0.69, to: 0.74 },
   { d: TUFT, local: true, from: 0.74, to: 0.76 },
   // 몸을 다 그린 뒤, 몸의 오른쪽 끝에서 땅을 오른쪽으로 긋는다
   { d: `M${gx(BODY_RIGHT_X)} ${GROUND} H1700`, local: false, from: 0.78, to: 0.9 },
@@ -102,7 +99,7 @@ const SWING = 9; // 걸을 때 팔이 흔들리는 각도
 const SHOULDER_L = { x: 176, y: 226 };
 const SHOULDER_R = { x: 294, y: 214 };
 // 땅을 다 그으면 오른쪽 끝에 필리핀 국기가 달린 학교가 이미 서 있고, 캐릭터가 끊기지 않고 걸어가 문으로 들어간다. 안으로 사라진 뒤 다음 장면으로 넘어간다.
-const VH_TOTAL = 2420; // 전체 스크롤 길이(vh)
+const VH_TOTAL = 2470; // 전체 스크롤 길이(vh)
 const SCENE_END = 700 / VH_TOTAL; // 앞의 그리기·걷기 장면이 끝나는 지점
 const F_END = 1140 / VH_TOTAL; // 비행기 장면(3살에 필리핀으로)이 끝나는 지점
 const RAMP_X = [502, 652] as const; // 비행기 탑승 계단의 아래·위 가로 위치(위쪽 끝이 문 바로 앞)
@@ -117,14 +114,14 @@ const stairRise = (e: number) => {
 };
 const W1 = 150; // 첫 장면에서 땅을 긋는 동안 캐릭터가 걷는 거리(그 뒤 비행기가 있는 곳까지 화면이 흐르며 계속 걷는다)
 const W_RAMP = RAMP_X[0] - (CX + 233 * S); // 탑승 계단 아래에 닿을 때의 걸음 위치
-const S2_END = 1940 / VH_TOTAL; // 필리핀 장면이 끝나는 지점(그 뒤가 대학 졸업 -> 코딩 -> 싸피 장면)
+const S2_END = 1990 / VH_TOTAL; // 필리핀 장면이 끝나는 지점(그 뒤가 대학 졸업 -> 코딩 -> 싸피 장면)
 const PAN_MAX = 1500; // 풍경이 왼쪽으로 흘러가는 거리(클수록 오른쪽으로 멀리 가는 느낌)
 const DOOR_SCREEN_X = 800; // 캐릭터가 학교로 들어갈 때 문이 화면에서 서는 자리(가운데)
 const SCHOOL_X = DOOR_SCREEN_X + PAN_MAX;
 const PLANE_PAN = 2800; // 비행기가 있는 곳까지 풍경이 흘러가는 거리(클수록 비행기까지 멀리 걷는다)
 const PLANE_X = DOOR_SCREEN_X + PLANE_PAN; // 비행기가 서 있는 자리(풍경 좌표) // 학교 문의 가운데(풍경 좌표: 처음엔 화면 오른쪽 밖 멀리 있고, 풍경이 흘러오며 들어온다)
 const DOOR_WALK = SCHOOL_X - PAN_MAX - (CX + 233 * S); // 캐릭터(화면 기준)가 학교 문까지 걸어가는 거리
-const SV = 800; // 필리핀 장면의 스크롤 길이(vh)
+const SV = 850; // 필리핀 장면의 스크롤 길이(vh)
 const qv = (vh: number) => vh / SV; // vh -> 필리핀 장면의 진행 정도(q)
 const Q_DOOR = qv(240); // 캐릭터가 문에 닿는 때(이때부터 학교 안으로 들어간다)
 const DOOR_FADE = qv(32); // 문 안으로 들어가고 나오는 데 걸리는 길이
@@ -138,12 +135,11 @@ const BEATS = [
   { text: '저를 따라오세요.', a: SCENE_END * 0.9, b: SCENE_END + 0.1 * FS },
   { text: '제 이야기는 어렸을 때부터 시작됩니다.', a: SCENE_END + 0.14 * FS, b: SCENE_END + 0.4 * FS },
   { text: '저는 3살 때 필리핀으로 이민 갔습니다.', a: SCENE_END + 0.44 * FS, b: qT(qv(64)) },
-  { text: '낯선 말과 낯선 문화 속에서, 하나씩 배우며 자랐습니다.', a: qT(qv(64)), b: qT(qv(190)) },
-  { text: '그곳에서 자유롭게 지냈습니다.', a: qT(qv(190)), b: qT(qv(240)) },
+  { text: '낯선 말과 낯선 문화 속에서, 하나씩 배우며 자랐습니다.', a: qT(qv(64)), b: qT(qv(240)) },
   { text: '초등학교도 다니고,', a: qT(qv(240)), b: qT(qv(335)) },
   { text: '농구도 하고,', a: qT(qv(335)), b: qT(qv(540)) },
-  { text: '친구랑 PC방에 가서 게임도 했죠.', a: qT(qv(540)), b: qT(qv(760)) },
-  { text: '한국으로 돌아와 중·고등학교를 다녔습니다.', a: qT(qv(764)), b: rT(0.16) },
+  { text: '친구랑 PC방에 가서 게임도 했죠.', a: qT(qv(540)), b: qT(qv(814)) },
+  { text: '한국으로 돌아와 중·고등학교를 다녔습니다.', a: qT(qv(818)), b: rT(0.16) },
   { text: '대학교를 졸업하고,', a: rT(0.31), b: rT(0.5) },
   { text: '코딩에 흥미가 생겨,', a: rT(0.5), b: rT(0.68) },
   { text: 'SSAFY 14기에 입과했습니다.', a: rT(0.68), b: 2 },
@@ -161,6 +157,7 @@ const SCHOOL = scaleMap(SCHOOL_X, 1);
 const FLAG_W = 160; // 국기의 가로
 const FLAG_H = 90; // 국기의 세로
 // 학교(벽·지붕·문·창문·깃대·국기): 땅이 닿으면 이미 서 있다
+const DOOR_LINE = 2; // SCHOOL_LINES 중 문 선의 순서
 const SCHOOL_LINES = [
   'M-190 0 L-190 -200 L190 -200 L190 0',
   'M-215 -200 L0 -290 L215 -200 Z',
@@ -258,13 +255,12 @@ const EXIT_X = [LAND_X - 127, LAND_X - 17] as const; // 내려가는 계단의 �
 // 학교에서 다시 나온 뒤: 농구 골대와 친구들이 있는 곳까지 풍경이 더 흘러가고, 슛을 한 다음 PC방으로 넘어간다
 const Q_BACK = qv(300); // 학교 안에서 다시 나오는 때
 const Q_BB = [qv(335), qv(420)] as const; // 농구 골대까지 걷는 구간(풍경이 더 흘러간다)
-const Q_SHOT = [qv(480), qv(520)] as const; // 직접 던지지 않았을 때 저절로 슛하는 구간(공이 포물선으로 골대에 들어간다)
 const Q_BBEND = qv(540); // 농구가 끝나고 PC방으로 걸어가기 시작하는 때(이때부터 공은 사라진다)
-const Q_PW = [qv(535), qv(655)] as const; // PC방까지 걷는 구간(풍경이 더 흘러간다)
-const Q_PDOOR = qv(655); // PC방 문에 닿는 때(이때부터 안으로 들어간다)
-const Q_PC = [qv(680), qv(760)] as const; // PC방이 나오는 구간(들어오고 나가는 것 포함)
-const Q_RESET = qv(700); // PC방이 화면을 다 덮은 뒤: 이때 풍경을 학교 앞으로 되돌린다
-const Q_SWAP = [qv(764), qv(800)] as const; // 국기가 태극기로 바뀌고 건물이 좋아지는 구간
+const Q_PW = [qv(535), qv(700)] as const; // PC방까지 걷는 구간(풍경이 더 흘러간다)
+const Q_PDOOR = qv(700); // PC방 문에 닿는 때(이때부터 안으로 들어간다)
+const Q_PC = [qv(734), qv(814)] as const; // PC방이 나오는 구간(들어오고 나가는 것 포함)
+const Q_RESET = qv(754); // PC방이 화면을 다 덮은 뒤: 이때 풍경을 학교 앞으로 되돌린다
+const Q_SWAP = [qv(818), qv(850)] as const; // 국기가 태극기로 바뀌고 건물이 좋아지는 구간
 const BB_PAN = 850; // 농구 골대까지 풍경이 더 흘러가는 거리
 const BB_BASE = PAN_MAX + BB_PAN; // 농구 장면에서 풍경이 흘러간 전체 거리
 const HOOP_SCREEN = 1380; // 도착했을 때 골대가 화면에서 서는 자리
@@ -276,7 +272,14 @@ const PCB_X = DOOR_SCREEN_X + BB_BASE + PC_PAN; // PC방 문의 가운데(풍경
 // 농구공(사용자가 준 손그림): 슬링샷처럼 끌었다 놓아 던진다
 const BALL_R = 32; // 공 반지름(클수록 큰 공)
 const BALL_K = BALL_R / 368; // 공 그림(반지름 약 368px)을 줄이는 비율
-const BALL_HAND = { x: BB_CHAR_SCREEN + 125 + BB_BASE, y: GROUND - 76 }; // 캐릭터 손(풍경 좌표)
+// 슛 자세 그림(사용자가 그린 슛.png, 슛2.png를 잘라 만든 마스크): 몸 아래 가운데가 (ax, ay)이고 k배로 줄여 쓴다
+const UP_LIMIT = 24; // 조준하며 위로 끌 수 있는 최대 거리
+const CROUCH = 0.14; // 끝까지 당겼을 때 몸이 세로로 줄어드는 비율(공도 같이 내려간다)
+const POSE = { w: 560, h: 815, ax: 198.5, ay: 801, k: 0.395 };
+const POSE_X = BB_CHAR_SCREEN + BB_BASE; // 캐릭터 몸의 가운데(풍경 좌표)
+const BALL_REST = { x: HOOP_X - 140, y: GROUND - BALL_R }; // 공이 놓여 있는 자리: 농구 골대 밑 땅 위(풍경 좌표)
+const HAND_ZONE = { x: POSE_X + 120, y: GROUND - 82, r: 56, reach: 70 }; // r: 보이는 원, reach: 공 중심이 이 안에 들어오면 쥔다 // 공을 끌어다 놓으면 캐릭터가 손에 쥐는 자리(풍경 좌표)
+const BALL_HAND = { x: POSE_X + 29, y: GROUND - 314 }; // 조준할 때 머리 위 두 손 사이(여기서 공이 날아간다)
 // 골대: 사용자가 준 손그림(public/hoop-line.png). 정면에서 본 골대라서, 공이 림(타원) 안으로 위에서 떨어지면 들어간 것이다.
 const HOOP_K = 0.34; // 골대 그림을 줄이는 비율(클수록 큰 골대)
 const HOOP_IMG = { w: 745, h: 1060, ox: 378, oy: 1038 }; // 잘라낸 그림 크기와 원점(바닥 가운데)
@@ -284,7 +287,6 @@ const RIM_CX = HOOP_X - 10 * HOOP_K; // 림 가운데(그림에서 림의 위치
 const RIM_L = RIM_CX - 190 * HOOP_K; // 림의 왼쪽·오른쪽 끝
 const RIM_R = RIM_CX + 190 * HOOP_K;
 const RIM_Y = GROUND - 715 * HOOP_K; // 림 높이
-const NET_BOTTOM = GROUND - 478 * HOOP_K; // 그물 아래
 const GRAV = 1500; // 중력(px/s²)
 const SHOT_K = 6; // 끈 길이 -> 던지는 속도
 const MAX_DRAG = 220; // 최대로 끌 수 있는 길이
@@ -353,6 +355,12 @@ export default function LineScene() {
   const tgFlagRef = useRef<SVGGElement>(null); // 태극기
   const beatRefs = useRef<(SVGTextElement | null)[]>([]); // 한 줄씩 나오는 이야기
   const pcDoorRef = useRef<SVGRectElement>(null); // PC방 문 안쪽(들어갈 때 어두워진다)
+  const poseHopRef = useRef<SVGGElement>(null); // 슛 자세 그림(두 장)을 함께 뛰게 하는 묶음
+  const poseAimRef = useRef<SVGGElement>(null); // 조준: 두 손이 머리 위
+  const poseShootRef = useRef<SVGGElement>(null); // 슛: 팔을 뻗은 마무리
+  const charHideRef = useRef<SVGGElement>(null); // 슛 자세가 나오는 동안 평소 캐릭터를 숨긴다
+  const groundPlugRef = useRef<SVGPathElement>(null); // 뛰어올랐을 때 몸 밑에 비는 땅선을 메운다
+  const poseNow = useRef<'none' | 'aim' | 'shoot'>('none');
   const hoopShakeRef = useRef<SVGGElement>(null); // 골이 들어가면 골대가 살짝 흔들린다
   const hopRef = useRef<SVGGElement>(null); // 캐릭터가 던질 때 웅크렸다 뛰는 동작
   const bbRef = useRef<SVGGElement>(null); // 농구 골대와 친구들
@@ -367,9 +375,14 @@ export default function LineScene() {
   const goalRef = useRef<SVGTextElement>(null); // 골 문구
   const goalNextRef = useRef<SVGTextElement>(null); // 골 뒤에 나오는 '계속 스크롤' 안내
   const ballHintRef = useRef<SVGGElement>(null); // 공을 끌어 보라는 안내
+  const handZoneRef = useRef<SVGGElement>(null); // 공을 들고 있는 동안 '여기에 놓기' 표시
+  const heldHintRef = useRef<SVGGElement>(null); // 공을 쥔 뒤 '뒤로 끌었다 놓기' 안내
+  const handRingRef = useRef<SVGCircleElement>(null);
+  const handTextRef = useRef<SVGTextElement>(null);
+  const hintAlpha = useRef(0);
   const panNow = useRef(0); // 지금 풍경이 흘러간 정도(마우스 위치를 풍경 좌표로 바꿀 때 쓴다)
   const rafRef = useRef(0);
-  const shotRef = useRef({ mode: 'idle' as 'idle' | 'drag' | 'fly' | 'rest' | 'ret', x: 0, y: 0, vx: 0, vy: 0, spin: 0, scored: false, attempted: false, done: false, jumpAt: 0, goalAt: 0, groundAt: 0, last: 0, restAt: 0, rx: 0, ry: 0, dragX: 0, dragY: 0 });
+  const shotRef = useRef({ mode: 'idle' as 'idle' | 'drag' | 'grab' | 'held' | 'fly' | 'rest' | 'ret', sub: 'aim' as 'carry' | 'aim', ox: 0, oy: 0, near: false, reload: false, fading: false, fadeAt: 0, x: 0, y: 0, vx: 0, vy: 0, spin: 0, scored: false, attempted: false, done: false, jumpAt: 0, goalAt: 0, groundAt: 0, last: 0, restAt: 0, rx: 0, ry: 0, dragX: 0, dragY: 0, sx: 0, sy: 0 });
   const pcRef = useRef<SVGGElement>(null); // PC방 그림
   const pcCoverRef = useRef<SVGRectElement>(null); // PC방이 나올 동안 뒤의 학교를 가린다
   const upgradeRef = useRef<SVGGElement>(null); // 한국 학교로 바뀔 때 더해지는 건물(양쪽 건물, 시계, 계단)
@@ -405,9 +418,10 @@ export default function LineScene() {
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
 
   // 마우스(손가락)로 공을 끌었다 놓아 던진다
-  const setBall = (x: number, y: number, rot: number, show = true) => {
+  const setBall = (x: number, y: number, rot: number, show = true, behind = false) => {
     // 림 아래 그물 사이를 지나는 동안에는 그물 선 뒤에서 보이도록 뒤쪽 공으로 바꾼다
-    const inNet = y > RIM_Y - 4 && y < NET_BOTTOM && x > RIM_L && x < RIM_R;
+    const nearPole = y > RIM_Y - 4 && Math.abs(x - HOOP_X) < 80; // 골대 기둥·받침 앞을 지나는 공은 선 뒤로 보내서 겹쳐 보이지 않게 한다
+    const inNet = nearPole || behind; // behind: 두 손이 공 앞에 오도록 손 그림 뒤로 보낸다
     ballRef.current?.setAttribute('transform', `translate(${x} ${y})`);
     ballSpinRef.current?.setAttribute('transform', `rotate(${rot})`);
     ballBackRef.current?.setAttribute('transform', `translate(${x} ${y})`);
@@ -415,10 +429,44 @@ export default function LineScene() {
     if (ballRef.current) ballRef.current.style.opacity = show && !inNet ? '1' : '0';
     if (ballBackRef.current) ballBackRef.current.style.opacity = show && inNet ? '1' : '0';
   };
+  const setHop = (hop: number, crouch = 0) => {
+    const t = `translate(0 ${-hop})`;
+    hopRef.current?.setAttribute('transform', t);
+    // 조준하며 뒤로 끌수록 몸이 아래로 웅크려진다(세로로만 줄여서 발은 땅에 붙어 있다)
+    poseHopRef.current?.setAttribute('transform', crouch > 0 ? `${t} translate(0 ${GROUND}) scale(1 ${1 - crouch * CROUCH}) translate(0 ${-GROUND})` : t);
+    if (groundPlugRef.current) groundPlugRef.current.style.opacity = hop > 0.5 ? '1' : '0';
+  };
+  const setPose = (kind: 'none' | 'aim' | 'shoot') => {
+    if (poseNow.current === kind) return;
+    poseNow.current = kind;
+    if (poseAimRef.current) poseAimRef.current.style.opacity = kind === 'aim' ? '1' : '0';
+    if (poseShootRef.current) poseShootRef.current.style.opacity = kind === 'shoot' ? '1' : '0';
+    if (charHideRef.current) charHideRef.current.style.opacity = kind === 'none' ? '1' : '0';
+  };
+  const setHandNear = (near: boolean) => {
+    const sh = shotRef.current;
+    if (sh.near === near) return;
+    sh.near = near;
+    handRingRef.current?.setAttribute('stroke-dasharray', near ? '1 0' : '4 12');
+    handRingRef.current?.setAttribute('stroke-width', near ? '4' : '2.5');
+    if (handTextRef.current) handTextRef.current.textContent = near ? '놓으면 쥐어요' : '여기에 놓아요';
+  };
+  const setHints = () => {
+    const sh = shotRef.current;
+    const a = hintAlpha.current;
+    if (ballHintRef.current) ballHintRef.current.style.opacity = a > 0 && !sh.attempted && sh.mode === 'idle' && !sh.done ? `${a}` : '0';
+    if (handZoneRef.current) handZoneRef.current.style.opacity = a > 0 && sh.mode === 'drag' && sh.sub === 'carry' ? '1' : '0';
+    if (heldHintRef.current) heldHintRef.current.style.opacity = a > 0 && sh.mode === 'held' ? '1' : '0';
+  };
   const stopShot = () => {
+    setPose('none');
+    setHop(0);
     cancelAnimationFrame(rafRef.current);
     rafRef.current = 0;
     shotRef.current.mode = 'idle';
+    shotRef.current.reload = false;
+    shotRef.current.fading = false;
+    setHints();
     if (goalRef.current) goalRef.current.style.opacity = '0';
     if (goalNextRef.current) goalNextRef.current.style.opacity = '0';
     if (trajRef.current) trajRef.current.style.opacity = '0';
@@ -431,11 +479,20 @@ export default function LineScene() {
   };
   const shotLoop = (now: number) => {
     const sh = shotRef.current;
-    if (sh.scored && sh.groundAt && now - sh.groundAt > 2000) {
-      sh.done = true; // 골을 넣은 공은 바닥에 떨어져 잠깐 있다가 사라지고, 다시 돌아오지 않는다
-      sh.mode = 'idle';
-      setBall(sh.x, sh.y, sh.spin, false);
-      return;
+    if (!sh.fading && sh.scored && ((sh.mode === 'rest' && now - sh.restAt > 2000) || (sh.groundAt && now - sh.groundAt > 4500))) {
+      sh.fading = true; // 골을 넣은 공은 바닥에 떨어져 멈춘 뒤 2초 있다가 천천히 사라지고, 다시 돌아오지 않는다
+      sh.fadeAt = now;
+    }
+    if (sh.fading) {
+      const u = clamp01((now - sh.fadeAt) / 1200);
+      if (u >= 1) {
+        sh.fading = false;
+        sh.done = true;
+        sh.mode = 'idle';
+        setBall(sh.x, sh.y, sh.spin, false);
+        return;
+      }
+      if (ballRef.current) ballRef.current.style.opacity = `${1 - ease(u)}`;
     }
     if (sh.goalAt) {
       const u = (now - sh.goalAt) / 800;
@@ -445,11 +502,12 @@ export default function LineScene() {
       } else hoopShakeRef.current?.setAttribute('transform', `rotate(${(1.8 * Math.exp(-4 * u) * Math.sin(u * 30)).toFixed(3)} ${HOOP_X} ${GROUND})`); // 점점 잦아드는 흔들림
     }
     if (sh.jumpAt) {
-      const u = (now - sh.jumpAt) / 520;
+      const u = (now - sh.jumpAt) / 700;
       if (u >= 1) {
         sh.jumpAt = 0;
-        setHop(0, 0);
-      } else setHop(46 * 4 * u * (1 - u), 0); // 위로 뛰었다가 내려온다
+        setHop(0);
+        if (sh.mode !== 'drag' && sh.mode !== 'held') setPose(sh.reload ? 'aim' : 'none'); // 슛 마무리 자세가 끝나면 평소 모습으로 돌아온다(빗나갔으면 다시 슛 자세)
+      } else setHop(34 * 4 * u * (1 - u)); // 위로 뛰었다가 내려온다
     }
     if (sh.mode === 'fly') {
       const dt = Math.min(0.033, (now - sh.last) / 1000);
@@ -478,7 +536,7 @@ export default function LineScene() {
       if (!sh.scored && py < RIM_Y && sh.y >= RIM_Y && sh.x > RIM_L + 6 && sh.x < RIM_R - 6) {
         sh.scored = true; // 골!
         sh.goalAt = now;
-        sh.vx *= 0.35;
+        sh.vx = -110; // 그물을 지나면 기둥에서 멀어지는 쪽(캐릭터 쪽)으로 튀어 굴러간다
         if (goalRef.current) goalRef.current.style.opacity = '1';
         if (goalNextRef.current) goalNextRef.current.style.opacity = '0.85';
       }
@@ -497,45 +555,95 @@ export default function LineScene() {
           sh.restAt = now;
         }
       }
-      setBall(sh.x, sh.y, sh.spin);
+      if (!sh.fading) setBall(sh.x, sh.y, sh.spin);
       if (!sh.scored && sh.groundAt && now - sh.groundAt > 350) {
-        sh.mode = 'ret'; // 빗나가면 오래 기다리지 않고 바로 손으로 돌아온다
+        sh.mode = 'ret'; // 빗나가면 오래 기다리지 않고 바로 손(슛 자세)으로 돌아온다
+        sh.reload = true;
         sh.last = now;
         sh.rx = sh.x;
         sh.ry = sh.y;
       }
+    } else if (sh.mode === 'grab') {
+      // 공을 놓으면 먼저 손으로 들어가고, 그다음 두 손으로 머리 위까지 들어 올린다
+      const u = clamp01((now - sh.last) / 520);
+      if (u < 0.35) {
+        const e = ease(u / 0.35);
+        setBall(sh.rx + (HAND_ZONE.x - sh.rx) * e, sh.ry + (HAND_ZONE.y - sh.ry) * e, sh.spin * (1 - e));
+      } else {
+        const e = ease((u - 0.35) / 0.65);
+        setPose('aim');
+        setBall(HAND_ZONE.x + (BALL_HAND.x - HAND_ZONE.x) * e, HAND_ZONE.y + (BALL_HAND.y - HAND_ZONE.y) * e, 0, true, u > 0.85);
+      }
+      if (u >= 1) {
+        sh.mode = 'held';
+        setBall(BALL_HAND.x, BALL_HAND.y, 0, true, true);
+        setHints();
+        return;
+      }
     } else if (sh.mode === 'rest') {
       if (!sh.scored && now - sh.restAt > 1000) {
         sh.mode = 'ret';
+        sh.reload = true;
         sh.last = now;
         sh.rx = sh.x;
         sh.ry = sh.y;
       }
     } else if (sh.mode === 'ret') {
-      const u = clamp01((now - sh.last) / 300);
+      const u = clamp01((now - sh.last) / 380);
       const e = ease(u);
-      setBall(sh.rx + (BALL_HAND.x - sh.rx) * e, sh.ry + (BALL_HAND.y - sh.ry) * e, sh.spin * (1 - e)); // 다시 손으로 돌아온다
+      const home = sh.reload ? BALL_HAND : BALL_REST; // 빗나가면 슛 자세의 손으로, 손에 못 닿았으면 골대 밑으로
+      setBall(sh.rx + (home.x - sh.rx) * e, sh.ry + (home.y - sh.ry) * e, sh.spin * (1 - e), true, sh.reload && u > 0.8);
+      if (u >= 1 && sh.reload) {
+        sh.reload = false;
+        sh.mode = 'held'; // 차징부터 다시 한다(공을 다시 끌어다 놓을 필요 없다)
+        sh.spin = 0;
+        setPose('aim');
+        setBall(BALL_HAND.x, BALL_HAND.y, 0, true, true);
+        if (goalRef.current) goalRef.current.style.opacity = '0';
+        if (goalNextRef.current) goalNextRef.current.style.opacity = '0';
+        setHints();
+        return;
+      }
       if (u >= 1) {
         sh.mode = 'idle';
         sh.spin = 0;
         if (goalRef.current) goalRef.current.style.opacity = '0';
         if (goalNextRef.current) goalNextRef.current.style.opacity = '0';
+        sh.attempted = false; // 공이 돌아오면 안내가 다시 나온다
+        setHints();
         return;
       }
     }
     if (sh.mode !== 'idle') rafRef.current = requestAnimationFrame(shotLoop);
   };
-  const setHop = (hop: number, crouch: number) => {
-    hopRef.current?.setAttribute('transform', `translate(0 ${-hop}) translate(0 ${GROUND}) scale(1 ${1 - crouch * 0.06}) translate(0 ${-GROUND})`);
-  };
   const onBallDown = (e: React.PointerEvent<SVGCircleElement>) => {
     const sh = shotRef.current;
-    if (sh.mode !== 'idle') return;
-    sh.mode = 'drag';
+    if (sh.mode !== 'idle' && sh.mode !== 'held') return;
+    const w0 = toWorld(e);
     sh.attempted = true;
-    if (ballHintRef.current) ballHintRef.current.style.opacity = '0'; // 잡으면 안내를 지운다
-    sh.dragX = BALL_HAND.x;
-    sh.dragY = BALL_HAND.y;
+    if (sh.mode === 'idle') {
+      // 골대 밑의 공을 집어 든다: 끌어다 캐릭터 손에 놓으면 슛 자세가 된다
+      sh.scored = false; // 지난 슛의 기록이 남아 있으면 공이 저절로 사라진다
+      sh.fading = false;
+      sh.groundAt = 0;
+      sh.goalAt = 0;
+      sh.sub = 'carry';
+      sh.near = true;
+      setHandNear(false);
+      sh.dragX = BALL_REST.x;
+      sh.dragY = BALL_REST.y;
+      sh.ox = w0 ? BALL_REST.x - w0.x : 0;
+      sh.oy = w0 ? BALL_REST.y - w0.y : 0;
+    } else {
+      // 손에 쥔 공을 뒤로 끌었다 놓아 던진다
+      sh.sub = 'aim';
+      sh.dragX = BALL_HAND.x;
+      sh.dragY = BALL_HAND.y;
+      sh.sx = w0 ? w0.x : BALL_HAND.x; // 잡은 자리에서부터 얼마나 끌었는지로 방향과 세기를 정한다
+      sh.sy = w0 ? w0.y : BALL_HAND.y;
+    }
+    sh.mode = 'drag';
+    setHints();
     e.currentTarget.setPointerCapture(e.pointerId);
     e.preventDefault();
   };
@@ -544,8 +652,15 @@ export default function LineScene() {
     if (sh.mode !== 'drag') return;
     const w = toWorld(e);
     if (!w) return;
-    let dx = w.x - BALL_HAND.x;
-    let dy = w.y - BALL_HAND.y;
+    if (sh.sub === 'carry') {
+      sh.dragX = w.x + sh.ox;
+      sh.dragY = Math.max(GROUND - 340, Math.min(w.y + sh.oy, GROUND - BALL_R)); // 땅 아래로도, 너무 높이도 못 든다
+      setBall(sh.dragX, sh.dragY, sh.dragX * 0.8); // 끌려가며 구른다
+      setHandNear(Math.hypot(sh.dragX - HAND_ZONE.x, sh.dragY - HAND_ZONE.y) < HAND_ZONE.reach);
+      return;
+    }
+    let dx = w.x - sh.sx;
+    let dy = Math.max(w.y - sh.sy, -UP_LIMIT); // 위로는 거의 끌 수 없다(슬링샷은 뒤·아래로 당긴다)
     const len = Math.hypot(dx, dy);
     if (len > MAX_DRAG) {
       dx *= MAX_DRAG / len;
@@ -553,8 +668,10 @@ export default function LineScene() {
     }
     sh.dragX = BALL_HAND.x + dx;
     sh.dragY = BALL_HAND.y + dy;
-    setBall(sh.dragX, sh.dragY, 0);
-    setHop(0, Math.min(1, Math.hypot(dx, dy) / MAX_DRAG)); // 많이 끌수록 웅크린다
+    // 당기는 동안 공은 손과 함께 움직인다: 몸이 웅크리는 만큼만 같이 내려가고(던질 방향과 세기는 끈 거리로 따로 정한다)
+    const charge = Math.min(1, Math.hypot(dx, dy) / MAX_DRAG);
+    setBall(BALL_HAND.x + dx * 0.1, GROUND - (GROUND - BALL_HAND.y) * (1 - charge * CROUCH), 0, true, true);
+    setHop(0, charge);
     // 던질 방향 미리보기(점선)
     if (trajRef.current) {
       if (Math.hypot(dx, dy) < 30) {
@@ -572,18 +689,43 @@ export default function LineScene() {
   const onBallUp = () => {
     const sh = shotRef.current;
     if (sh.mode !== 'drag') return;
+    if (sh.sub === 'carry') {
+      if (Math.hypot(sh.dragX - HAND_ZONE.x, sh.dragY - HAND_ZONE.y) < HAND_ZONE.reach) {
+        sh.mode = 'grab'; // 캐릭터가 공을 받아 쥐고 슛 자세가 된다
+        sh.last = performance.now();
+        sh.rx = sh.dragX;
+        sh.ry = sh.dragY;
+        sh.spin = sh.dragX * 0.8;
+        setHop(0);
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(shotLoop);
+      } else {
+        sh.mode = 'ret'; // 손에 닿지 않았으면 골대 밑으로 돌아간다
+        sh.reload = false;
+        sh.last = performance.now();
+        sh.rx = sh.dragX;
+        sh.ry = sh.dragY;
+        sh.spin = sh.dragX * 0.8;
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(shotLoop);
+      }
+      setHints();
+      return;
+    }
     if (trajRef.current) trajRef.current.style.opacity = '0';
+    setHop(0);
     const dx = sh.dragX - BALL_HAND.x;
     const dy = sh.dragY - BALL_HAND.y;
     if (Math.hypot(dx, dy) < 30) {
-      setHop(0, 0);
-      sh.mode = 'idle'; // 조금만 끌었으면 던지지 않고 손으로 돌아간다
-      setBall(BALL_HAND.x, BALL_HAND.y, 0);
+      sh.mode = 'held'; // 조금만 끌었으면 던지지 않고 계속 쥐고 있는다
+      setBall(BALL_HAND.x, BALL_HAND.y, 0, true, true);
+      setHints();
       return;
     }
     const [vx, vy] = assistShot(BALL_HAND.x, BALL_HAND.y, -dx * SHOT_K, -dy * SHOT_K);
     sh.mode = 'fly';
     sh.jumpAt = performance.now(); // 던지면서 뛰어오른다
+    setPose('shoot');
     sh.x = BALL_HAND.x; // 슬링샷처럼 손(원래 자리)에서 날아간다
     sh.y = BALL_HAND.y;
     sh.vx = vx;
@@ -593,6 +735,7 @@ export default function LineScene() {
     sh.goalAt = 0;
     sh.groundAt = 0;
     sh.last = performance.now();
+    setHints();
     cancelAnimationFrame(rafRef.current);
     rafRef.current = requestAnimationFrame(shotLoop);
   };
@@ -692,11 +835,18 @@ export default function LineScene() {
     const phase = Math.sin((walk + pan) * STEP); // 화면이 흐르는 만큼도 걸음이 이어진다
     const stretch = moving ? 1 + Math.abs(phase) * 0.03 : 1; // 발은 땅에 붙인 채 몸만 살짝 늘었다 줄었다 한다(떠오르지 않는다)
     const lean = moving ? phase * 2.2 : 0;
+    // 문으로 들어가고 나올 때: 문이 어두워진 뒤 캐릭터가 빠르게 사라지고(나올 때는 나타난다)
+    const enterT = r > 0 ? (r < R_OUT[0] ? 1 - clamp01(r / R_OUT[0]) : 0) : q >= Q_RESET ? 1 : q >= Q_BACK ? Math.max(1 - clamp01((q - Q_BACK) / DOOR_FADE), clamp01((q - Q_PDOOR) / DOOR_FADE)) : q >= Q_DOOR ? clamp01((q - Q_DOOR) / DOOR_FADE) : 0;
     charRef.current?.setAttribute('transform', `translate(${walk} ${-rise}) translate(0 ${GROUND}) scale(1 ${stretch}) translate(0 ${-GROUND}) rotate(${lean} ${gx(233)} ${GROUND})`);
     // 캐릭터가 서 있는 바로 그 밑만 땅을 가린다(걸어가도 밑에는 땅이 없고, 지나간 뒤쪽에는 땅이 있다)
-    const inSchool = r === 0 && ((q === 0 && f > F_WALK) || (q > 0 && q < Q_STEP[1]) || (q >= Q_DOOR + DOOR_FADE && q < Q_BACK) || q >= Q_RESET); // 학교 안으로 들어가 보이지 않는 동안
-    holeRef.current?.setAttribute('x', `${inSchool ? -5000 : gx(BODY_LEFT_X) + walk + HOLE_INSET + pan}`);
-    if (charRef.current) charRef.current.style.opacity = r > 0 ? `${r < R_OUT[0] ? clamp01(r / R_OUT[0]) : 1}` : q > 0 ? `${q < Q_DOOR ? clamp01((q - Q_STEP[0]) / qv(12)) : q < Q_BACK ? 1 - clamp01((q - Q_DOOR) / DOOR_FADE) : q < Q_RESET ? clamp01((q - Q_BACK) / DOOR_FADE) * (1 - clamp01((q - Q_PDOOR) / DOOR_FADE)) : 0}` : `${1 - clamp01((f - F_WALK - BOARD * 0.7) / (BOARD * 0.3))}`; // 문에 닿으면 학교 안으로 사라지고, 나올 때 다시 나타난다
+    const inSchool = r === 0 && ((q === 0 && f > F_WALK) || (q > 0 && q < Q_STEP[1])); // 비행기를 타고 내리는 동안(건물에 들어가 있는 동안에도 발밑 땅은 계속 비워 둬서 땅이 보였다 안 보였다 하지 않게 한다)
+    if (charRef.current) charRef.current.style.opacity = r > 0 ? `${1 - clamp01(enterT / 0.45)}` : q > 0 ? `${q < Q_DOOR ? clamp01((q - Q_STEP[0]) / qv(12)) : 1 - clamp01((enterT - 0.5) / 0.5)}` : `${1 - clamp01((f - F_WALK - BOARD * 0.7) / (BOARD * 0.3))}`; // 문에 닿으면 학교 안으로 사라지고, 나올 때 다시 나타난다
+    // 발밑 땅은 캐릭터가 보이는 만큼만 비운다: 건물로 들어가며 사라질 때 천천히 닫히고, 나올 때 천천히 열려서 땅이 갑자기 나타났다 사라지지 않는다
+    const charOp = parseFloat(charRef.current?.style.opacity || '1');
+    const holeW = (gx(BODY_RIGHT_X) - gx(BODY_LEFT_X) - 2 * HOLE_INSET) * (Number.isFinite(charOp) ? charOp : 1);
+    const holeCenter = gx(233) + walk + pan;
+    holeRef.current?.setAttribute('x', `${inSchool ? -5000 : holeCenter - holeW / 2}`);
+    holeRef.current?.setAttribute('width', `${holeW}`);
     // 서 있던 자리의 땅은 캐릭터가 비켜나는 만큼 왼쪽부터 드러난다
     if (gapRef.current) gapRef.current.style.strokeDashoffset = `${1 - (q > 0 ? 1 : clamp01(walk / (gx(BODY_RIGHT_X) - gx(BODY_LEFT_X))))}`;
     const sw = moving ? phase * SWING : 0;
@@ -786,37 +936,17 @@ export default function LineScene() {
       sh.done = false;
     }
     if (ballHitRef.current) ballHitRef.current.style.pointerEvents = interactive && !sh.done ? 'all' : 'none';
-    const ts = clamp01((q - Q_SHOT[0]) / (Q_SHOT[1] - Q_SHOT[0]));
-    const pickT = clamp01((q - (Q_BB[1] - qv(10))) / qv(20));
+    const ballOn = q >= Q_BB[0] - qv(20) && q < Q_BBEND; // 공은 풍경과 같이 들어와 땅에 놓여 있다(잡지 않고 스크롤하면 그냥 지나간다)
     if (ballRef.current) {
       if (sh.mode === 'idle') {
-        const bxr = RIM_CX; // 림 가운데
-        const byr = RIM_Y - 140; // 림 위
-        let bx = BALL_HAND.x - 30 * (1 - ease(pickT));
-        let by = GROUND - BALL_R + (BALL_HAND.y - (GROUND - BALL_R)) * ease(pickT); // 땅에서 집어 올린다
-        let rot = 0;
-        if (!sh.attempted && ts > 0) {
-          rot = ts * 720; // 도는 공
-          if (ts < 0.65) {
-            const u = ts / 0.65;
-            bx = BALL_HAND.x + (bxr - BALL_HAND.x) * u;
-            by = BALL_HAND.y + (byr - BALL_HAND.y) * u - 230 * 4 * u * (1 - u); // 포물선
-          } else if (ts < 0.85) {
-            const u = (ts - 0.65) / 0.2;
-            bx = bxr;
-            by = byr + (GROUND - 22 - byr) * u * u; // 그물을 지나 떨어진다
-          } else {
-            const u = (ts - 0.85) / 0.15;
-            bx = bxr - 10 * u;
-            by = GROUND - 22 - 26 * Math.sin(u * Math.PI); // 한 번 튀고 멈춘다
-          }
-        }
-        setBall(bx, by, rot, q >= Q_BB[1] - qv(10) && q < Q_BBEND && !sh.done);
-      } else if (!(q >= Q_BB[1] - qv(10) && q < Q_BBEND)) {
-        setBall(BALL_HAND.x, BALL_HAND.y, 0, false);
+        setPose('none');
+        setBall(BALL_REST.x, BALL_REST.y, 0, ballOn && !sh.done);
+      } else if (!ballOn) {
+        setBall(BALL_REST.x, BALL_REST.y, 0, false);
       }
     }
-    if (ballHintRef.current) ballHintRef.current.style.opacity = interactive && !sh.attempted && ts === 0 && sh.mode === 'idle' ? `${pickT}` : '0';
+    hintAlpha.current = interactive ? clamp01((q - Q_BB[1]) / qv(14)) : 0;
+    setHints();
     const flagSwap = clamp01((q - Q_SWAP[0]) / (Q_SWAP[1] - Q_SWAP[0])); // PC방 장면이 지나가면 필리핀 국기가 태극기로 바뀌고 건물도 좋아진다
     if (upgradeRef.current) upgradeRef.current.style.opacity = `${flagSwap}`;
     // 분위기: 필리핀으로 가는 동안 따뜻한 색이 되고, 국기가 태극기로 바뀌면 서늘한 색으로 바뀐다
@@ -975,7 +1105,7 @@ export default function LineScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[2300vh]" aria-label="소개 장면">
+    <section ref={sectionRef} className="relative h-[2470vh] select-none" aria-label="소개 장면">
       <div className="sticky top-0 h-screen overflow-hidden">
         <svg ref={svgRef} viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" className="h-full w-full" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--l-ink, #1c1b19)', pointerEvents: 'none' }}>
           {/* 서명: 처음엔 크게 가운데에 있다가 스크롤에 따라 땅 선으로 내려앉는다 */}
@@ -1085,8 +1215,8 @@ export default function LineScene() {
               </g>
               <path ref={doorFillRef} opacity="0" fill={INK} stroke="none" d={mapPath('M-40 0 L-40 -110 L40 -110 L40 0 Z', SCHOOL)} />
               <g stroke={INK} strokeWidth={LINE_W}>
-                {SCHOOL_LINES.map((d) => (
-                  <path key={d} d={d} />
+                {SCHOOL_LINES.map((d, i) => (
+                  <path key={d} d={d} strokeLinecap={i === DOOR_LINE ? 'butt' : undefined} /> // 문 선은 땅에서 끊기게 해서(둥근 끝이 땅 아래로 나오지 않게) 캐릭터가 문 앞에 설 때 점이 보이지 않게 한다
                 ))}
               </g>
             </g>
@@ -1094,13 +1224,15 @@ export default function LineScene() {
           {/* 농구: 학교 오른쪽의 골대와 친구들, 공 */}
           <g ref={bbRef} opacity="0" stroke={INK} strokeWidth={LINE_W}>
             {/* PC방: 간판과 창문, 문이 있는 가게 */}
-            <rect x={PCB_X - 260} y={GROUND - 300} width="520" height="300" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+            {/* 건물 몸통과 문: 아랫변은 그리지 않는다(땅선과 겹쳐 캐릭터 발밑에 선이 보이지 않게) */}
+            <rect x={PCB_X - 260} y={GROUND - 300} width="520" height="300" stroke="none" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+            <path d={`M${PCB_X - 260} ${GROUND} V${GROUND - 300} H${PCB_X + 260} V${GROUND}`} strokeLinecap="butt" fill="none" />
             <rect x={PCB_X - 280} y={GROUND - 390} width="560" height="90" rx="6" style={{ fill: 'var(--l-bg, #ffffff)' }} />
             <text x={PCB_X} y={GROUND - 326} fill={INK} stroke="none" fontSize="62" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
               PC방
             </text>
-            <rect x={PCB_X - 60} y={GROUND - 200} width="120" height="200" />
-            <rect ref={pcDoorRef} x={PCB_X - 60} y={GROUND - 200} width="120" height="200" opacity="0" style={{ fill: INK }} />
+            <path d={`M${PCB_X - 60} ${GROUND} V${GROUND - 200} H${PCB_X + 60} V${GROUND}`} strokeLinecap="butt" fill="none" />
+            <rect ref={pcDoorRef} x={PCB_X - 60} y={GROUND - 200} width="120" height="200" opacity="0" stroke="none" style={{ fill: INK }} />
             {[-185, 125].map((dx) => (
               <g key={dx}>
                 <rect x={PCB_X + dx} y={GROUND - 230} width="60" height="120" />
@@ -1131,12 +1263,25 @@ export default function LineScene() {
           {/* 던질 방향 미리보기와 안내, 골 문구 */}
           <path ref={trajRef} d="M0 0" opacity="0" stroke={INK} strokeWidth={LINE_W - 1.5} strokeDasharray="2 14" fill="none" />
           <g ref={ballHintRef} opacity="0">
-            <circle cx={BALL_HAND.x} cy={BALL_HAND.y} r={BALL_R * 1.7} stroke={INK} strokeWidth="2.5" fill="none" className="ball-pulse" />
-            <text x={BALL_HAND.x} y={GROUND - 340} fill={INK} stroke="none" fontSize="30" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
-              공을 뒤로 끌었다 놓아 보세요
+            <circle cx={BALL_REST.x} cy={BALL_REST.y} r={BALL_R * 1.7} stroke={INK} strokeWidth="2.5" fill="none" className="ball-pulse" />
+            <text x={POSE_X + (BALL_REST.x - POSE_X) * 0.45} y={GROUND - 340} fill={INK} stroke="none" fontSize="30" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+              공을 잡아 캐릭터 손에 쥐어 주세요
             </text>
-            <text x={BALL_HAND.x} y={GROUND - 300} fill={INK} stroke="none" fontSize="22" opacity="0.6" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+            <text x={POSE_X + (BALL_REST.x - POSE_X) * 0.45} y={GROUND - 300} fill={INK} stroke="none" fontSize="22" opacity="0.6" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
               (하기 싫으면 그냥 스크롤해도 돼요)
+            </text>
+          </g>
+          <g ref={handZoneRef} opacity="0">
+            <circle ref={handRingRef} cx={HAND_ZONE.x} cy={HAND_ZONE.y} r={HAND_ZONE.r} stroke={INK} strokeWidth="2.5" strokeDasharray="4 12" fill="none" className="ball-pulse" />
+            <circle cx={HAND_ZONE.x} cy={HAND_ZONE.y} r="4" fill={INK} stroke="none" opacity="0.45" />
+            <text ref={handTextRef} x={HAND_ZONE.x + 50} y={HAND_ZONE.y - HAND_ZONE.r - 10} fill={INK} stroke="none" fontSize="26" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+              여기에 놓아요
+            </text>
+          </g>
+          <g ref={heldHintRef} opacity="0">
+            <circle cx={BALL_HAND.x} cy={BALL_HAND.y} r={BALL_R * 1.7} stroke={INK} strokeWidth="2.5" fill="none" className="ball-pulse" />
+            <text x={BALL_HAND.x} y={BALL_HAND.y - 64} fill={INK} stroke="none" fontSize="28" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+              뒤로 끌었다 놓아 보세요
             </text>
           </g>
           <text ref={goalRef} x={HOOP_X} y={GROUND - 1020 * HOOP_K - 24} opacity="0" fill={INK} stroke="none" fontSize="52" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
@@ -1231,6 +1376,10 @@ export default function LineScene() {
 
           {/* 캐릭터: 몸과 팔과 얼굴. 다 그린 뒤에는 통째로 옆으로 걸어간다 */}
           <g ref={hopRef}>
+          <clipPath id="char-clip">
+            <rect x="-4000" y="-300" width="14000" height={GROUND + 300} />
+          </clipPath>
+          <g ref={charHideRef} clipPath="url(#char-clip)">
           <g ref={charRef}>
             <g transform={`translate(${CX} ${CY}) scale(${S})`} stroke={INK} strokeWidth={LINE_W / S}>
               <path ref={footLineRef} d={`M${BODY_LEFT_X} 384 H${BODY_RIGHT_X}`} opacity="0" />
@@ -1303,12 +1452,35 @@ export default function LineScene() {
             {/* 앞머리 속 채움: 윤곽을 그린 뒤 채워진다 */}
             <g ref={faceRef} opacity="0" transform={`translate(${CX} ${CY}) scale(${S})`}>
               <path d={HAIR} fill={INK} stroke="none" />
+              {EYES.map((e) => (
+                <circle key={e.x} cx={e.x} cy={e.y} r={EYE_R} fill={INK} stroke="none" />
+              ))}
             </g>
+          </g>
           </g>
           </g>
 
           {/* 공: 손바닥보다 앞에 보이도록 캐릭터 뒤에 그린다(풍경과 같이 움직인다) */}
           <g ref={ballLayerRef}>
+            <path ref={groundPlugRef} d={`M${POSE_X - 62} ${GROUND} H${POSE_X + 62}`} stroke={INK} strokeWidth={LINE_W} opacity="0" />
+            {/* 슛 자세: 평소 캐릭터 대신 같은 자리에 나온다(공은 이 위에 그려진다) */}
+            <g ref={poseHopRef}>
+              {[
+                { id: 'shoot', ref: poseAimRef },
+                { id: 'shoot2', ref: poseShootRef },
+              ].map((pz) => (
+                <g key={pz.id} ref={pz.ref} opacity="0" transform={`translate(${POSE_X} ${GROUND}) scale(${POSE.k})`}>
+                  <mask id={`${pz.id}-fill-mask`} maskUnits="userSpaceOnUse" x={-POSE.ax} y={-POSE.ay} width={POSE.w} height={POSE.h}>
+                    <image href={`/${pz.id}-fill.png`} x={-POSE.ax} y={-POSE.ay} width={POSE.w} height={POSE.h} />
+                  </mask>
+                  <mask id={`${pz.id}-line-mask`} maskUnits="userSpaceOnUse" x={-POSE.ax} y={-POSE.ay} width={POSE.w} height={POSE.h}>
+                    <image href={`/${pz.id}-line.png`} x={-POSE.ax} y={-POSE.ay} width={POSE.w} height={POSE.h} />
+                  </mask>
+                  <rect x={-POSE.ax} y={-POSE.ay} width={POSE.w} height={POSE.h} mask={`url(#${pz.id}-fill-mask)`} style={{ fill: 'var(--l-bg, #ffffff)' }} />
+                  <rect x={-POSE.ax} y={-POSE.ay} width={POSE.w} height={POSE.h} mask={`url(#${pz.id}-line-mask)`} fill="currentColor" />
+                </g>
+              ))}
+            </g>
           <g ref={ballRef} opacity="0">
             <g ref={ballSpinRef}>
               <g transform={`scale(${BALL_K})`}>
@@ -1326,7 +1498,7 @@ export default function LineScene() {
               ref={ballHitRef}
               cx="0"
               cy="0"
-              r={BALL_R * 1.7}
+              r={BALL_R * 1.05}
               fill="none"
               onPointerDown={onBallDown}
               onPointerMove={onBallMove}
