@@ -136,9 +136,9 @@ const BEATS = [
   { text: '제 이야기는 어렸을 때부터 시작됩니다.', a: SCENE_END + 0.14 * FS, b: SCENE_END + 0.4 * FS },
   { text: '저는 3살 때 필리핀으로 이민 갔습니다.', a: SCENE_END + 0.44 * FS, b: qT(qv(64)) },
   { text: '낯선 말과 낯선 문화 속에서, 하나씩 배우며 자랐습니다.', a: qT(qv(64)), b: qT(qv(240)) },
-  { text: '초등학교도 다니고,', a: qT(qv(240)), b: qT(qv(335)) },
-  { text: '농구도 하고,', a: qT(qv(335)), b: qT(qv(540)) },
-  { text: '친구랑 PC방에 가서 게임도 했죠.', a: qT(qv(540)), b: qT(qv(814)) },
+  { text: '초등학교도 다니고,', a: qT(qv(240)), b: qT(qv(395)) },
+  { text: '농구도 하고,', a: qT(qv(395)), b: qT(qv(540)) },
+  { text: '친구랑 PC방에 가서 게임도 했죠.', a: qT(qv(650)), b: qT(qv(814)) },
   { text: '한국으로 돌아와 중·고등학교를 다녔습니다.', a: qT(qv(818)), b: rT(0.16) },
   { text: '대학교를 졸업하고,', a: rT(0.31), b: rT(0.5) },
   { text: '코딩에 흥미가 생겨,', a: rT(0.5), b: rT(0.68) },
@@ -159,9 +159,9 @@ const FLAG_H = 90; // 국기의 세로
 // 학교(벽·지붕·문·창문·깃대·국기): 땅이 닿으면 이미 서 있다
 const DOOR_LINE = 2; // SCHOOL_LINES 중 문 선의 순서
 const SCHOOL_LINES = [
-  'M-190 0 L-190 -200 L190 -200 L190 0',
+  'M-190 -2 L-190 -200 L190 -200 L190 -2', // 벽 기둥도 땅선 위쪽 가장자리에서 끝낸다(발밑 땅이 비는 곳에서 선 끝이 비쳐 보이지 않게)
   'M-215 -200 L0 -290 L215 -200 Z',
-  'M-40 0 L-40 -110 L40 -110 L40 0',
+  'M-40 -2 L-40 -110 L40 -110 L40 -2', // 문 기둥은 땅선 위쪽 가장자리에서 끝낸다(캐릭터 발밑의 비운 땅 위로 문 선 끝이 비쳐 보이지 않게)
   'M-150 -170 L-100 -170 L-100 -120 L-150 -120 Z',
   'M100 -170 L150 -170 L150 -120 L100 -120 Z',
   'M0 -290 L0 -410',
@@ -245,10 +245,6 @@ const TUFT_ALL = Array.from({ length: 24 }, (_, i) => 520 + i * 290 + (i % 3) * 
 const nearSchool = (x: number) => Math.abs(x - SCHOOL_X) <= 360;
 const nearPlane = (x: number) => x - PLANE_X >= -310 && x - PLANE_X <= 290;
 const nearLanded = (x: number) => x - LAND_X >= -310 && x - LAND_X <= 290;
-const TUFT_SCHOOL = TUFT_ALL.filter(nearSchool); // 학교가 나오는 필리핀 장면에서만 비운다(비행기 장면에서는 풀이 있다)
-const TUFT_PLANE = TUFT_ALL.filter((x) => !nearSchool(x) && nearPlane(x)); // 비행기가 서 있는 비행기 장면에서만 비운다
-const TUFT_LANDED = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && nearLanded(x)); // 비행기가 착륙해 서 있는 동안만 비운다
-const TUFT_FREE = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && !nearLanded(x));
 const Q_LAND = [qv(8), qv(64)] as const; // 착륙하는 구간
 const Q_STEP = [qv(88), qv(120)] as const; // 캐릭터가 문에서 나와 계단을 내려오는 구간
 const EXIT_X = [LAND_X - 127, LAND_X - 17] as const; // 내려가는 계단의 위·아래 가로 위치(문 오른쪽 끝에서 시작)
@@ -267,6 +263,11 @@ const HOOP_SCREEN = 1380; // 도착했을 때 골대가 화면에서 서는 자�
 const BB_CHAR_SCREEN = 760; // 캐릭터가 서는 자리
 const BB_WALK = BB_CHAR_SCREEN - (CX + 233 * S);
 const HOOP_X = HOOP_SCREEN + BB_BASE; // 골대(풍경 좌표)
+const nearHoop = (x: number) => Math.abs(x - HOOP_X) <= 280; // 골대 밑에는 풀을 두지 않는다
+const TUFT_SCHOOL = TUFT_ALL.filter(nearSchool); // 학교가 나오는 필리핀 장면에서만 비운다(비행기 장면에서는 풀이 있다)
+const TUFT_PLANE = TUFT_ALL.filter((x) => !nearSchool(x) && nearPlane(x) && !nearHoop(x)); // 비행기가 서 있는 비행기 장면에서만 비운다
+const TUFT_LANDED = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && nearLanded(x)); // 비행기가 착륙해 서 있는 동안만 비운다
+const TUFT_FREE = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && !nearLanded(x) && !nearHoop(x));
 const PC_PAN = 1900; // 골대 다음 PC방까지 풍경이 더 흘러가는 거리
 const PCB_X = DOOR_SCREEN_X + BB_BASE + PC_PAN; // PC방 문의 가운데(풍경 좌표)
 // 농구공(사용자가 준 손그림): 슬링샷처럼 끌었다 놓아 던진다
@@ -479,12 +480,12 @@ export default function LineScene() {
   };
   const shotLoop = (now: number) => {
     const sh = shotRef.current;
-    if (!sh.fading && sh.scored && ((sh.mode === 'rest' && now - sh.restAt > 2000) || (sh.groundAt && now - sh.groundAt > 4500))) {
+    if (!sh.fading && sh.scored && ((sh.mode === 'rest' && now - sh.restAt > 1400) || (sh.groundAt && now - sh.groundAt > 4500))) {
       sh.fading = true; // 골을 넣은 공은 바닥에 떨어져 멈춘 뒤 2초 있다가 천천히 사라지고, 다시 돌아오지 않는다
       sh.fadeAt = now;
     }
     if (sh.fading) {
-      const u = clamp01((now - sh.fadeAt) / 1200);
+      const u = clamp01((now - sh.fadeAt) / 800);
       if (u >= 1) {
         sh.fading = false;
         sh.done = true;
@@ -1216,7 +1217,7 @@ export default function LineScene() {
               <path ref={doorFillRef} opacity="0" fill={INK} stroke="none" d={mapPath('M-40 0 L-40 -110 L40 -110 L40 0 Z', SCHOOL)} />
               <g stroke={INK} strokeWidth={LINE_W}>
                 {SCHOOL_LINES.map((d, i) => (
-                  <path key={d} d={d} strokeLinecap={i === DOOR_LINE ? 'butt' : undefined} /> // 문 선은 땅에서 끊기게 해서(둥근 끝이 땅 아래로 나오지 않게) 캐릭터가 문 앞에 설 때 점이 보이지 않게 한다
+                  <path key={d} d={d} strokeLinecap={i === DOOR_LINE || i === 0 ? 'butt' : undefined} /> // 문 선은 땅에서 끊기게 해서(둥근 끝이 땅 아래로 나오지 않게) 캐릭터가 문 앞에 설 때 점이 보이지 않게 한다
                 ))}
               </g>
             </g>
