@@ -52,7 +52,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${outfit.variable} ${notoSerif.variable} ${hand.variable} antialiased`}
       >
-        {/* 나이트 모드 색 변환: 흰색 -> 푸른 회색(#637a9e), 검정 -> 밝은 회색. 채널마다 out = L - (L - T) * in */}
+        {/* 나이트 모드 색 변환: 흰색 -> 푸른 회색(#455878), 검정 -> 밝은 회색. 채널마다 out = L - (L - T) * in */}
         <svg aria-hidden width="0" height="0" style={{ position: "absolute" }}>
           <defs>
             <filter id="night" colorInterpolationFilters="sRGB">

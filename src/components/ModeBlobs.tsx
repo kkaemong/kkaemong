@@ -160,7 +160,7 @@ export default function ModeBlobs({ items, ready }: { items: BlobItem[]; ready: 
   }, []);
 
   return (
-    <div ref={wrapRef} className="relative h-[90vh] w-[min(56vw,860px)]" style={{ pointerEvents: ready ? 'auto' : 'none' }}>
+    <div ref={wrapRef} className="relative h-[96vh] w-[min(57vw,880px)]" style={{ pointerEvents: ready ? 'auto' : 'none' }}>
       {items.map((it, i) => {
         const box = LAYOUT[i % LAYOUT.length];
         return (
@@ -206,14 +206,14 @@ export default function ModeBlobs({ items, ready }: { items: BlobItem[]; ready: 
               {it.content && <span className="block aspect-square h-[38%] shrink-0">{it.content}</span>}
               {/* 오른쪽: 번호, 이름, 마우스를 올리면 작은 설명 */}
               <span className="relative block">
-                <span className={`flex items-center justify-between gap-6 text-base font-semibold tracking-[0.3em] ${SERIF}`} style={{ color: '#e4572e' }}>
+                <span className={`flex items-center justify-between gap-6 text-lg font-semibold tracking-[0.3em] ${SERIF}`} style={{ color: '#e4572e' }}>
                   {it.no}
-                  <ArrowUpRight size={26} strokeWidth={1.8} className={`text-[#1c1b19] transition-transform duration-500 ${on ? '-translate-y-0.5 translate-x-0.5' : ''}`} />
+                  <ArrowUpRight size={30} strokeWidth={1.8} className={`text-[#1c1b19] transition-transform duration-500 ${on ? '-translate-y-0.5 translate-x-0.5' : ''}`} />
                 </span>
-                <span className={`mt-1 block whitespace-nowrap text-[clamp(1.05rem,1.6vw,1.9rem)] font-extralight uppercase leading-none tracking-[0.08em] ${SERIF}`}>{it.title}</span>
-                <span className={`mt-2 block text-[clamp(0.85rem,1vw,1.15rem)] font-light ${SERIF}`}>{it.label}</span>
+                <span className={`mt-1 block whitespace-nowrap text-[clamp(1.2rem,1.9vw,2.25rem)] font-extralight uppercase leading-none tracking-[0.08em] ${SERIF}`}>{it.title}</span>
+                <span className={`mt-2 block text-[clamp(0.95rem,1.15vw,1.3rem)] font-light ${SERIF}`}>{it.label}</span>
                 <span
-                  className={`absolute left-0 top-full z-20 mt-2 block w-max whitespace-nowrap rounded-xl bg-white/90 px-3.5 py-2.5 text-[clamp(0.78rem,0.88vw,0.95rem)] leading-relaxed text-[#4a4843] shadow-[0_8px_24px_-10px_rgba(0,0,0,0.3)] transition-all duration-500 ${on ? 'translate-y-0 opacity-100' : 'translate-y-1.5 opacity-0'}`}
+                  className={`absolute left-0 top-full z-20 mt-2 block w-max whitespace-nowrap rounded-xl bg-white/90 px-3.5 py-2.5 text-[clamp(0.85rem,1vw,1.1rem)] leading-relaxed text-[#4a4843] shadow-[0_8px_24px_-10px_rgba(0,0,0,0.3)] transition-all duration-500 ${on ? 'translate-y-0 opacity-100' : 'translate-y-1.5 opacity-0'}`}
                 >
                   {it.desc}
                 </span>

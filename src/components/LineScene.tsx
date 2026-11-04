@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useMotionValueEvent, useScroll } from 'framer-motion';
-import SignatureHero, { STROKES as SIGNATURE } from '@/components/SignatureHero';
+import { JEEP_TIP } from '@/data/jeepTip';
+import SignatureHero, { HERO_POS, STROKES as SIGNATURE } from '@/components/SignatureHero';
 import { currentPeriod, type Period } from '@/lib/timeOfDay';
 
 // 인터랙티브 첫 장면: 첫 화면과 똑같이 왼쪽에 서명과 소개 글이 있다가, 스크롤을 내리면 서명이 납작해지며 땅(선 하나)으로 내려앉고, 그 선을 연필을 쥔 손이 이어 그으며 솟아올라 내 캐릭터가 된다.
@@ -99,10 +100,10 @@ const SWING = 9; // 걸을 때 팔이 흔들리는 각도
 const SHOULDER_L = { x: 176, y: 226 };
 const SHOULDER_R = { x: 294, y: 214 };
 // 땅을 다 그으면 오른쪽 끝에 필리핀 국기가 달린 학교가 이미 서 있고, 캐릭터가 끊기지 않고 걸어가 문으로 들어간다. 안으로 사라진 뒤 다음 장면으로 넘어간다.
-const VH_TOTAL = 2470; // 전체 스크롤 길이(vh)
+const VH_TOTAL = 2678; // 전체 스크롤 길이(vh)
 const SCENE_END = 700 / VH_TOTAL; // 앞의 그리기·걷기 장면이 끝나는 지점
 const F_END = 1140 / VH_TOTAL; // 비행기 장면(3살에 필리핀으로)이 끝나는 지점
-const RAMP_X = [502, 652] as const; // 비행기 탑승 계단의 아래·위 가로 위치(위쪽 끝이 문 바로 앞)
+const RAMP_X = [502, 622] as const; // 비행기 탑승 계단의 아래·위 가로 위치(위쪽 끝이 문 바로 앞)
 const RAMP_RISE = 70; // 계단을 올라가는 높이
 const RAMP_STEPS = 4;
 const SHOW_FOOT_LINE = true; // 계단을 오르내리는 동안 캐릭터 발밑에 줄을 그린다(false로 하면 줄이 없다)
@@ -114,35 +115,52 @@ const stairRise = (e: number) => {
 };
 const W1 = 150; // 첫 장면에서 땅을 긋는 동안 캐릭터가 걷는 거리(그 뒤 비행기가 있는 곳까지 화면이 흐르며 계속 걷는다)
 const W_RAMP = RAMP_X[0] - (CX + 233 * S); // 탑승 계단 아래에 닿을 때의 걸음 위치
-const S2_END = 1990 / VH_TOTAL; // 필리핀 장면이 끝나는 지점(그 뒤가 대학 졸업 -> 코딩 -> 싸피 장면)
-const PAN_MAX = 1500; // 풍경이 왼쪽으로 흘러가는 거리(클수록 오른쪽으로 멀리 가는 느낌)
+const S2_END = 2198 / VH_TOTAL; // 필리핀 장면이 끝나는 지점(그 뒤가 대학 졸업 -> 코딩 -> 싸피 장면)
+const PAN_MAX = 4000; // 풍경이 왼쪽으로 흘러가는 거리(클수록 오른쪽으로 멀리 가는 느낌)
 const DOOR_SCREEN_X = 800; // 캐릭터가 학교로 들어갈 때 문이 화면에서 서는 자리(가운데)
 const SCHOOL_X = DOOR_SCREEN_X + PAN_MAX;
 const PLANE_PAN = 2800; // 비행기가 있는 곳까지 풍경이 흘러가는 거리(클수록 비행기까지 멀리 걷는다)
 const PLANE_X = DOOR_SCREEN_X + PLANE_PAN; // 비행기가 서 있는 자리(풍경 좌표) // 학교 문의 가운데(풍경 좌표: 처음엔 화면 오른쪽 밖 멀리 있고, 풍경이 흘러오며 들어온다)
 const DOOR_WALK = SCHOOL_X - PAN_MAX - (CX + 233 * S); // 캐릭터(화면 기준)가 학교 문까지 걸어가는 거리
-const SV = 850; // 필리핀 장면의 스크롤 길이(vh)
+const SV = 1058; // 필리핀 장면의 스크롤 길이(vh)
 const qv = (vh: number) => vh / SV; // vh -> 필리핀 장면의 진행 정도(q)
-const Q_DOOR = qv(240); // 캐릭터가 문에 닿는 때(이때부터 학교 안으로 들어간다)
+const Q_DOOR = qv(448); // 캐릭터가 문에 닿는 때(이때부터 학교 안으로 들어간다)
 const DOOR_FADE = qv(32); // 문 안으로 들어가고 나오는 데 걸리는 길이
 const ENTER_WALK = -950; // 다음 장면에서 왼쪽 화면 밖에서 시작하는 걸음 위치
 // 이야기 한 줄씩: 그림이 나올 때마다 한 줄이 나타났다가 사라지고 다음 줄이 나온다(스크롤 위치 기준)
 const qT = (q: number) => F_END + q * (S2_END - F_END); // 필리핀 장면의 진행 정도 -> 스크롤 위치
 const rT = (r: number) => S2_END + r * (1 - S2_END); // 그 뒤 장면의 진행 정도 -> 스크롤 위치
 const FS = F_END - SCENE_END;
+// ===== "색이 들어오는" 컨셉: SSAFY 간판에 색이 번지고, 마지막에 앞서 나온 색들이 섞여 June의 몸이 채워진다 =====
+// 색과 시점은 모두 여기서 조정한다. 그림(사용자가 준 학교·PC방·지프니·공·골대·비행기·슛 자세)은 바꾸지 않는다.
+const COLORS = {
+  ph: '#7f9fe0', // 필리핀: 부드러운 파랑
+  pc: '#ee8a7b', // PC방(게임): 코랄 레드
+  ball: '#f2b760', // 농구공: 따뜻한 주황
+  ssafy: '#62bfa8', // SSAFY 간판: 민트 초록
+} as const;
+const COLOR_AT = {
+  ssafy: [0.82, 0.9] as const, // SSAFY 간판에 색이 번지는 구간(마지막 장면의 r)
+  end: [0.9, 0.985] as const, // 색들이 모여 June의 몸이 아래에서부터 채워지는 구간(r)
+} as const;
 const BEAT_FADE = 0.012; // 나타나고 사라지는 데 걸리는 스크롤 길이
 const BEATS = [
   { text: '저를 따라오세요.', a: SCENE_END * 0.9, b: SCENE_END + 0.1 * FS },
   { text: '제 이야기는 어렸을 때부터 시작됩니다.', a: SCENE_END + 0.14 * FS, b: SCENE_END + 0.4 * FS },
   { text: '저는 3살 때 필리핀으로 이민 갔습니다.', a: SCENE_END + 0.44 * FS, b: qT(qv(64)) },
-  { text: '낯선 말과 낯선 문화 속에서, 하나씩 배우며 자랐습니다.', a: qT(qv(64)), b: qT(qv(240)) },
-  { text: '초등학교도 다니고,', a: qT(qv(240)), b: qT(qv(395)) },
-  { text: '농구도 하고,', a: qT(qv(395)), b: qT(qv(540)) },
-  { text: '친구랑 PC방에 가서 게임도 했죠.', a: qT(qv(650)), b: qT(qv(814)) },
-  { text: '한국으로 돌아와 중·고등학교를 다녔습니다.', a: qT(qv(818)), b: rT(0.16) },
+  { text: '낯선 말과 낯선 문화 속에서, 하나씩 배우며 자랐습니다.', a: qT(qv(64)), b: qT(qv(150)) },
+  { text: '그렇게 저는, 어디서든 적응하는 법을 배웠습니다.', a: qT(qv(150)), b: qT(qv(225)) },
+  { text: '지프니를 타고 학교에 다녔고,', a: qT(qv(225)), b: qT(qv(423)) },
+  { text: '초등학교도 다니고,', a: qT(qv(423)), b: qT(qv(603)) },
+  { text: '농구도 하고,', a: qT(qv(603)), b: qT(qv(748)) },
+  { text: '친구랑 PC방에 가서 게임도 했죠.', a: qT(qv(858)), b: qT(qv(975)) },
+  { text: '이때 게임이 제 마음에 색을 칠했습니다.', a: qT(qv(975)), b: qT(qv(1024)) }, // 두 번째 색(PC방)이 들어오는 때
+  { text: '한국으로 돌아와 중·고등학교를 다녔습니다.', a: qT(qv(1026)), b: rT(0.16) },
   { text: '대학교를 졸업하고,', a: rT(0.31), b: rT(0.5) },
-  { text: '코딩에 흥미가 생겨,', a: rT(0.5), b: rT(0.68) },
-  { text: 'SSAFY 14기에 입과했습니다.', a: rT(0.68), b: 2 },
+  { text: '게임을 즐기던 제가, 직접 만들어 보고 싶어졌습니다.', a: rT(0.5), b: rT(0.68) },
+  { text: '그래서 코딩을 배우러 SSAFY 14기에 입과했습니다.', a: rT(0.68), b: rT(0.8) }, // 네 번째 색(SSAFY 간판)이 들어오는 때는 이 문장 끝 무렵
+  { text: '그리고 지금은, 몰입을 설계하는 게임 클라이언트 개발자를 꿈꾸고 있습니다.', a: rT(0.8), b: rT(0.9) },
+  { text: '이 색들이 모여, 지금의 제가 되었습니다.', a: rT(0.9), b: 2 }, // 엔딩: 색들이 모여 June가 채워진다
 ];
 // 땅 위의 작은 풀(풍경이 흘러가는 걸 보여 준다): 땅이 그어진 곳에만 보인다
 const TUFT_PATH = 'M0 0 L-9 -20 M0 0 L0 -26 M0 0 L9 -20';
@@ -167,8 +185,6 @@ const SCHOOL_LINES = [
   'M0 -290 L0 -410',
   `M0 -410 L${FLAG_W} -410 L${FLAG_W} ${-410 + FLAG_H} L0 ${-410 + FLAG_H} Z`,
 ].map((d) => mapPath(d, SCHOOL));
-// 필리핀 국기의 삼각형·가운데 선(국기가 태극기로 바뀔 때 함께 사라진다)
-const PH_FLAG_LINES = [`M0 -410 L70 ${-410 + FLAG_H / 2} L0 ${-410 + FLAG_H}`, `M70 ${-410 + FLAG_H / 2} L${FLAG_W} ${-410 + FLAG_H / 2}`].map((d) => mapPath(d, SCHOOL));
 // 태극기: 가운데 태극 무늬(위 빨강·아래 파랑)와 네 모서리의 괘(막대 셋)
 const TG_CX = SCHOOL_X + FLAG_W / 2;
 const TG_CY = GROUND - 410 + FLAG_H / 2;
@@ -241,34 +257,83 @@ const BOARD = 0.14; // 캐릭터가 계단을 올라 비행기에 타는 데 걸
 // 필리핀 장면의 처음: 비행기가 왼쪽 위에서 내려와 땅에 닿아 멈추고, 캐릭터가 문에서 나와 계단을 내려온다
 const LAND_X = 520; // 비행기가 멈추는 자리(풍경 좌표, 이때 풍경은 아직 흐르지 않는다)
 // 땅 위의 작은 풀: 학교·비행기가 서 있는 동안만 그 자리를 비운다(그 자리를 지나갈 때 풀이 갑자기 사라지지 않게, 있을 때만 보이도록 묶어서 켜고 끈다)
-const TUFT_ALL = Array.from({ length: 24 }, (_, i) => 520 + i * 290 + (i % 3) * 40);
+const TUFT_ALL = Array.from({ length: 40 }, (_, i) => 520 + i * 290 + (i % 3) * 40);
 const nearSchool = (x: number) => Math.abs(x - SCHOOL_X) <= 360;
 const nearPlane = (x: number) => x - PLANE_X >= -310 && x - PLANE_X <= 290;
 const nearLanded = (x: number) => x - LAND_X >= -310 && x - LAND_X <= 290;
 const Q_LAND = [qv(8), qv(64)] as const; // 착륙하는 구간
 const Q_STEP = [qv(88), qv(120)] as const; // 캐릭터가 문에서 나와 계단을 내려오는 구간
+// 계단을 내려온 뒤: 조금 걷다가, 손이 지프니를 그리고, 캐릭터가 타서 멀리 있는 학교 앞까지 간다
+const Q_WALK1 = [qv(120), qv(225)] as const; // 착륙한 자리에서 조금 걸어간다
+const Q_DRAW = [qv(225), qv(280)] as const; // 손이 지프니를 그린다
+const Q_BOARD = [qv(280), qv(328)] as const; // 캐릭터가 지프니에 탄다
+const Q_RIDE = [qv(328), qv(423)] as const; // 지프니를 타고 학교 앞까지 간다(풍경이 빠르게 흘러간다)
+const Q_EXIT = [qv(423), qv(448)] as const; // 내려서 학교 문까지 걸어간다
+const WALK1_STEP = 200; // 그동안 캐릭터가 화면에서 걸어가는 거리
+const JEEP_DRAW_SCREEN = 1380; // 손이 지프니를 그릴 때 지프니가 화면에서 서는 자리(오른쪽 끝)
+const JEEP_SCREEN0 = 800; // 캐릭터가 타는 자리(화면 가운데)
+const JEEP_SCREEN1 = 640; // 달리는 동안(그리고 멈출 때) 지프니가 화면에서 서는 자리
+const PAN_WALK1 = 1300; // 착륙한 뒤 걸어가는 동안 풍경이 흘러간 거리(그다음 멈춰 서서 지프니를 그린다)
+const JEEP_X0 = PAN_WALK1 + JEEP_DRAW_SCREEN; // 지프니를 그리는 자리(풍경 좌표, 오른쪽 끝)
 const EXIT_X = [LAND_X - 127, LAND_X - 17] as const; // 내려가는 계단의 위·아래 가로 위치(문 오른쪽 끝에서 시작)
 // 학교에서 다시 나온 뒤: 농구 골대와 친구들이 있는 곳까지 풍경이 더 흘러가고, 슛을 한 다음 PC방으로 넘어간다
-const Q_BACK = qv(300); // 학교 안에서 다시 나오는 때
-const Q_BB = [qv(335), qv(420)] as const; // 농구 골대까지 걷는 구간(풍경이 더 흘러간다)
-const Q_BBEND = qv(540); // 농구가 끝나고 PC방으로 걸어가기 시작하는 때(이때부터 공은 사라진다)
-const Q_PW = [qv(535), qv(700)] as const; // PC방까지 걷는 구간(풍경이 더 흘러간다)
-const Q_PDOOR = qv(700); // PC방 문에 닿는 때(이때부터 안으로 들어간다)
-const Q_PC = [qv(734), qv(814)] as const; // PC방이 나오는 구간(들어오고 나가는 것 포함)
-const Q_RESET = qv(754); // PC방이 화면을 다 덮은 뒤: 이때 풍경을 학교 앞으로 되돌린다
-const Q_SWAP = [qv(818), qv(850)] as const; // 국기가 태극기로 바뀌고 건물이 좋아지는 구간
+const Q_BACK = qv(532); // 학교 안에서 다시 나오는 때(그 전까지 말풍선이 터져 나온다)
+const Q_BB = [qv(543), qv(628)] as const; // 농구 골대까지 걷는 구간(풍경이 더 흘러간다)
+const Q_BBEND = qv(748); // 농구가 끝나고 PC방으로 걸어가기 시작하는 때(이때부터 공은 사라진다)
+const Q_PW = [qv(743), qv(908)] as const; // PC방까지 걷는 구간(풍경이 더 흘러간다)
+const Q_PDOOR = qv(908); // PC방 문에 닿는 때(이때부터 안으로 들어간다)
+const Q_PC = [qv(942), qv(1022)] as const; // PC방이 나오는 구간(들어오고 나가는 것 포함)
+const Q_RESET = qv(962); // PC방이 화면을 다 덮은 뒤: 이때 풍경을 학교 앞으로 되돌린다
+const Q_SWAP = [qv(1026), qv(1058)] as const; // 국기가 태극기로 바뀌고 건물이 좋아지는 구간
 const BB_PAN = 850; // 농구 골대까지 풍경이 더 흘러가는 거리
 const BB_BASE = PAN_MAX + BB_PAN; // 농구 장면에서 풍경이 흘러간 전체 거리
 const HOOP_SCREEN = 1380; // 도착했을 때 골대가 화면에서 서는 자리
 const BB_CHAR_SCREEN = 760; // 캐릭터가 서는 자리
 const BB_WALK = BB_CHAR_SCREEN - (CX + 233 * S);
 const HOOP_X = HOOP_SCREEN + BB_BASE; // 골대(풍경 좌표)
+// 학교 문 앞에서 안으로 들어가 있는 동안: 영어로 오가는 말을 말풍선으로 한 마디씩 보여 준다([영어, 뜻, 나타나는 구간(vh)])
+// 말풍선은 학교 위에 한 줄로 터져 나온다: 가운데는 높게, 양옆(왼쪽은 국기 위, 오른쪽은 지붕 옆)은 조금 낮게. 말풍선마다 자리(dx, dy)와 기울기(rot), 양옆의 반짝 표시(spark: -1 왼쪽, 1 오른쪽)를 정한다
+const TALK_SCALE = 0.9; // 말풍선 크기
+const TALKS = [
+  { en: 'Good morning, teacher!', ko: '선생님, 안녕하세요!', a: qv(484), b: qv(530), dx: -5, dy: -55, rot: 0, spark: 0 },
+  { en: 'Could you say that again?', ko: '한 번만 더 말해 주실래요?', a: qv(498), b: qv(530), dx: 297, dy: -5, rot: 0, spark: 1 },
+  { en: 'Can I play with you?', ko: '나도 같이 해도 돼?', a: qv(512), b: qv(530), dx: -285, dy: -94, rot: 0, spark: -1 },
+] as const;
+// 겪은 일마다 늘어난 역량: 화면 위 글 밑에 작은 표시로 나타났다 사라진다(이름과 구간은 여기서 고친다)
+const SKILLS = [
+  { name: '적응력', a: qT(qv(150)), b: qT(qv(225)) },
+  { name: '영어 소통', a: qT(qv(536)), b: qT(qv(592)) },
+  { name: '팀워크', a: qT(qv(690)), b: qT(qv(748)) },
+  { name: '게임을 보는 눈', a: qT(qv(975)), b: qT(qv(1024)) },
+] as const;
+const JEEP_PARK = SCHOOL_X - 620; // 지프니가 멈추는 자리: 학교 깃대 앞(풍경 좌표)
+const rideU = (q: number) => clamp01((q - Q_RIDE[0]) / (Q_RIDE[1] - Q_RIDE[0]));
+const jeepWorldX = (q: number) => JEEP_X0 + (JEEP_PARK - JEEP_X0) * ease(rideU(q)); // 출발할 때 천천히, 도착할 때 천천히
+const jeepScreenX = (q: number) => JEEP_SCREEN0 + (JEEP_SCREEN1 - JEEP_SCREEN0) * ease(clamp01(rideU(q) / 0.25));
+// 학교까지 가는 동안 풍경이 흘러간 정도: 걷고, 멈춰서 지프니를 그린 뒤, 지프니가 가운데로 오고, 지프니를 따라 빠르게 흘러가고, 내려서 걸어간다
+const panPh = (q: number) => {
+  if (q < Q_WALK1[0]) return 0;
+  if (q < Q_WALK1[1]) return PAN_WALK1 * ease(clamp01((q - Q_WALK1[0]) / (Q_WALK1[1] - Q_WALK1[0])));
+  if (q < Q_BOARD[0]) return PAN_WALK1; // 멈춰 서서 손이 지프니를 그린다
+  if (q < Q_RIDE[0]) return PAN_WALK1 + (JEEP_DRAW_SCREEN - JEEP_SCREEN0) * ease(clamp01((q - Q_BOARD[0]) / (Q_BOARD[1] - Q_BOARD[0]))); // 그린 지프니가 오른쪽 끝에서 화면 가운데로 온다
+  if (q < Q_RIDE[1]) return jeepWorldX(q) - jeepScreenX(q);
+  const end = JEEP_PARK - JEEP_SCREEN1;
+  if (q < Q_EXIT[1]) return end + (PAN_MAX - end) * ease(clamp01((q - Q_EXIT[0]) / (Q_EXIT[1] - Q_EXIT[0])));
+  return PAN_MAX;
+};
+// 필리핀 학교 그림(사용자가 준 필리핀학교.png에서 만든 선·채움·국기 색 층): 현관문 가운데 아래가 (ax, ay), k배로 쓴다
+const SCH = { w: 645, h: 405, ax: 358, ay: 377, k: 1.0 };
+const SCH_DOOR_PATH = 'M-39 -22 L-39 -72 L33 -72 L39 -28 Z'; // 현관문(어두워지는 자리): 학교 문 가운데 기준
+const JEEP = { w: 633, h: 332, ax: 316, ay: 297, k: 0.632, tilt: -1.72, pivotX: -133.4 }; // 지프니 그림(잘라 만든 마스크): 뒷바퀴 바닥이 (ay)에서 땅에 닿고, k배로 줄여 쓴다. 그림이 비스듬한 각도라 앞바퀴가 더 낮아서, 뒷바퀴 바닥(pivotX)을 기준으로 tilt만큼 살짝 돌려 앞바퀴도 땅에 닿게 한다
 const nearHoop = (x: number) => Math.abs(x - HOOP_X) <= 280; // 골대 밑에는 풀을 두지 않는다
+const nearJeep = (x: number) => Math.abs(x - JEEP_X0) <= 260 || Math.abs(x - JEEP_PARK) <= 260; // 지프니를 그리는 자리와 멈추는 자리 밑에는 풀을 두지 않는다
 const TUFT_SCHOOL = TUFT_ALL.filter(nearSchool); // 학교가 나오는 필리핀 장면에서만 비운다(비행기 장면에서는 풀이 있다)
-const TUFT_PLANE = TUFT_ALL.filter((x) => !nearSchool(x) && nearPlane(x) && !nearHoop(x)); // 비행기가 서 있는 비행기 장면에서만 비운다
-const TUFT_LANDED = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && nearLanded(x)); // 비행기가 착륙해 서 있는 동안만 비운다
-const TUFT_FREE = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && !nearLanded(x) && !nearHoop(x));
+const TUFT_PLANE = TUFT_ALL.filter((x) => !nearSchool(x) && nearPlane(x) && !nearHoop(x) && !nearJeep(x)); // 비행기가 서 있는 비행기 장면에서만 비운다
+const TUFT_LANDED = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && nearLanded(x) && !nearJeep(x)); // 비행기가 착륙해 서 있는 동안만 비운다
+const TUFT_FREE = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && !nearLanded(x) && !nearHoop(x) && !nearJeep(x));
 const PC_PAN = 1900; // 골대 다음 PC방까지 풍경이 더 흘러가는 거리
+// PC방 그림(사용자가 준 피시방.png에서 만든 선·흰 면·색 면): 가게 앞 열린 곳 가운데 아래가 (ax, ay), k배로 쓴다
+const PCSHOP = { w: 629, h: 439, ax: 332, ay: 425, k: 1.0 };
 const PCB_X = DOOR_SCREEN_X + BB_BASE + PC_PAN; // PC방 문의 가운데(풍경 좌표)
 // 농구공(사용자가 준 손그림): 슬링샷처럼 끌었다 놓아 던진다
 const BALL_R = 32; // 공 반지름(클수록 큰 공)
@@ -316,8 +381,8 @@ const assistShot = (x0: number, y0: number, vx: number, vy: number): [number, nu
 const EXIT_WALK = [LAND_X - 137 - (CX + 233 * S), EXIT_X[1] - (CX + 233 * S)] as const; // 문 앞 자리, 계단 아래 자리에서의 걸음 위치
 // 분위기 색: 필리핀은 햇볕 같은 따뜻한 색, 한국은 차분한 서늘한 색(낮/밤 모드에 맞춰 두 벌)
 const MOOD = {
-  light: { base: '#ffffff', ph: '#fff0cf', kr: '#e7eef7' },
-  dark: { base: '#637a9e', ph: '#8a7863', kr: '#4c6283' },
+  light: { base: '#faf8f3', ph: '#fff0cf', kr: '#e7eef7' },
+  dark: { base: '#455878', ph: '#6a5a47', kr: '#34465f' },
 } as const;
 const hexRgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const mixHex = (a: string, b: string, t: number) => {
@@ -345,6 +410,7 @@ export default function LineScene() {
   const sectionRef = useRef<HTMLElement>(null);
   const [greeting, setGreeting] = useState(''); // 지금 시간에 맞춘 인삿말(서버와 화면이 달라지지 않게 화면이 뜬 뒤에 채운다)
   useEffect(() => setGreeting(TIME_GREETING[currentPeriod()]), []);
+  useEffect(() => () => cancelAnimationFrame(pcRafRef.current), []);
   const pathRefs = useRef<(SVGPathElement | null)[]>([]);
   const lens = useRef<number[]>([]);
   const handRef = useRef<SVGGElement>(null);
@@ -352,17 +418,41 @@ export default function LineScene() {
   const bodyFillRef = useRef<SVGPathElement>(null); // 몸 안쪽을 배경색으로 채워 뒤에 있는 그림(학교 등)이 비치지 않게 한다
   const uniformRef = useRef<SVGGElement>(null); // 교복(학교에서 나올 때만 입는다)
   const armFillRefs = useRef<(SVGPathElement | null)[]>([]); // 팔 안쪽 채움(팔을 다 그리면 채워진다)
-  const phFlagRef = useRef<SVGGElement>(null); // 필리핀 국기
+  const phFlagRef = useRef<SVGGElement>(null); // 필리핀 학교(그림)
   const tgFlagRef = useRef<SVGGElement>(null); // 태극기
+  const oldSchoolRef = useRef<SVGGElement>(null); // 한국 학교(손으로 그린 선)
+  const doorFillPhRef = useRef<SVGPathElement>(null); // 필리핀 학교 현관문(어두워진다)
   const beatRefs = useRef<(SVGTextElement | null)[]>([]); // 한 줄씩 나오는 이야기
-  const pcDoorRef = useRef<SVGRectElement>(null); // PC방 문 안쪽(들어갈 때 어두워진다)
   const poseHopRef = useRef<SVGGElement>(null); // 슛 자세 그림(두 장)을 함께 뛰게 하는 묶음
   const poseAimRef = useRef<SVGGElement>(null); // 조준: 두 손이 머리 위
   const poseShootRef = useRef<SVGGElement>(null); // 슛: 팔을 뻗은 마무리
   const charHideRef = useRef<SVGGElement>(null); // 슛 자세가 나오는 동안 평소 캐릭터를 숨긴다
   const groundPlugRef = useRef<SVGPathElement>(null); // 뛰어올랐을 때 몸 밑에 비는 땅선을 메운다
   const poseNow = useRef<'none' | 'aim' | 'shoot'>('none');
+  const jeepRef = useRef<SVGGElement>(null); // 지프니
+  const jeepPosRef = useRef<SVGGElement>(null); // 지프니가 놓인 자리(달리면 움직인다)
+  const jeepThrRef = useRef<SVGFEColorMatrixElement>(null); // 지프니가 선을 따라 그려지는 정도
+  const jeepFillRef = useRef<SVGRectElement>(null); // 지프니 안쪽 면(선을 다 그린 뒤 채워진다)
   const hoopShakeRef = useRef<SVGGElement>(null); // 골이 들어가면 골대가 살짝 흔들린다
+  const emoteRef = useRef<SVGGElement>(null); // 캐릭터 머리 위 표시(생각, 놀람)
+  const thinkRef = useRef<SVGGElement>(null);
+  const surpriseRef = useRef<SVGGElement>(null);
+  const juneFillRef = useRef<SVGPathElement>(null); // 엔딩에서 채워지는 June의 몸
+  const juneClipRef = useRef<SVGRectElement>(null);
+  const signColorRef = useRef<SVGRectElement>(null); // SSAFY 간판에 번지는 색
+  const signColorClipRef = useRef<SVGRectElement>(null);
+  const talkRefs = useRef<(SVGGElement | null)[]>([]); // 학교 문 앞의 영어 말풍선
+  const skillRefs = useRef<(SVGGElement | null)[]>([]); // 늘어난 역량 표시
+  const pcMonRef = useRef<SVGGElement>(null); // PC방에서 떠오르는 모니터
+  const pcHeroRef = useRef<SVGGElement>(null); // 모니터 속 게임의 꼬마
+  const pcCoinRefs = useRef<(SVGCircleElement | null)[]>([]); // 모니터 속 게임의 동전
+  const pcHitRef = useRef<SVGRectElement>(null); // 모니터 화면 위 마우스·손가락 받는 곳
+  const pcScoreRef = useRef<SVGTextElement>(null);
+  const pcHintRef = useRef<SVGTextElement>(null);
+  const pcClearRef = useRef<SVGTextElement>(null);
+  const pcRafRef = useRef(0);
+  const pcGame = useRef({ on: false, running: false, last: 0, px: 0, tx: 0, score: 0, coins: [] as { x: number; y: number; v: number }[] });
+  const hopPlugRef = useRef<SVGPathElement>(null); // 폴짝 뛸 때 비는 발밑 땅선을 메운다
   const hopRef = useRef<SVGGElement>(null); // 캐릭터가 던질 때 웅크렸다 뛰는 동작
   const bbRef = useRef<SVGGElement>(null); // 농구 골대와 친구들
   const ballLayerRef = useRef<SVGGElement>(null); // 캐릭터 앞에 그리는 공 층(풍경과 같이 움직인다)
@@ -374,7 +464,9 @@ export default function LineScene() {
   const ballHitRef = useRef<SVGCircleElement>(null); // 공을 잡는 자리(마우스로 끌 수 있다)
   const trajRef = useRef<SVGPathElement>(null); // 던질 방향 미리보기
   const goalRef = useRef<SVGTextElement>(null); // 골 문구
-  const goalNextRef = useRef<SVGTextElement>(null); // 골 뒤에 나오는 '계속 스크롤' 안내
+  const goalNextRef = useRef<HTMLDivElement>(null); // 골 뒤 오른쪽에 나오는 '스크롤로 계속' 안내
+  const confettiRef = useRef<(SVGElement | null)[]>([]); // 골 축하 색종이
+  const audioRef = useRef<AudioContext | null>(null);
   const ballHintRef = useRef<SVGGElement>(null); // 공을 끌어 보라는 안내
   const handZoneRef = useRef<SVGGElement>(null); // 공을 들고 있는 동안 '여기에 놓기' 표시
   const heldHintRef = useRef<SVGGElement>(null); // 공을 쥔 뒤 '뒤로 끌었다 놓기' 안내
@@ -410,6 +502,7 @@ export default function LineScene() {
   const s3Refs = useRef<(SVGPathElement | null)[]>([]); // 졸업모·노트북·간판(손이 그리는 선)
   const signClipRef = useRef<SVGRectElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
+  const creditRef = useRef<HTMLDivElement>(null); // 출처와 제작 방식 안내(첫 화면에서 스크롤하면 사라진다)
   const sigRef = useRef<SVGGElement>(null);
   const capRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<SVGPathElement>(null);
@@ -459,6 +552,56 @@ export default function LineScene() {
     if (handZoneRef.current) handZoneRef.current.style.opacity = a > 0 && sh.mode === 'drag' && sh.sub === 'carry' ? '1' : '0';
     if (heldHintRef.current) heldHintRef.current.style.opacity = a > 0 && sh.mode === 'held' ? '1' : '0';
   };
+  // 골 축하: 색종이가 터지고 짧은 팡파레가 울린다
+  const celebrate = () => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      confettiRef.current.forEach((el, i) => {
+        if (!el) return;
+        const ang = (-Math.PI / 2) + (Math.random() - 0.5) * Math.PI * 1.25; // 위쪽 부채꼴로 터진다
+        const dist = 90 + Math.random() * 150;
+        el.animate(
+          [
+            { transform: 'translate(0px, 0px) rotate(0deg)', opacity: 1 },
+            { transform: `translate(${Math.cos(ang) * dist}px, ${Math.sin(ang) * dist - 40}px) rotate(${(Math.random() - 0.5) * 540}deg)`, opacity: 1, offset: 0.55 },
+            { transform: `translate(${Math.cos(ang) * dist * 1.15}px, ${Math.sin(ang) * dist + 110}px) rotate(${(Math.random() - 0.5) * 720}deg)`, opacity: 0 },
+          ],
+          { duration: 1300 + (i % 5) * 120, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards' }
+        );
+      });
+    }
+    try {
+      const AC = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AC) return;
+      const ctx = audioRef.current ?? new AC();
+      audioRef.current = ctx;
+      void ctx.resume();
+      const t0 = ctx.currentTime + 0.02;
+      // 도 미 솔 (짧게) 도 — 맑은 삼각파 + 살짝 겹친 사각파
+      const notes: [number, number, number][] = [
+        [523.25, 0, 0.13],
+        [659.25, 0.13, 0.13],
+        [783.99, 0.26, 0.13],
+        [1046.5, 0.39, 0.5],
+      ];
+      notes.forEach(([f, at, len]) => {
+        (['triangle', 'square'] as const).forEach((type, k) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = type;
+          o.frequency.value = f;
+          const peak = k === 0 ? 0.11 : 0.025;
+          g.gain.setValueAtTime(0.0001, t0 + at);
+          g.gain.exponentialRampToValueAtTime(peak, t0 + at + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + len);
+          o.connect(g).connect(ctx.destination);
+          o.start(t0 + at);
+          o.stop(t0 + at + len + 0.05);
+        });
+      });
+    } catch {
+      // 소리를 낼 수 없는 환경이면 조용히 넘어간다
+    }
+  };
   const stopShot = () => {
     setPose('none');
     setHop(0);
@@ -471,6 +614,53 @@ export default function LineScene() {
     if (goalRef.current) goalRef.current.style.opacity = '0';
     if (goalNextRef.current) goalNextRef.current.style.opacity = '0';
     if (trajRef.current) trajRef.current.style.opacity = '0';
+  };
+  // PC방 모니터 미니게임: 마우스(손가락)로 꼬마를 좌우로 움직여 떨어지는 동전을 먹는다(안 해도 스크롤로 넘어간다)
+  const PC_COINS = 5; // 이만큼 먹으면 CLEAR
+  const pcSpawn = (c: { x: number; y: number; v: number }, first: number) => {
+    c.x = -110 + Math.random() * 220;
+    c.y = -84 - first * 45;
+    c.v = 45 + Math.random() * 35;
+  };
+  const pcStep = (now: number) => {
+    const g = pcGame.current;
+    if (!g.on) {
+      g.running = false;
+      return;
+    }
+    const dt = Math.min(0.05, (now - g.last) / 1000);
+    g.last = now;
+    if (!g.coins.length) {
+      for (let i = 0; i < 4; i++) {
+        const c = { x: 0, y: 0, v: 0 };
+        pcSpawn(c, i);
+        g.coins.push(c);
+      }
+    }
+    g.px += (g.tx - g.px) * Math.min(1, dt * 14);
+    g.coins.forEach((c, i) => {
+      c.y += c.v * dt;
+      if (c.y > 30 && c.y < 52 && Math.abs(c.x - g.px) < 16) {
+        g.score += 1;
+        pcSpawn(c, 0);
+      } else if (c.y > 56) pcSpawn(c, 0);
+      const el = pcCoinRefs.current[i];
+      if (el) {
+        el.setAttribute('cx', c.x.toFixed(1));
+        el.setAttribute('cy', c.y.toFixed(1));
+      }
+    });
+    pcHeroRef.current?.setAttribute('transform', `translate(${g.px.toFixed(1)} 48)`);
+    if (pcScoreRef.current) pcScoreRef.current.textContent = `COIN ${Math.min(g.score, PC_COINS)} / ${PC_COINS}`;
+    if (pcHintRef.current) pcHintRef.current.style.opacity = g.score === 0 ? '1' : '0';
+    if (pcClearRef.current) pcClearRef.current.style.opacity = g.score >= PC_COINS ? '1' : '0';
+    pcRafRef.current = requestAnimationFrame(pcStep);
+  };
+  const pcPoint = (e: React.PointerEvent) => {
+    const ctm = pcMonRef.current?.getScreenCTM();
+    if (!ctm) return;
+    const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
+    pcGame.current.tx = Math.max(-118, Math.min(118, pt.x));
   };
   const toWorld = (e: React.PointerEvent) => {
     const ctm = svgRef.current?.getScreenCTM();
@@ -539,7 +729,8 @@ export default function LineScene() {
         sh.goalAt = now;
         sh.vx = -110; // 그물을 지나면 기둥에서 멀어지는 쪽(캐릭터 쪽)으로 튀어 굴러간다
         if (goalRef.current) goalRef.current.style.opacity = '1';
-        if (goalNextRef.current) goalNextRef.current.style.opacity = '0.85';
+        if (goalNextRef.current) goalNextRef.current.style.opacity = '1';
+        celebrate();
       }
       if (sh.y > GROUND - BALL_R) {
         if (!sh.groundAt) sh.groundAt = now;
@@ -746,7 +937,7 @@ export default function LineScene() {
     const f = clamp01((pRaw - SCENE_END) / (F_END - SCENE_END)); // 비행기 장면의 진행 정도
     const q = clamp01((pRaw - F_END) / (S2_END - F_END)); // 필리핀 장면의 진행 정도
     const r = clamp01((pRaw - S2_END) / (1 - S2_END)); // 그 뒤 장면(졸업 -> 코딩 -> 싸피)의 진행 정도
-    const pan = q > 0 ? ease(clamp01((q - Q_STEP[1]) / (Q_DOOR - Q_STEP[1]))) * PAN_MAX + (q < Q_RESET ? ease(clamp01((q - Q_BB[0]) / (Q_BB[1] - Q_BB[0]))) * BB_PAN + ease(clamp01((q - Q_PW[0]) / (Q_PW[1] - Q_PW[0]))) * PC_PAN : 0) : ease(clamp01(f / F_WALK)) * PLANE_PAN; // 풍경이 왼쪽으로 흘러간 정도(비행기, 학교, 농구 골대)
+    const pan = q > 0 ? panPh(q) + (q < Q_RESET ? ease(clamp01((q - Q_BB[0]) / (Q_BB[1] - Q_BB[0]))) * BB_PAN + ease(clamp01((q - Q_PW[0]) / (Q_PW[1] - Q_PW[0]))) * PC_PAN : 0) : ease(clamp01(f / F_WALK)) * PLANE_PAN; // 풍경이 왼쪽으로 흘러간 정도(비행기, 학교, 농구 골대)
     const hand = handRef.current;
     if (!hand || lens.current.length !== PIECES.length) return;
 
@@ -799,9 +990,30 @@ export default function LineScene() {
         moving = true;
         rise = stairRise(1 - e);
       } else if (q < Q_DOOR) {
-        const e = clamp01((q - Q_STEP[1]) / (Q_DOOR - Q_STEP[1]));
-        walk = EXIT_WALK[1] + (DOOR_WALK - EXIT_WALK[1]) * e;
-        moving = e < 1;
+        // 조금 걷고 -> 손이 지프니를 그리는 동안 서 있고 -> 지프니로 걸어가 타고 -> 달리는 동안 안에 있다가 -> 내려서 학교 문까지 걷는다
+        const w0 = EXIT_WALK[1];
+        const w1 = w0 + WALK1_STEP;
+        const wBoard = JEEP_SCREEN0 - 30 - gx(233);
+        if (q < Q_WALK1[1]) {
+          const e = clamp01((q - Q_WALK1[0]) / (Q_WALK1[1] - Q_WALK1[0]));
+          walk = w0 + (w1 - w0) * ease(e);
+          moving = e < 1;
+        } else if (q < Q_BOARD[0]) {
+          walk = w1;
+          moving = false; // 멈춰 서서 손이 지프니를 그리는 걸 본다
+        } else if (q < Q_BOARD[1]) {
+          const e = clamp01((q - Q_BOARD[0]) / (Q_BOARD[1] - Q_BOARD[0]));
+          walk = w1 + (wBoard - w1) * ease(e);
+          moving = e < 1;
+        } else if (q < Q_EXIT[0]) {
+          walk = jeepScreenX(q) - 30 - gx(233); // 지프니 안에서 함께 달린다(보이지 않는다)
+          moving = false;
+        } else {
+          const wOut = JEEP_SCREEN1 + 40 - gx(233);
+          const e = clamp01((q - Q_EXIT[0]) / (Q_EXIT[1] - Q_EXIT[0]));
+          walk = wOut + (DOOR_WALK - wOut) * ease(e);
+          moving = e < 1;
+        }
       } else if (q < Q_BB[0] || q >= Q_RESET) {
         // 학교 안(들어갔다가 다시 나올 때까지)이거나 PC방 이후: 문 앞에 있다
         walk = DOOR_WALK;
@@ -835,22 +1047,59 @@ export default function LineScene() {
     }
     const phase = Math.sin((walk + pan) * STEP); // 화면이 흐르는 만큼도 걸음이 이어진다
     const stretch = moving ? 1 + Math.abs(phase) * 0.03 : 1; // 발은 땅에 붙인 채 몸만 살짝 늘었다 줄었다 한다(떠오르지 않는다)
-    const lean = moving ? phase * 2.2 : 0;
+    // 손이 지프니를 그리는 동안 기다리는 몸짓: 먼저 고개를 갸웃하며 "?" 하고 생각하다가, 거의 다 그려지면 "!" 하며 깜짝 놀라 팔을 들고 폴짝 뛴다
+    const inDraw = q >= Q_DRAW[0] && q <= Q_DRAW[1] && r === 0;
+    const gu = inDraw ? clamp01((q - Q_DRAW[0]) / (Q_DRAW[1] - Q_DRAW[0])) : 0;
+    const trap = (x: number, a: number, b: number, c: number, d: number) => clamp01((x - a) / (b - a)) * (1 - clamp01((x - c) / (d - c)));
+    const think = inDraw ? trap(gu, 0.06, 0.18, 0.46, 0.58) : 0;
+    const surprise = inDraw ? trap(gu, 0.62, 0.7, 0.86, 0.94) : 0;
+    const hop = inDraw ? 16 * Math.sin(Math.PI * clamp01((gu - 0.62) / 0.2)) : 0;
+    rise += hop;
+    const lean = (moving ? phase * 2.2 : 0) - 3.5 * think; // 생각할 때 몸이 살짝 갸웃한다
     // 문으로 들어가고 나올 때: 문이 어두워진 뒤 캐릭터가 빠르게 사라지고(나올 때는 나타난다)
     const enterT = r > 0 ? (r < R_OUT[0] ? 1 - clamp01(r / R_OUT[0]) : 0) : q >= Q_RESET ? 1 : q >= Q_BACK ? Math.max(1 - clamp01((q - Q_BACK) / DOOR_FADE), clamp01((q - Q_PDOOR) / DOOR_FADE)) : q >= Q_DOOR ? clamp01((q - Q_DOOR) / DOOR_FADE) : 0;
     charRef.current?.setAttribute('transform', `translate(${walk} ${-rise}) translate(0 ${GROUND}) scale(1 ${stretch}) translate(0 ${-GROUND}) rotate(${lean} ${gx(233)} ${GROUND})`);
+    // 머리 위 표시: 생각("?")과 놀람("!")이 캐릭터를 따라다닌다
+    const emoteX = gx(233) + walk;
+    emoteRef.current?.setAttribute('transform', `translate(${emoteX} ${-rise})`);
+    if (thinkRef.current) thinkRef.current.style.opacity = `${think}`;
+    if (surpriseRef.current) surpriseRef.current.style.opacity = `${surprise}`;
+    TALKS.forEach((tk2, i) => {
+      const el = talkRefs.current[i];
+      if (!el) return;
+      const o = r === 0 ? trap(q, tk2.a, tk2.a + qv(5), tk2.b - qv(5), tk2.b) : 0;
+      el.style.opacity = `${o}`;
+    });
+    hopPlugRef.current?.setAttribute('transform', `translate(${emoteX} 0)`);
+    if (hopPlugRef.current) hopPlugRef.current.style.opacity = hop > 1 ? '1' : '0';
     // 캐릭터가 서 있는 바로 그 밑만 땅을 가린다(걸어가도 밑에는 땅이 없고, 지나간 뒤쪽에는 땅이 있다)
     const inSchool = r === 0 && ((q === 0 && f > F_WALK) || (q > 0 && q < Q_STEP[1])); // 비행기를 타고 내리는 동안(건물에 들어가 있는 동안에도 발밑 땅은 계속 비워 둬서 땅이 보였다 안 보였다 하지 않게 한다)
-    if (charRef.current) charRef.current.style.opacity = r > 0 ? `${1 - clamp01(enterT / 0.45)}` : q > 0 ? `${q < Q_DOOR ? clamp01((q - Q_STEP[0]) / qv(12)) : 1 - clamp01((enterT - 0.5) / 0.5)}` : `${1 - clamp01((f - F_WALK - BOARD * 0.7) / (BOARD * 0.3))}`; // 문에 닿으면 학교 안으로 사라지고, 나올 때 다시 나타난다
+    const boardU = clamp01((q - Q_BOARD[0]) / (Q_BOARD[1] - Q_BOARD[0]));
+    const preDoorVis = q < Q_BOARD[0] ? clamp01((q - Q_STEP[0]) / qv(12)) : q < Q_BOARD[1] ? 1 - clamp01((boardU - 0.45) / 0.45) : q < Q_EXIT[0] ? 0 : clamp01((q - Q_EXIT[0]) / ((Q_EXIT[1] - Q_EXIT[0]) * 0.35));
+    if (charRef.current) charRef.current.style.opacity = r > 0 ? `${1 - clamp01(enterT / 0.45)}` : q > 0 ? `${q < Q_DOOR ? preDoorVis : 1 - clamp01((enterT - 0.5) / 0.5)}` : `${1 - clamp01((f - F_WALK - BOARD * 0.7) / (BOARD * 0.3))}`; // 문에 닿으면 학교 안으로 사라지고, 나올 때 다시 나타난다
+    // 지프니: 손이 그려 나가고(왼쪽에서부터 나타난다), 캐릭터가 타면 학교 앞까지 달려가 선다
+    if (jeepRef.current) jeepRef.current.style.opacity = q > 0 && q < Q_RESET ? '1' : '0';
+    const jw = q <= 0 ? JEEP_X0 : jeepWorldX(q);
+    const bounce = q >= Q_RIDE[0] && q < Q_RIDE[1] ? Math.sin(jw * 0.09) * 1.6 : 0; // 달리는 동안 살짝 덜컹거린다
+    jeepPosRef.current?.setAttribute('transform', `translate(${jw} ${GROUND + bounce})`);
+    const jeepRv = clamp01((q - Q_DRAW[0]) / (Q_DRAW[1] - Q_DRAW[0]));
+    jeepThrRef.current?.setAttribute('values', `0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 -255 0 0 0 ${(255 * (jeepRv * 1.006 + 0.002)).toFixed(2)}`);
+    if (jeepFillRef.current) jeepFillRef.current.style.opacity = `${clamp01((jeepRv - 0.9) / 0.1)}`;
     // 발밑 땅은 캐릭터가 보이는 만큼만 비운다: 건물로 들어가며 사라질 때 천천히 닫히고, 나올 때 천천히 열려서 땅이 갑자기 나타났다 사라지지 않는다
     const charOp = parseFloat(charRef.current?.style.opacity || '1');
+    // 색: 나를 바꾼 것마다 June 머리 위에 색 방울이 하나씩 번지듯 들어오고, 마지막에 방울들이 몸으로 모이며 June가 아래에서부터 채워진다
+    const endT = clamp01((r - COLOR_AT.end[0]) / (COLOR_AT.end[1] - COLOR_AT.end[0])); // 엔딩: June 몸이 채워지는 정도
+    if (juneFillRef.current) juneFillRef.current.style.opacity = endT > 0 ? '0.9' : '0';
+    juneClipRef.current?.setAttribute('y', `${384 - 300 * ease(endT)}`);
+    const signT = clamp01((r - COLOR_AT.ssafy[0]) / (COLOR_AT.ssafy[1] - COLOR_AT.ssafy[0]));
+    signColorClipRef.current?.setAttribute('width', `${380 * ease(signT)}`);
     const holeW = (gx(BODY_RIGHT_X) - gx(BODY_LEFT_X) - 2 * HOLE_INSET) * (Number.isFinite(charOp) ? charOp : 1);
     const holeCenter = gx(233) + walk + pan;
     holeRef.current?.setAttribute('x', `${inSchool ? -5000 : holeCenter - holeW / 2}`);
     holeRef.current?.setAttribute('width', `${holeW}`);
     // 서 있던 자리의 땅은 캐릭터가 비켜나는 만큼 왼쪽부터 드러난다
     if (gapRef.current) gapRef.current.style.strokeDashoffset = `${1 - (q > 0 ? 1 : clamp01(walk / (gx(BODY_RIGHT_X) - gx(BODY_LEFT_X))))}`;
-    const sw = moving ? phase * SWING : 0;
+    const sw = (moving ? phase * SWING : 0) + 115 * surprise; // 놀라면 두 팔이 위로 올라간다
     swingRefs.current.forEach((g, i) => {
       if (!g) return;
       const left = i < 3 || i === 6; // 앞의 세 개와 왼팔 채움은 왼팔, 나머지는 오른팔
@@ -914,6 +1163,25 @@ export default function LineScene() {
       const bt = BEATS[i];
       el.style.opacity = `${Math.min(clamp01((pRaw - bt.a) / BEAT_FADE), clamp01((bt.b - pRaw) / BEAT_FADE))}`;
     });
+    skillRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const sk = SKILLS[i];
+      const inT = clamp01((pRaw - sk.a) / BEAT_FADE);
+      el.style.opacity = `${Math.min(inT, clamp01((sk.b - pRaw) / BEAT_FADE))}`;
+      el.setAttribute('transform', `translate(800 ${(214 + 12 * (1 - inT)).toFixed(1)})`);
+    });
+    // PC방: 들어가면 모니터 화면이 바로 커다랗게 나오고, 미니게임(동전 먹기)을 할 수 있다
+    const monOp = r === 0 ? trap(q, qv(930), qv(946), qv(1004), qv(1020)) : 0;
+    if (pcMonRef.current) pcMonRef.current.style.opacity = `${monOp}`;
+    if (pcHitRef.current) pcHitRef.current.style.pointerEvents = monOp > 0.6 ? 'all' : 'none';
+    const pg = pcGame.current;
+    pg.on = monOp > 0.05;
+    if (pg.on && !pg.running) {
+      pg.running = true;
+      pg.last = performance.now();
+      pcRafRef.current = requestAnimationFrame(pcStep);
+    }
+    if (!pg.on && pg.score > 0 && monOp === 0) pg.score = 0; // 다시 들어오면 처음부터
     if (coverRef.current) coverRef.current.style.opacity = `${q > 0 ? 1 - clamp01(q / qv(24)) : clamp01((f - 0.88) / 0.1)}`;
     // PC방 장면: 학교로 들어간 뒤 잠깐 PC방이 나오고, 그동안 학교는 한국의 학교로 바뀐다
     const pcOn = clamp01((q - Q_PC[0]) / qv(16)) * (1 - clamp01((q - (Q_PC[1] - qv(16))) / qv(16)));
@@ -949,7 +1217,7 @@ export default function LineScene() {
     hintAlpha.current = interactive ? clamp01((q - Q_BB[1]) / qv(14)) : 0;
     setHints();
     const flagSwap = clamp01((q - Q_SWAP[0]) / (Q_SWAP[1] - Q_SWAP[0])); // PC방 장면이 지나가면 필리핀 국기가 태극기로 바뀌고 건물도 좋아진다
-    if (upgradeRef.current) upgradeRef.current.style.opacity = `${flagSwap}`;
+    if (upgradeRef.current) upgradeRef.current.style.opacity = '1';
     // 분위기: 필리핀으로 가는 동안 따뜻한 색이 되고, 국기가 태극기로 바뀌면 서늘한 색으로 바뀐다
     const root = svgRef.current?.closest<HTMLElement>('.landing-root');
     if (root) {
@@ -959,10 +1227,15 @@ export default function LineScene() {
       if (toPh === 0 && flagSwap === 0) root.style.removeProperty('--l-bg');
       else root.style.setProperty('--l-bg', mixHex(mixHex(pal.base, pal.ph, toPh), pal.kr, flagSwap));
     }
-    if (phFlagRef.current) phFlagRef.current.style.opacity = `${1 - flagSwap}`;
-    if (tgFlagRef.current) tgFlagRef.current.style.opacity = `${flagSwap}`;
-    if (pcDoorRef.current) pcDoorRef.current.style.opacity = q > 0 && q < Q_RESET ? `${clamp01((q - (Q_PDOOR - qv(8))) / qv(8))}` : '0';
-    if (doorFillRef.current) doorFillRef.current.style.opacity = `${r > 0 ? 1 - clamp01(r / R_OUT[0]) : q >= Q_RESET ? 1 : clamp01((q - (Q_DOOR - qv(8))) / qv(8)) * (1 - clamp01((q - (Q_BACK + DOOR_FADE * 0.5)) / qv(16)))}`; // 들어가고 나오는 동안 문 안쪽이 어두워지고, 한국 학교에서는 교복 입은 캐릭터가 나올 때까지 어둡다
+    // 필리핀 학교 그림이 먼저 사라지고, 그다음 한국 학교(태극기, 중·고등학교)가 나타난다
+    const phShow = 1 - clamp01(flagSwap * 2);
+    const krShow = clamp01(flagSwap * 2 - 1);
+    if (phFlagRef.current) phFlagRef.current.style.opacity = `${phShow}`;
+    if (oldSchoolRef.current) oldSchoolRef.current.style.opacity = `${krShow}`;
+    if (tgFlagRef.current) tgFlagRef.current.style.opacity = '1';
+    const doorOp = r > 0 ? 1 - clamp01(r / R_OUT[0]) : q >= Q_RESET ? 1 : clamp01((q - (Q_DOOR - qv(8))) / qv(8)) * (1 - clamp01((q - (Q_BACK + DOOR_FADE * 0.5)) / qv(16))); // 들어가고 나오는 동안 문 안쪽이 어두워지고, 한국 학교에서는 교복 입은 캐릭터가 나올 때까지 어둡다
+    if (doorFillRef.current) doorFillRef.current.style.opacity = `${doorOp * (flagSwap >= 0.5 ? 1 : 0)}`;
+    if (doorFillPhRef.current) doorFillPhRef.current.style.opacity = `${doorOp * (flagSwap < 0.5 ? 1 : 0)}`;
 
     // 세 번째 장면: 졸업모 -> 노트북 -> 싸피 간판을 손이 그리고, 위의 글이 차례로 바뀐다
     let tip3: { x: number; y: number } | null = null;
@@ -1032,6 +1305,32 @@ export default function LineScene() {
         ({ x, y } = p3);
       }
     }
+    if (q > 0 && r === 0) {
+      // 필리핀 장면: 오른쪽 아래에서 올라온 손이 지프니를 왼쪽에서부터 그려 나가고, 다 그리면 빠진다
+      const t0 = Q_DRAW[0] - qv(10);
+      const t1 = Q_DRAW[1] + qv(14);
+      if (q > t0 && q < t1) {
+        const left = JEEP_DRAW_SCREEN - JEEP.ax * JEEP.k;
+        const ti = JEEP_TIP[Math.min(JEEP_TIP.length - 1, Math.round(clamp01(jeepRv) * (JEEP_TIP.length - 1)))];
+        const tipX = JEEP_DRAW_SCREEN + (ti[0] - JEEP.ax) * JEEP.k; // 선을 그려 나가는 자리에 펜 끝이 있다
+        const tipY = GROUND + (ti[1] - JEEP.ay) * JEEP.k;
+        if (q < Q_DRAW[0]) {
+          const e = ease(clamp01((q - t0) / (Q_DRAW[0] - t0)));
+          x = left + 260 * (1 - e);
+          y = tipY + 520 * (1 - e);
+        } else if (q <= Q_DRAW[1]) {
+          x = tipX;
+          y = tipY;
+        } else {
+          const o = clamp01((q - Q_DRAW[1]) / (t1 - Q_DRAW[1]));
+          x = left + JEEP.w * JEEP.k + o * 500;
+          y = tipY + o * 520;
+        }
+        hand.style.opacity = '1';
+      } else {
+        hand.style.opacity = '0';
+      }
+    }
     hand.setAttribute('transform', `translate(${x} ${y}) scale(${HAND_SCALE}) translate(${-HAND_TIP.x} ${-HAND_TIP.y})`);
 
     // 큰 서명이 작아지고 납작해지며 땅으로 내려앉는다
@@ -1050,6 +1349,7 @@ export default function LineScene() {
     }
     if (capRef.current) capRef.current.style.opacity = `${1 - clamp01((p - 0.02) / 0.07)}`;
     if (hintRef.current) hintRef.current.style.opacity = `${1 - clamp01(p / 0.05)}`;
+    if (creditRef.current) creditRef.current.style.opacity = `${1 - clamp01(p / 0.05)}`;
   };
 
   // 첫 화면에 있던 서명(위에 겹쳐 둔 것)의 실제 위치와 크기를 재서, 장면 속 서명이 정확히 그 자리에서 시작하게 한다
@@ -1106,7 +1406,7 @@ export default function LineScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[2470vh] select-none" aria-label="소개 장면">
+    <section ref={sectionRef} className="relative h-[2678vh] select-none" aria-label="소개 장면">
       <div className="sticky top-0 h-screen overflow-hidden">
         <svg ref={svgRef} viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" className="h-full w-full" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--l-ink, #1c1b19)', pointerEvents: 'none' }}>
           {/* 서명: 처음엔 크게 가운데에 있다가 스크롤에 따라 땅 선으로 내려앉는다 */}
@@ -1147,7 +1447,7 @@ export default function LineScene() {
           <path ref={gapRef} d={`M${gx(BODY_LEFT_X)} ${GROUND} H${gx(BODY_RIGHT_X)}`} stroke={INK} strokeWidth={LINE_W} pathLength="1" strokeDasharray="1" strokeDashoffset="1" />
 
           {/* 걷기가 끝난 뒤 이어지는 땅 */}
-          <path ref={extRef} d={`M1700 ${GROUND} H${Math.max(SCHOOL_X, PLANE_X) + 2600}`} stroke={INK} strokeWidth={LINE_W} opacity="0" />
+          <path ref={extRef} d={`M1700 ${GROUND} H${Math.max(SCHOOL_X, PLANE_X) + 4600}`} stroke={INK} strokeWidth={LINE_W} opacity="0" />
           <clipPath id="tuft-clip">
             <rect ref={tuftClipRef} x="-3000" y="0" width="0" height="900" />
           </clipPath>
@@ -1175,25 +1475,51 @@ export default function LineScene() {
 
           {/* 필리핀 장면: 오른쪽 끝에 이미 서 있는 학교(필리핀 국기) */}
           <g ref={scene2Ref}>
-            <g ref={schoolRef} opacity="0">
-              <g ref={phFlagRef}>
-                {/* 필리핀 초등학교 간판 */}
-                <text x={SCHOOL_X} y={GROUND - 214} fill={INK} stroke="none" fontSize="27" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
-                  ELEMENTARY SCHOOL
-                </text>
-                <g stroke="none">
-                  <rect x={SCHOOL_X} y={GROUND - 410} width={FLAG_W} height={FLAG_H / 2} fill="#0038a8" />
-                  <rect x={SCHOOL_X} y={GROUND - 410 + FLAG_H / 2} width={FLAG_W} height={FLAG_H / 2} fill="#ce1126" />
-                  <path d={`M${SCHOOL_X} ${GROUND - 410} L${SCHOOL_X + 70} ${GROUND - 410 + FLAG_H / 2} L${SCHOOL_X} ${GROUND - 410 + FLAG_H} Z`} fill="#ffffff" />
-                  <circle cx={SCHOOL_X + 22} cy={GROUND - 410 + FLAG_H / 2} r="8" fill="#fcd116" />
+            {/* 지프니: 필리핀에서 타고 다닌 승합 버스. 창문으로 친구가 영어로 말을 건다 */}
+            <g ref={jeepRef} opacity="0" stroke={INK} strokeWidth={LINE_W} strokeLinejoin="round">
+              <g ref={jeepPosRef} transform={`translate(${JEEP_X0} ${GROUND})`}>
+                <defs>
+                  {/* 선을 따라 그려 나가는 순서 그림(jeep-order.png)의 값이 지금 그린 정도보다 작은 곳만 보이게 한다 */}
+                  <filter id="jeep-thr" colorInterpolationFilters="sRGB" x="0" y="0" width="100%" height="100%">
+                    <feColorMatrix ref={jeepThrRef} type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 -255 0 0 0 0.5" />
+                  </filter>
+                  <mask id="jeep-order-mask" maskUnits="userSpaceOnUse" x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k}>
+                    <image href="/jeep-order.png" x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k} filter="url(#jeep-thr)" />
+                  </mask>
+                </defs>
+                <g transform={`rotate(${JEEP.tilt} ${JEEP.pivotX} 0)`}>
+                {/* 사용자가 준 지프니 그림(public/지프니.png)에서 만든 선 마스크와 채움 마스크 */}
+                <mask id="jeep-fill-mask" maskUnits="userSpaceOnUse" x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k}>
+                  <image href="/jeep-fill.png" x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k} />
+                </mask>
+                <mask id="jeep-line-mask" maskUnits="userSpaceOnUse" x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k}>
+                  <image href="/jeep-line.png" x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k} />
+                </mask>
+                <rect x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k} mask="url(#jeep-fill-mask)" stroke="none" style={{ fill: 'var(--l-bg, #ffffff)' }} ref={jeepFillRef} />
+                <g mask="url(#jeep-order-mask)">
+                  <rect x={-JEEP.ax * JEEP.k} y={-JEEP.ay * JEEP.k} width={JEEP.w * JEEP.k} height={JEEP.h * JEEP.k} mask="url(#jeep-line-mask)" stroke="none" fill="currentColor" />
                 </g>
-                <g stroke={INK} strokeWidth={LINE_W}>
-                  {PH_FLAG_LINES.map((d) => (
-                    <path key={d} d={d} />
-                  ))}
                 </g>
               </g>
-              <g ref={tgFlagRef} opacity="0">
+            </g>
+            <g ref={schoolRef} opacity="0">
+              <g ref={phFlagRef}>
+                {/* 필리핀 초등학교: 사용자가 준 그림(선은 글씨색, 안쪽은 배경색, 국기는 원래 색) */}
+                <g transform={`translate(${SCHOOL_X} ${GROUND})`}>
+                  <mask id="school-fill-mask" maskUnits="userSpaceOnUse" x={-SCH.ax * SCH.k} y={-SCH.ay * SCH.k} width={SCH.w * SCH.k} height={SCH.h * SCH.k}>
+                    <image href="/school-fill.png" x={-SCH.ax * SCH.k} y={-SCH.ay * SCH.k} width={SCH.w * SCH.k} height={SCH.h * SCH.k} />
+                  </mask>
+                  <mask id="school-line-mask" maskUnits="userSpaceOnUse" x={-SCH.ax * SCH.k} y={-SCH.ay * SCH.k} width={SCH.w * SCH.k} height={SCH.h * SCH.k}>
+                    <image href="/school-line.png" x={-SCH.ax * SCH.k} y={-SCH.ay * SCH.k} width={SCH.w * SCH.k} height={SCH.h * SCH.k} />
+                  </mask>
+                  <rect x={-SCH.ax * SCH.k} y={-SCH.ay * SCH.k} width={SCH.w * SCH.k} height={SCH.h * SCH.k} mask="url(#school-fill-mask)" stroke="none" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+                  <image href="/school-color.png" x={-SCH.ax * SCH.k} y={-SCH.ay * SCH.k} width={SCH.w * SCH.k} height={SCH.h * SCH.k} />
+                  <rect x={-SCH.ax * SCH.k} y={-SCH.ay * SCH.k} width={SCH.w * SCH.k} height={SCH.h * SCH.k} mask="url(#school-line-mask)" stroke="none" fill="currentColor" />
+                </g>
+                <path ref={doorFillPhRef} opacity="0" fill={INK} stroke="none" d={mapPath(SCH_DOOR_PATH, SCHOOL)} />
+              </g>
+              <g ref={oldSchoolRef} opacity="0">
+              <g ref={tgFlagRef}>
                 {/* 한국으로 돌아온 뒤의 학교 간판 */}
                 <text x={SCHOOL_X} y={GROUND - 214} fill={INK} stroke="none" fontSize="32" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
                   중·고등학교
@@ -1220,27 +1546,23 @@ export default function LineScene() {
                   <path key={d} d={d} strokeLinecap={i === DOOR_LINE || i === 0 ? 'butt' : undefined} /> // 문 선은 땅에서 끊기게 해서(둥근 끝이 땅 아래로 나오지 않게) 캐릭터가 문 앞에 설 때 점이 보이지 않게 한다
                 ))}
               </g>
+              </g>
             </g>
           </g>
           {/* 농구: 학교 오른쪽의 골대와 친구들, 공 */}
           <g ref={bbRef} opacity="0" stroke={INK} strokeWidth={LINE_W}>
-            {/* PC방: 간판과 창문, 문이 있는 가게 */}
-            {/* 건물 몸통과 문: 아랫변은 그리지 않는다(땅선과 겹쳐 캐릭터 발밑에 선이 보이지 않게) */}
-            <rect x={PCB_X - 260} y={GROUND - 300} width="520" height="300" stroke="none" style={{ fill: 'var(--l-bg, #ffffff)' }} />
-            <path d={`M${PCB_X - 260} ${GROUND} V${GROUND - 300} H${PCB_X + 260} V${GROUND}`} strokeLinecap="butt" fill="none" />
-            <rect x={PCB_X - 280} y={GROUND - 390} width="560" height="90" rx="6" style={{ fill: 'var(--l-bg, #ffffff)' }} />
-            <text x={PCB_X} y={GROUND - 326} fill={INK} stroke="none" fontSize="62" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
-              PC방
-            </text>
-            <path d={`M${PCB_X - 60} ${GROUND} V${GROUND - 200} H${PCB_X + 60} V${GROUND}`} strokeLinecap="butt" fill="none" />
-            <rect ref={pcDoorRef} x={PCB_X - 60} y={GROUND - 200} width="120" height="200" opacity="0" stroke="none" style={{ fill: INK }} />
-            {[-185, 125].map((dx) => (
-              <g key={dx}>
-                <rect x={PCB_X + dx} y={GROUND - 230} width="60" height="120" />
-                <rect x={PCB_X + dx + 12} y={GROUND - 212} width="36" height="26" strokeWidth="2.5" />
-                <path d={`M${PCB_X + dx + 30} ${GROUND - 186} V${GROUND - 172} M${PCB_X + dx + 18} ${GROUND - 172} H${PCB_X + dx + 42}`} strokeWidth="2.5" />
-              </g>
-            ))}
+            {/* PC방: 사용자가 준 그림(public/피시방.png)에서 만든 선·흰 면·색 면. 색 면은 원래 색 그대로 둔다 */}
+            <g transform={`translate(${PCB_X} ${GROUND})`} stroke="none">
+              <mask id="pcshop-fill-mask" maskUnits="userSpaceOnUse" x={-PCSHOP.ax * PCSHOP.k} y={-PCSHOP.ay * PCSHOP.k} width={PCSHOP.w * PCSHOP.k} height={PCSHOP.h * PCSHOP.k}>
+                <image href="/pcshop-fill.png" x={-PCSHOP.ax * PCSHOP.k} y={-PCSHOP.ay * PCSHOP.k} width={PCSHOP.w * PCSHOP.k} height={PCSHOP.h * PCSHOP.k} />
+              </mask>
+              <mask id="pcshop-line-mask" maskUnits="userSpaceOnUse" x={-PCSHOP.ax * PCSHOP.k} y={-PCSHOP.ay * PCSHOP.k} width={PCSHOP.w * PCSHOP.k} height={PCSHOP.h * PCSHOP.k}>
+                <image href="/pcshop-line.png" x={-PCSHOP.ax * PCSHOP.k} y={-PCSHOP.ay * PCSHOP.k} width={PCSHOP.w * PCSHOP.k} height={PCSHOP.h * PCSHOP.k} />
+              </mask>
+              <rect x={-PCSHOP.ax * PCSHOP.k} y={-PCSHOP.ay * PCSHOP.k} width={PCSHOP.w * PCSHOP.k} height={PCSHOP.h * PCSHOP.k} mask="url(#pcshop-fill-mask)" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+              <image href="/pcshop-color.png" x={-PCSHOP.ax * PCSHOP.k} y={-PCSHOP.ay * PCSHOP.k} width={PCSHOP.w * PCSHOP.k} height={PCSHOP.h * PCSHOP.k} />
+              <rect x={-PCSHOP.ax * PCSHOP.k} y={-PCSHOP.ay * PCSHOP.k} width={PCSHOP.w * PCSHOP.k} height={PCSHOP.h * PCSHOP.k} mask="url(#pcshop-line-mask)" fill="currentColor" />
+            </g>
           </g>
           {/* 골대: 공이 그물에 들어간 동안에는 공이 그물 선 뒤로 보인다 */}
           <g ref={hoopRef} opacity="0">
@@ -1288,9 +1610,26 @@ export default function LineScene() {
           <text ref={goalRef} x={HOOP_X} y={GROUND - 1020 * HOOP_K - 24} opacity="0" fill={INK} stroke="none" fontSize="52" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
             골!
           </text>
-          <text ref={goalNextRef} x={HOOP_X} y={GROUND - 1020 * HOOP_K - 78} opacity="0" fill={INK} stroke="none" fontSize="26" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
-            ↓ 스크롤해서 계속
-          </text>
+          {/* 골 축하 색종이: 림 위에서 터진다 */}
+          <g style={{ pointerEvents: 'none' }}>
+            {Array.from({ length: 26 }, (_, i) => (
+              <rect
+                key={i}
+                ref={(el) => {
+                  confettiRef.current[i] = el;
+                }}
+                x={RIM_CX + ((i % 7) - 3) * 9}
+                y={RIM_Y - 30}
+                width={i % 3 === 0 ? 7 : 5}
+                height={i % 3 === 0 ? 11 : 8}
+                rx="1.5"
+                opacity="0"
+                fill={['#e8553d', '#f2b134', '#3b7ddd', '#4caf7a', '#b667d8'][i % 5]}
+                stroke="none"
+                style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
+              />
+            ))}
+          </g>
           {/* 비행기: 학교가 있던 자리(풍경 오른쪽 멀리)에 서 있고, 캐릭터가 걸어가 타면 날아오른다 */}
           <g ref={planeRef} opacity="0">
             <mask id="plane-fill-mask" maskUnits="userSpaceOnUse" x={-PLANE_IMG.ox} y={-PLANE_IMG.oy} width={PLANE_IMG.w} height={PLANE_IMG.h}>
@@ -1322,7 +1661,11 @@ export default function LineScene() {
               {bt.text}
             </text>
           ))}
-
+          {/* SSAFY 간판에 번지는 색(간판 선 뒤에 깔린다) */}
+          <clipPath id="sign-color-clip">
+            <rect ref={signColorClipRef} x={SIGN_X - 190} y={GROUND - 340} width="0" height="140" />
+          </clipPath>
+          <rect ref={signColorRef} x={SIGN_X - 190} y={GROUND - 330} width="380" height="120" rx="3" fill={COLORS.ssafy} opacity="0.55" stroke="none" clipPath="url(#sign-color-clip)" />
           {/* 세 번째 장면: 졸업모, 노트북, 싸피 간판과 위에 나오는 글 */}
           <g stroke={INK} strokeWidth={LINE_W}>
             {SCENE3.map((it, i) =>
@@ -1376,6 +1719,43 @@ export default function LineScene() {
           </g>
 
           {/* 캐릭터: 몸과 팔과 얼굴. 다 그린 뒤에는 통째로 옆으로 걸어간다 */}
+          <g ref={emoteRef} style={{ pointerEvents: 'none' }}>
+            <g ref={thinkRef} opacity="0">
+              <text x="58" y="470" fill={INK} stroke="none" fontSize="64" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+                ?
+              </text>
+            </g>
+            {TALKS.map((tk2, i) => (
+              <g
+                key={tk2.en}
+                ref={(el) => {
+                  talkRefs.current[i] = el;
+                }}
+                opacity="0"
+                stroke={INK}
+                strokeWidth={LINE_W - 0.5}
+                strokeLinejoin="round"
+              >
+                <g transform={`translate(${tk2.dx} ${tk2.dy}) translate(0 424) rotate(${tk2.rot}) scale(${TALK_SCALE}) translate(0 -424)`}>
+                  {tk2.spark !== 0 && <path d="M -176 312 L -186 298 M -162 306 L -166 290 M -190 326 L -204 318" fill="none" strokeLinecap="round" transform={tk2.spark > 0 ? 'scale(-1 1)' : undefined} />}
+                  <path d="M -150 318 H 136 a14 14 0 0 1 14 14 V 384 a14 14 0 0 1 -14 14 H 14 L 0 424 L -12 398 H -136 a14 14 0 0 1 -14 -14 V 332 a14 14 0 0 1 14 -14 Z" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+                  <text x="0" y="356" fill={INK} stroke="none" fontSize="28" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+                    {tk2.en}
+                  </text>
+                  <text x="0" y="384" fill={INK} stroke="none" fontSize="19" opacity="0.65" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+                    {tk2.ko}
+                  </text>
+                </g>
+              </g>
+            ))}
+            <g ref={surpriseRef} opacity="0" stroke={INK} strokeWidth={LINE_W - 0.5}>
+              <text x="0" y="442" fill={INK} stroke="none" fontSize="72" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+                !
+              </text>
+              <path d="M -52 448 L -70 436 M 52 448 L 70 436 M -58 470 L -80 470 M 58 470 L 80 470" fill="none" />
+            </g>
+          </g>
+          <path ref={hopPlugRef} d={`M -54 ${GROUND} H 54`} stroke={INK} strokeWidth={LINE_W} opacity="0" />
           <g ref={hopRef}>
           <clipPath id="char-clip">
             <rect x="-4000" y="-300" width="14000" height={GROUND + 300} />
@@ -1385,6 +1765,18 @@ export default function LineScene() {
             <g transform={`translate(${CX} ${CY}) scale(${S})`} stroke={INK} strokeWidth={LINE_W / S}>
               <path ref={footLineRef} d={`M${BODY_LEFT_X} 384 H${BODY_RIGHT_X}`} opacity="0" />
               <path ref={bodyFillRef} d={`${BODY_FWD} Z`} stroke="none" opacity="0" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+              <defs>
+                <linearGradient id="june-grad" gradientUnits="userSpaceOnUse" x1="166" y1="390" x2="300" y2="90">
+                  <stop offset="0" stopColor={COLORS.ph} />
+                  <stop offset="0.38" stopColor={COLORS.pc} />
+                  <stop offset="0.7" stopColor={COLORS.ball} />
+                  <stop offset="1" stopColor={COLORS.ssafy} />
+                </linearGradient>
+                <clipPath id="june-fill-clip">
+                  <rect ref={juneClipRef} x="100" y="384" width="260" height="300" />
+                </clipPath>
+              </defs>
+              <path ref={juneFillRef} d={`${BODY_FWD} Z`} stroke="none" opacity="0" fill="url(#june-grad)" clipPath="url(#june-fill-clip)" />
               {/* 팔 안쪽 채움: 몸·팔 선보다 뒤에 깔아서 선이 가려지지 않게 한다(어깨를 중심으로 팔과 같이 흔들린다) */}
               {ARM_FILL.map((d, k) => (
                 <g
@@ -1575,18 +1967,85 @@ export default function LineScene() {
           </g>
 
           {/* 화면 전환: 위쪽의 글은 남기고 아래 장면만 배경색으로 덮었다가 걷는다 */}
+          {SKILLS.map((sk, i) => {
+            const w = 96 + sk.name.length * 26;
+            return (
+              <g
+                key={sk.name}
+                ref={(el) => {
+                  skillRefs.current[i] = el;
+                }}
+                opacity="0"
+                stroke={INK}
+                strokeWidth={LINE_W - 0.5}
+              >
+                <rect x={-w / 2} y="-24" width={w} height="44" rx="22" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+                <text x="0" y="7" fill={INK} stroke="none" fontSize="26" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+                  {`＋ ${sk.name} UP`}
+                </text>
+              </g>
+            );
+          })}
+
+          <g ref={pcMonRef} opacity="0" transform="translate(800 462) scale(2.2)" stroke={INK} strokeWidth={(LINE_W - 0.5) / 2.2} strokeLinejoin="round" strokeLinecap="round">
+            <path d="M -28 90 L -40 128 H 40 L 28 90" fill="none" />
+            <rect x="-150" y="-100" width="300" height="190" rx="14" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+            <rect x="-132" y="-84" width="264" height="150" rx="6" fill={INK} stroke="none" />
+            <path d="M -132 48 H 132" stroke="var(--l-bg, #ffffff)" strokeWidth="1.5" fill="none" />
+            {[0, 1, 2, 3].map((i) => (
+              <circle
+                key={i}
+                ref={(el) => {
+                  pcCoinRefs.current[i] = el;
+                }}
+                cx="0"
+                cy="-90"
+                r="6"
+                stroke="none"
+                style={{ fill: 'var(--l-bg, #ffffff)' }}
+              />
+            ))}
+            <g ref={pcHeroRef} transform="translate(0 48)">
+              <rect x="-9" y="-24" width="18" height="24" rx="8" stroke="none" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+              <circle cx="-3" cy="-15" r="1.6" stroke="none" fill={INK} />
+              <circle cx="3" cy="-15" r="1.6" stroke="none" fill={INK} />
+            </g>
+            <g stroke="none" style={{ fill: 'var(--l-bg, #ffffff)', fontFamily: 'var(--font-hand)' }}>
+              <text ref={pcScoreRef} x="-124" y="-68" fontSize="11">
+                COIN 0 / 5
+              </text>
+              <text ref={pcHintRef} x="0" y="-30" fontSize="12" textAnchor="middle">
+                마우스를 움직여 동전을 먹어 보세요
+              </text>
+              <text ref={pcClearRef} x="0" y="-10" fontSize="22" textAnchor="middle" opacity="0">
+                CLEAR!
+              </text>
+            </g>
+            <rect
+              ref={pcHitRef}
+              x="-132"
+              y="-84"
+              width="264"
+              height="150"
+              fill="transparent"
+              stroke="none"
+              onPointerMove={pcPoint}
+              onPointerDown={pcPoint}
+              style={{ pointerEvents: 'none', touchAction: 'pan-y', cursor: 'none' }}
+            />
+          </g>
           <rect ref={coverRef} x="-3000" y="200" width="8000" height="800" opacity="0" style={{ fill: 'var(--l-bg, #ffffff)' }} />
         </svg>
         {/* 첫 화면의 서명과 소개 글을 그대로 겹쳐 둔다. 서명 선은 숨기고(장면 속 서명이 대신 그려진다) 글만 보인다. */}
         <div ref={capRef} className="pointer-events-none absolute inset-0">
           <div ref={heroRef} className="contents [&_svg]:opacity-0">
-            <SignatureHero skip onDone={() => {}} className="absolute left-[4vw] top-[12vh] z-10 w-[min(78vw,420px)] md:top-1/2 md:w-[min(38vw,560px)] md:-translate-y-1/2" />
+            <SignatureHero skip onDone={() => {}} className={HERO_POS} />
           </div>
         </div>
         {/* 처음 화면의 안내: 물방울이 사라진 오른쪽에서 스크롤하라고 알려 준다(스크롤을 시작하면 사라진다) */}
         <div
           ref={hintRef}
-          className="pointer-events-none absolute inset-x-0 bottom-10 flex flex-col items-center gap-3 text-center md:inset-x-auto md:bottom-auto md:right-[17vw] md:top-1/2 md:-translate-y-1/2"
+          className="pointer-events-none absolute inset-x-0 bottom-32 flex flex-col items-center gap-3 text-center md:inset-x-auto md:bottom-auto md:right-[17vw] md:top-1/2 md:-translate-y-1/2"
           style={{ color: 'var(--l-muted, #8a8780)' }}
         >
           <svg width="38" height="58" viewBox="0 0 30 46" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -1598,6 +2057,27 @@ export default function LineScene() {
             <span className="hidden [@media(pointer:coarse)]:block">화면을 위로 밀어 올려 주세요</span>
             <span className="mt-2 block text-sm tracking-wider opacity-70 md:text-lg">그림이 그려지며 이야기가 시작됩니다</span>
           </p>
+        </div>
+        <div
+          ref={goalNextRef}
+          className="pointer-events-none absolute inset-x-0 bottom-32 flex flex-col items-center gap-3 text-center md:inset-x-auto md:bottom-[6vh] md:right-[7vw]"
+          style={{ color: 'var(--l-muted, #8a8780)', opacity: 0, transition: 'opacity 0.5s' }}
+        >
+          <svg width="38" height="58" viewBox="0 0 30 46" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <rect x="2" y="2" width="26" height="42" rx="13" />
+            <circle className="scroll-dot" cx="15" cy="13" r="2.6" fill="currentColor" stroke="none" />
+          </svg>
+          <p className="text-lg leading-relaxed tracking-wide md:text-2xl">스크롤로 계속</p>
+        </div>
+        <div
+          ref={creditRef}
+          className="pointer-events-none absolute inset-x-0 bottom-4 px-6 text-center text-[11px] leading-relaxed tracking-wide md:bottom-6 md:text-sm"
+          style={{ color: 'var(--l-muted, #8a8780)' }}
+        >
+          <p>
+            Gianluca Boccia의 &ldquo;Still Drawing&rdquo;에서 영감을 받아, 같은 콘셉트로 제 이야기로 다시 만들었습니다.
+          </p>
+          <p className="opacity-80">그림(캐릭터와 소품)과 배경음악은 AI로 만들었고, 코드는 AI(Claude)의 도움을 받아 작성했습니다.</p>
         </div>
       </div>
     </section>

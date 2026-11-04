@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import SignatureHero, { markSignatureSeen, useSignatureSeen } from '@/components/SignatureHero';
+import SignatureHero, { HERO_POS, markSignatureSeen, useSignatureSeen } from '@/components/SignatureHero';
 import ThemeToggle from '@/components/ThemeToggle';
 import ModeBlobs from '@/components/ModeBlobs';
 import StoryView from '@/components/StoryView';
@@ -104,14 +104,14 @@ export default function Home() {
       )}
 
       {/* 왼쪽: 연필을 든 손이 쓰는 서명 */}
-      <SignatureHero skip={skip} onDone={handleDone} className="absolute left-[4vw] top-[12vh] z-10 w-[min(78vw,420px)] md:top-1/2 md:w-[min(38vw,560px)] md:-translate-y-1/2" />
+      <SignatureHero skip={skip} onDone={handleDone} links className={HERO_POS} />
 
       {/* ===== 넓은 화면: 오른쪽에 돌림판처럼 돌려서 고르는 세 가지 모드 ===== */}
       <motion.div
         initial={false}
         animate={{ opacity: ready ? 1 : 0, x: ready ? 0 : 36 }}
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute right-[2vw] top-[5vh] hidden md:block"
+        className="absolute right-[4vw] top-1/2 hidden -translate-y-1/2 md:block"
       >
         <ModeBlobs items={items} ready={ready} />
       </motion.div>
@@ -121,7 +121,7 @@ export default function Home() {
         initial={false}
         animate={{ opacity: ready ? 1 : 0 }}
         transition={{ duration: 1 }}
-        className="absolute inset-x-0 bottom-0 top-[46vh] flex flex-col md:hidden"
+        className="absolute inset-x-0 bottom-0 top-[60vh] flex flex-col md:hidden"
         style={{ pointerEvents: ready ? 'auto' : 'none' }}
       >
         {ITEMS.map((it, i) => {
