@@ -100,7 +100,7 @@ const SWING = 9; // 걸을 때 팔이 흔들리는 각도
 const SHOULDER_L = { x: 176, y: 226 };
 const SHOULDER_R = { x: 294, y: 214 };
 // 땅을 다 그으면 오른쪽 끝에 필리핀 국기가 달린 학교가 이미 서 있고, 캐릭터가 끊기지 않고 걸어가 문으로 들어간다. 안으로 사라진 뒤 다음 장면으로 넘어간다.
-const VH_TOTAL = 2678; // 전체 스크롤 길이(vh)
+const VH_TOTAL = 3146; // 전체 스크롤 길이(vh)
 const SCENE_END = 700 / VH_TOTAL; // 앞의 그리기·걷기 장면이 끝나는 지점
 const F_END = 1140 / VH_TOTAL; // 비행기 장면(3살에 필리핀으로)이 끝나는 지점
 const RAMP_X = [502, 622] as const; // 비행기 탑승 계단의 아래·위 가로 위치(위쪽 끝이 문 바로 앞)
@@ -115,14 +115,14 @@ const stairRise = (e: number) => {
 };
 const W1 = 150; // 첫 장면에서 땅을 긋는 동안 캐릭터가 걷는 거리(그 뒤 비행기가 있는 곳까지 화면이 흐르며 계속 걷는다)
 const W_RAMP = RAMP_X[0] - (CX + 233 * S); // 탑승 계단 아래에 닿을 때의 걸음 위치
-const S2_END = 2198 / VH_TOTAL; // 필리핀 장면이 끝나는 지점(그 뒤가 대학 졸업 -> 코딩 -> 싸피 장면)
+const S2_END = 2666 / VH_TOTAL; // 필리핀 장면이 끝나는 지점(그 뒤가 대학 졸업 -> 코딩 -> 싸피 장면)
 const PAN_MAX = 4000; // 풍경이 왼쪽으로 흘러가는 거리(클수록 오른쪽으로 멀리 가는 느낌)
 const DOOR_SCREEN_X = 800; // 캐릭터가 학교로 들어갈 때 문이 화면에서 서는 자리(가운데)
 const SCHOOL_X = DOOR_SCREEN_X + PAN_MAX;
 const PLANE_PAN = 2800; // 비행기가 있는 곳까지 풍경이 흘러가는 거리(클수록 비행기까지 멀리 걷는다)
 const PLANE_X = DOOR_SCREEN_X + PLANE_PAN; // 비행기가 서 있는 자리(풍경 좌표) // 학교 문의 가운데(풍경 좌표: 처음엔 화면 오른쪽 밖 멀리 있고, 풍경이 흘러오며 들어온다)
 const DOOR_WALK = SCHOOL_X - PAN_MAX - (CX + 233 * S); // 캐릭터(화면 기준)가 학교 문까지 걸어가는 거리
-const SV = 1058; // 필리핀 장면의 스크롤 길이(vh)
+const SV = 1526; // 필리핀 장면의 스크롤 길이(vh)
 const qv = (vh: number) => vh / SV; // vh -> 필리핀 장면의 진행 정도(q)
 const Q_DOOR = qv(448); // 캐릭터가 문에 닿는 때(이때부터 학교 안으로 들어간다)
 const DOOR_FADE = qv(32); // 문 안으로 들어가고 나오는 데 걸리는 길이
@@ -154,8 +154,8 @@ const BEATS = [
   { text: '초등학교도 다니고,', a: qT(qv(423)), b: qT(qv(603)) },
   { text: '농구도 하고,', a: qT(qv(603)), b: qT(qv(748)) },
   { text: '친구랑 PC방에 가서 게임도 했죠.', a: qT(qv(858)), b: qT(qv(975)) },
-  { text: '이때 게임이 제 마음에 색을 칠했습니다.', a: qT(qv(975)), b: qT(qv(1024)) }, // 두 번째 색(PC방)이 들어오는 때
-  { text: '한국으로 돌아와 중·고등학교를 다녔습니다.', a: qT(qv(1026)), b: rT(0.16) },
+  { text: '그렇게 저는, 게임과 함께하게 되었습니다.', a: qT(qv(975)), b: qT(qv(1116)) },
+  { text: '한국으로 돌아와 중·고등학교를 다녔습니다.', a: qT(qv(1320)), b: rT(0.16) },
   { text: '대학교를 졸업하고,', a: rT(0.31), b: rT(0.5) },
   { text: '게임을 즐기던 제가, 직접 만들어 보고 싶어졌습니다.', a: rT(0.5), b: rT(0.68) },
   { text: '그래서 코딩을 배우러 SSAFY 14기에 입과했습니다.', a: rT(0.68), b: rT(0.8) }, // 네 번째 색(SSAFY 간판)이 들어오는 때는 이 문장 끝 무렵
@@ -282,9 +282,13 @@ const Q_BB = [qv(543), qv(628)] as const; // 농구 골대까지 걷는 구간(�
 const Q_BBEND = qv(748); // 농구가 끝나고 PC방으로 걸어가기 시작하는 때(이때부터 공은 사라진다)
 const Q_PW = [qv(743), qv(908)] as const; // PC방까지 걷는 구간(풍경이 더 흘러간다)
 const Q_PDOOR = qv(908); // PC방 문에 닿는 때(이때부터 안으로 들어간다)
-const Q_PC = [qv(942), qv(1022)] as const; // PC방이 나오는 구간(들어오고 나가는 것 포함)
-const Q_RESET = qv(962); // PC방이 화면을 다 덮은 뒤: 이때 풍경을 학교 앞으로 되돌린다
-const Q_SWAP = [qv(1026), qv(1058)] as const; // 국기가 태극기로 바뀌고 건물이 좋아지는 구간
+const Q_PC = [qv(942), qv(972)] as const; // PC방 안 그림이 나오는 구간(나중에 여기에 게임을 넣는다)
+const Q_PEXIT = qv(958); // 안 그림이 사라질 무렵 캐릭터가 PC방에서 나오기 시작하는 때
+const Q_PWALK = [qv(980), qv(1030)] as const; // PC방에서 나와 오른쪽으로 걸어가는 구간(그 뒤로는 풍경이 흘러가며 계속 걷는다)
+const Q_PPAN = [qv(1000), qv(1112)] as const; // 풍경이 더 흘러가는 구간
+const PWALK_PAN = 1700; // 이때 풍경이 흘러가는 거리
+const Q_RESET = qv(1314); // PC방에서 나온 뒤 화면을 다 덮은 때: 이때 풍경을 학교 앞으로 되돌린다
+const Q_SWAP = [qv(1150), qv(1390)] as const; // 달리는 동안 배경 색이 서서히 한국의 색으로 바뀌는 구간
 const BB_PAN = 850; // 농구 골대까지 풍경이 더 흘러가는 거리
 const BB_BASE = PAN_MAX + BB_PAN; // 농구 장면에서 풍경이 흘러간 전체 거리
 const HOOP_SCREEN = 1380; // 도착했을 때 골대가 화면에서 서는 자리
@@ -304,7 +308,7 @@ const SKILLS = [
   { name: '적응력', a: qT(qv(150)), b: qT(qv(225)) },
   { name: '영어 소통', a: qT(qv(536)), b: qT(qv(592)) },
   { name: '팀워크', a: qT(qv(690)), b: qT(qv(748)) },
-  { name: '게임을 보는 눈', a: qT(qv(975)), b: qT(qv(1024)) },
+  { name: '게임을 보는 눈', a: qT(qv(975)), b: qT(qv(1016)) },
 ] as const;
 const JEEP_PARK = SCHOOL_X - 620; // 지프니가 멈추는 자리: 학교 깃대 앞(풍경 좌표)
 const rideU = (q: number) => clamp01((q - Q_RIDE[0]) / (Q_RIDE[1] - Q_RIDE[0]));
@@ -332,6 +336,31 @@ const TUFT_PLANE = TUFT_ALL.filter((x) => !nearSchool(x) && nearPlane(x) && !nea
 const TUFT_LANDED = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && nearLanded(x) && !nearJeep(x)); // 비행기가 착륙해 서 있는 동안만 비운다
 const TUFT_FREE = TUFT_ALL.filter((x) => !nearSchool(x) && !nearPlane(x) && !nearLanded(x) && !nearHoop(x) && !nearJeep(x));
 const PC_PAN = 1900; // 골대 다음 PC방까지 풍경이 더 흘러가는 거리
+// PC방을 나와 걷다가 다시 지프니를 타고 오른쪽으로 떠나고, 왼쪽에서 대한민국 버스가 들어온다(한국으로 돌아왔다는 뜻)
+const J2_BOARD = qv(1126); // 캐릭터가 지프니에 타서 사라지는 때
+const J2_GO = [qv(1140), qv(1314)] as const; // 지프니가 달리는 구간(화면의 한 자리에 선 채, 풍경이 흘러간다)
+const BUS_GO = [qv(1225), qv(1420)] as const; // 달리던 지프니가 서서히 버스로 바뀌고, 중·고등학교 정류장에 서는 구간
+const BUS_STOP_X = 140; // 버스가 서는 화면 자리(가운데 기준)
+const BUS_DOOR_DX = 63; // 버스 가운데에서 승차문까지의 거리
+const STOP_X = 436; // 정류장 표지판이 서 있는 화면 자리
+const Q_BUSX = qv(1426); // 캐릭터가 버스에서 내리는 때
+const Q_KWALK = [qv(1436), qv(1490)] as const; // 정류장에서 학교 문까지 걸어가는 구간
+const Q_KDOOR = qv(1490); // 학교 문에 닿는 때(이때부터 안으로 들어간다)
+const J2_SCREEN = 900; // 지프니가 서 있는 화면 자리(풍경이 다 흘러간 뒤)
+const JEEP2_X = PAN_MAX + BB_PAN + PC_PAN + 1700 + J2_SCREEN; // 지프니가 서 있는 자리(풍경 좌표). 풍경이 다 흘러가면 화면의 J2_SCREEN에 온다
+const BUS = { w: 1774, h: 887, k: 0.32, base: 785 }; // 대한민국 버스 그림(public/대한민국차.png): 바퀴 바닥이 base에서 땅에 닿고, k배로 줄여 쓴다
+const PUFF = { w: 249, h: 216 }; // 차 방귀(public/차방구.png)
+const RIDE_PAN = 1500; // 지프니를 타고 달리는 동안 풍경이 흘러가는 거리
+const KR_PAN = 800; // 한국에 와서 정류장에 설 때까지 풍경이 더 흘러가는 거리(학교가 오른쪽에서 다가온다)
+const rideEase = (q: number) => Math.pow(clamp01((q - J2_GO[0]) / (J2_GO[1] - J2_GO[0])), 2); // 천천히 출발해 점점 빨라진다
+const stopEase = (q: number) => {
+  const t = clamp01((q - Q_RESET) / (BUS_GO[1] - Q_RESET));
+  return 1 - (1 - t) * (1 - t); // 정류장에 가까워질수록 천천히
+};
+const kPan = (q: number) => (q < Q_RESET ? PAN_MAX + BB_PAN + PC_PAN + 1700 + RIDE_PAN * rideEase(q) : PAN_MAX - KR_PAN * (1 - stopEase(q))); // PC방을 나온 뒤 풍경이 흘러간 정도
+const busScreen = (q: number) => (q < Q_RESET ? J2_SCREEN : J2_SCREEN + (BUS_STOP_X - J2_SCREEN) * stopEase(q)); // 지프니와 같은 자리에서 서서히 버스로 바뀌고, 정류장에서 천천히 선다
+// 지금 달리는 차의 뒤쪽 화면 자리(달리지 않으면 null): 차 방귀가 여기서 나온다
+const rearAt = (q: number): number | null => (q >= J2_GO[0] + qv(6) && q < BUS_GO[1] - qv(12) ? busScreen(q) - 210 : null);
 // PC방 그림(사용자가 준 피시방.png에서 만든 선·흰 면·색 면): 가게 앞 열린 곳 가운데 아래가 (ax, ay), k배로 쓴다
 const PCSHOP = { w: 629, h: 439, ax: 332, ay: 425, k: 1.0 };
 const PCB_X = DOOR_SCREEN_X + BB_BASE + PC_PAN; // PC방 문의 가운데(풍경 좌표)
@@ -401,7 +430,7 @@ const UPGRADE_SHAPES = [
   'M-64 -10 L-64 -20 L64 -20 L64 -10 Z',
 ].map((d) => mapPath(d, SCHOOL));
 // PC방 그림: 나란히 놓인 모니터 두 대, 그 위로 나와 친구의 얼굴이 보인다
-const PC_X = [620, 980] as const;
+const PC_ROOM = { w: 1040, h: 514, y: 262 }; // PC방 안 그림(레트로 PC방의 추억, 1784 x 882)이 서는 자리와 크기
 const HAIR_FILL_FROM = remap(0.66); // 앞머리 윤곽을 거의 그리면 속이 채워진다
 const HAIR_FILL_TO = remap(0.68);
 const PIECES: Piece[] = RAW_PIECES.map((pc) => ({ ...pc, from: remap(pc.from), to: remap(pc.to) }));
@@ -410,7 +439,6 @@ export default function LineScene() {
   const sectionRef = useRef<HTMLElement>(null);
   const [greeting, setGreeting] = useState(''); // 지금 시간에 맞춘 인삿말(서버와 화면이 달라지지 않게 화면이 뜬 뒤에 채운다)
   useEffect(() => setGreeting(TIME_GREETING[currentPeriod()]), []);
-  useEffect(() => () => cancelAnimationFrame(pcRafRef.current), []);
   const pathRefs = useRef<(SVGPathElement | null)[]>([]);
   const lens = useRef<number[]>([]);
   const handRef = useRef<SVGGElement>(null);
@@ -443,15 +471,14 @@ export default function LineScene() {
   const signColorClipRef = useRef<SVGRectElement>(null);
   const talkRefs = useRef<(SVGGElement | null)[]>([]); // 학교 문 앞의 영어 말풍선
   const skillRefs = useRef<(SVGGElement | null)[]>([]); // 늘어난 역량 표시
-  const pcMonRef = useRef<SVGGElement>(null); // PC방에서 떠오르는 모니터
-  const pcHeroRef = useRef<SVGGElement>(null); // 모니터 속 게임의 꼬마
-  const pcCoinRefs = useRef<(SVGCircleElement | null)[]>([]); // 모니터 속 게임의 동전
-  const pcHitRef = useRef<SVGRectElement>(null); // 모니터 화면 위 마우스·손가락 받는 곳
-  const pcScoreRef = useRef<SVGTextElement>(null);
-  const pcHintRef = useRef<SVGTextElement>(null);
-  const pcClearRef = useRef<SVGTextElement>(null);
-  const pcRafRef = useRef(0);
-  const pcGame = useRef({ on: false, running: false, last: 0, px: 0, tx: 0, score: 0, coins: [] as { x: number; y: number; v: number }[] });
+  const gameIconRefs = useRef<(SVGGElement | null)[]>([]); // 게임에 빠진 시절: 머리 위로 계속 떠오르는 게임 아이콘
+  const busRef = useRef<SVGGElement>(null); // 대한민국 버스
+  const stopRef = useRef<SVGGElement>(null); // 중·고등학교 정류장 표지판
+  const krCoverRef = useRef<SVGRectElement>(null); // 풍경이 바뀌는 순간 풀을 가린다
+  const puffRefs = useRef<(SVGGElement | null)[]>([]); // 차 방귀
+  const headsetRef = useRef<SVGGElement>(null); // PC방에서 나온 뒤 쓰고 걷는 헤드셋
+  const sunRef = useRef<SVGGElement>(null); // 걷는 동안 하늘을 지나가는 해
+  const moonRef = useRef<SVGGElement>(null); // 걷는 동안 하늘을 지나가는 달
   const hopPlugRef = useRef<SVGPathElement>(null); // 폴짝 뛸 때 비는 발밑 땅선을 메운다
   const hopRef = useRef<SVGGElement>(null); // 캐릭터가 던질 때 웅크렸다 뛰는 동작
   const bbRef = useRef<SVGGElement>(null); // 농구 골대와 친구들
@@ -614,53 +641,6 @@ export default function LineScene() {
     if (goalRef.current) goalRef.current.style.opacity = '0';
     if (goalNextRef.current) goalNextRef.current.style.opacity = '0';
     if (trajRef.current) trajRef.current.style.opacity = '0';
-  };
-  // PC방 모니터 미니게임: 마우스(손가락)로 꼬마를 좌우로 움직여 떨어지는 동전을 먹는다(안 해도 스크롤로 넘어간다)
-  const PC_COINS = 5; // 이만큼 먹으면 CLEAR
-  const pcSpawn = (c: { x: number; y: number; v: number }, first: number) => {
-    c.x = -110 + Math.random() * 220;
-    c.y = -84 - first * 45;
-    c.v = 45 + Math.random() * 35;
-  };
-  const pcStep = (now: number) => {
-    const g = pcGame.current;
-    if (!g.on) {
-      g.running = false;
-      return;
-    }
-    const dt = Math.min(0.05, (now - g.last) / 1000);
-    g.last = now;
-    if (!g.coins.length) {
-      for (let i = 0; i < 4; i++) {
-        const c = { x: 0, y: 0, v: 0 };
-        pcSpawn(c, i);
-        g.coins.push(c);
-      }
-    }
-    g.px += (g.tx - g.px) * Math.min(1, dt * 14);
-    g.coins.forEach((c, i) => {
-      c.y += c.v * dt;
-      if (c.y > 30 && c.y < 52 && Math.abs(c.x - g.px) < 16) {
-        g.score += 1;
-        pcSpawn(c, 0);
-      } else if (c.y > 56) pcSpawn(c, 0);
-      const el = pcCoinRefs.current[i];
-      if (el) {
-        el.setAttribute('cx', c.x.toFixed(1));
-        el.setAttribute('cy', c.y.toFixed(1));
-      }
-    });
-    pcHeroRef.current?.setAttribute('transform', `translate(${g.px.toFixed(1)} 48)`);
-    if (pcScoreRef.current) pcScoreRef.current.textContent = `COIN ${Math.min(g.score, PC_COINS)} / ${PC_COINS}`;
-    if (pcHintRef.current) pcHintRef.current.style.opacity = g.score === 0 ? '1' : '0';
-    if (pcClearRef.current) pcClearRef.current.style.opacity = g.score >= PC_COINS ? '1' : '0';
-    pcRafRef.current = requestAnimationFrame(pcStep);
-  };
-  const pcPoint = (e: React.PointerEvent) => {
-    const ctm = pcMonRef.current?.getScreenCTM();
-    if (!ctm) return;
-    const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
-    pcGame.current.tx = Math.max(-118, Math.min(118, pt.x));
   };
   const toWorld = (e: React.PointerEvent) => {
     const ctm = svgRef.current?.getScreenCTM();
@@ -937,7 +917,7 @@ export default function LineScene() {
     const f = clamp01((pRaw - SCENE_END) / (F_END - SCENE_END)); // 비행기 장면의 진행 정도
     const q = clamp01((pRaw - F_END) / (S2_END - F_END)); // 필리핀 장면의 진행 정도
     const r = clamp01((pRaw - S2_END) / (1 - S2_END)); // 그 뒤 장면(졸업 -> 코딩 -> 싸피)의 진행 정도
-    const pan = q > 0 ? panPh(q) + (q < Q_RESET ? ease(clamp01((q - Q_BB[0]) / (Q_BB[1] - Q_BB[0]))) * BB_PAN + ease(clamp01((q - Q_PW[0]) / (Q_PW[1] - Q_PW[0]))) * PC_PAN : 0) : ease(clamp01(f / F_WALK)) * PLANE_PAN; // 풍경이 왼쪽으로 흘러간 정도(비행기, 학교, 농구 골대)
+    const pan = q > 0 ? panPh(q) + (q < Q_RESET ? ease(clamp01((q - Q_BB[0]) / (Q_BB[1] - Q_BB[0]))) * BB_PAN + ease(clamp01((q - Q_PW[0]) / (Q_PW[1] - Q_PW[0]))) * PC_PAN + ease(clamp01((q - Q_PPAN[0]) / (Q_PPAN[1] - Q_PPAN[0]))) * PWALK_PAN + RIDE_PAN * rideEase(q) : -KR_PAN * (1 - stopEase(q))) : ease(clamp01(f / F_WALK)) * PLANE_PAN; // 풍경이 왼쪽으로 흘러간 정도(비행기, 학교, 농구 골대)
     const hand = handRef.current;
     if (!hand || lens.current.length !== PIECES.length) return;
 
@@ -1014,16 +994,22 @@ export default function LineScene() {
           walk = wOut + (DOOR_WALK - wOut) * ease(e);
           moving = e < 1;
         }
-      } else if (q < Q_BB[0] || q >= Q_RESET) {
-        // 학교 안(들어갔다가 다시 나올 때까지)이거나 PC방 이후: 문 앞에 있다
+      } else if (q >= Q_RESET) {
+        // 한국에 돌아온 뒤: 버스에서 내려 정류장에서 학교 문까지 걸어간다
+        const wt = ease(clamp01((q - Q_KWALK[0]) / (Q_KWALK[1] - Q_KWALK[0])));
+        walk = DOOR_WALK + (BUS_STOP_X + BUS_DOOR_DX - DOOR_SCREEN_X) * (1 - wt);
+        moving = wt > 0 && wt < 1;
+      } else if (q < Q_BB[0]) {
+        // 학교 안(들어갔다가 다시 나올 때까지): 문 앞에 있다
         walk = DOOR_WALK;
         moving = false;
       } else {
         // 학교에서 나와 농구 골대 쪽으로 걸어간다(풍경이 같이 흘러간다)
         const e = ease(clamp01((q - Q_BB[0]) / (Q_BB[1] - Q_BB[0])));
         const e2 = ease(clamp01((q - Q_PW[0]) / (Q_PW[1] - Q_PW[0])));
-        walk = DOOR_WALK + (BB_WALK - DOOR_WALK) * e + (DOOR_WALK - BB_WALK) * e2; // 농구 골대 쪽으로 갔다가, 다시 PC방 문까지 걸어간다
-        moving = (e > 0 && e < 1) || (e2 > 0 && e2 < 1);
+        const e3 = ease(clamp01((q - Q_PWALK[0]) / (Q_PWALK[1] - Q_PWALK[0])));
+        walk = DOOR_WALK + (BB_WALK - DOOR_WALK) * e + (DOOR_WALK - BB_WALK) * e2 + 80 * e3 + (J2_SCREEN - DOOR_SCREEN_X - 80) * ease(clamp01((q - qv(1112)) / qv(20))); // 농구 골대 쪽으로 갔다가, 다시 PC방 문까지 걸어가고, PC방에서 나와 걷다가 지프니 쪽으로 다가간다
+        moving = (e > 0 && e < 1) || (e2 > 0 && e2 < 1) || (e3 > 0 && q < qv(1132) && q >= Q_PWALK[0]);
       }
     }
     if (r > 0) {
@@ -1057,7 +1043,7 @@ export default function LineScene() {
     rise += hop;
     const lean = (moving ? phase * 2.2 : 0) - 3.5 * think; // 생각할 때 몸이 살짝 갸웃한다
     // 문으로 들어가고 나올 때: 문이 어두워진 뒤 캐릭터가 빠르게 사라지고(나올 때는 나타난다)
-    const enterT = r > 0 ? (r < R_OUT[0] ? 1 - clamp01(r / R_OUT[0]) : 0) : q >= Q_RESET ? 1 : q >= Q_BACK ? Math.max(1 - clamp01((q - Q_BACK) / DOOR_FADE), clamp01((q - Q_PDOOR) / DOOR_FADE)) : q >= Q_DOOR ? clamp01((q - Q_DOOR) / DOOR_FADE) : 0;
+    const enterT = r > 0 ? (r < R_OUT[0] ? 1 - clamp01(r / R_OUT[0]) : 0) : q >= Q_RESET ? (q < Q_BUSX ? 1 : q < Q_KDOOR ? 1 - clamp01((q - Q_BUSX) / qv(6)) : clamp01((q - Q_KDOOR) / DOOR_FADE)) : q >= Q_BACK ? Math.max(1 - clamp01((q - Q_BACK) / DOOR_FADE), (q < Q_PEXIT ? clamp01((q - Q_PDOOR) / DOOR_FADE) : 1 - clamp01((q - Q_PEXIT) / DOOR_FADE))) : q >= Q_DOOR ? clamp01((q - Q_DOOR) / DOOR_FADE) : 0;
     charRef.current?.setAttribute('transform', `translate(${walk} ${-rise}) translate(0 ${GROUND}) scale(1 ${stretch}) translate(0 ${-GROUND}) rotate(${lean} ${gx(233)} ${GROUND})`);
     // 머리 위 표시: 생각("?")과 놀람("!")이 캐릭터를 따라다닌다
     const emoteX = gx(233) + walk;
@@ -1077,10 +1063,13 @@ export default function LineScene() {
     const boardU = clamp01((q - Q_BOARD[0]) / (Q_BOARD[1] - Q_BOARD[0]));
     const preDoorVis = q < Q_BOARD[0] ? clamp01((q - Q_STEP[0]) / qv(12)) : q < Q_BOARD[1] ? 1 - clamp01((boardU - 0.45) / 0.45) : q < Q_EXIT[0] ? 0 : clamp01((q - Q_EXIT[0]) / ((Q_EXIT[1] - Q_EXIT[0]) * 0.35));
     if (charRef.current) charRef.current.style.opacity = r > 0 ? `${1 - clamp01(enterT / 0.45)}` : q > 0 ? `${q < Q_DOOR ? preDoorVis : 1 - clamp01((enterT - 0.5) / 0.5)}` : `${1 - clamp01((f - F_WALK - BOARD * 0.7) / (BOARD * 0.3))}`; // 문에 닿으면 학교 안으로 사라지고, 나올 때 다시 나타난다
+    const jb = r === 0 && q < Q_RESET ? clamp01((q - J2_BOARD) / qv(10)) : 0; // PC방에서 나와 걷다가 지프니에 타서 사라진다
+    if (jb > 0 && charRef.current) charRef.current.style.opacity = `${parseFloat(charRef.current.style.opacity || '1') * (1 - jb)}`;
     // 지프니: 손이 그려 나가고(왼쪽에서부터 나타난다), 캐릭터가 타면 학교 앞까지 달려가 선다
-    if (jeepRef.current) jeepRef.current.style.opacity = q > 0 && q < Q_RESET ? '1' : '0';
-    const jw = q <= 0 ? JEEP_X0 : jeepWorldX(q);
-    const bounce = q >= Q_RIDE[0] && q < Q_RIDE[1] ? Math.sin(jw * 0.09) * 1.6 : 0; // 달리는 동안 살짝 덜컹거린다
+    if (jeepRef.current) jeepRef.current.style.opacity = q > 0 && q < Q_RESET ? `${1 - clamp01((q - BUS_GO[0]) / qv(30))}` : '0'; // 달리다가 서서히 대한민국 버스로 바뀐다
+    const jeep2 = q >= Q_PPAN[0]; // PC방을 나온 뒤에는 같은 지프니가 앞쪽에 서 있다가 캐릭터를 태우고 떠난다
+    const jw = q <= 0 ? JEEP_X0 : jeep2 ? (q >= Q_PPAN[1] ? pan + J2_SCREEN : JEEP2_X) : jeepWorldX(q);
+    const bounce = (q >= Q_RIDE[0] && q < Q_RIDE[1]) || (q >= J2_GO[0] && q < J2_GO[1]) ? Math.sin(jw * 0.09) * 1.6 : 0; // 달리는 동안 살짝 덜컹거린다
     jeepPosRef.current?.setAttribute('transform', `translate(${jw} ${GROUND + bounce})`);
     const jeepRv = clamp01((q - Q_DRAW[0]) / (Q_DRAW[1] - Q_DRAW[0]));
     jeepThrRef.current?.setAttribute('values', `0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 -255 0 0 0 ${(255 * (jeepRv * 1.006 + 0.002)).toFixed(2)}`);
@@ -1170,22 +1159,51 @@ export default function LineScene() {
       el.style.opacity = `${Math.min(inT, clamp01((sk.b - pRaw) / BEAT_FADE))}`;
       el.setAttribute('transform', `translate(800 ${(214 + 12 * (1 - inT)).toFixed(1)})`);
     });
-    // PC방: 들어가면 모니터 화면이 바로 커다랗게 나오고, 미니게임(동전 먹기)을 할 수 있다
-    const monOp = r === 0 ? trap(q, qv(930), qv(946), qv(1004), qv(1020)) : 0;
-    if (pcMonRef.current) pcMonRef.current.style.opacity = `${monOp}`;
-    if (pcHitRef.current) pcHitRef.current.style.pointerEvents = monOp > 0.6 ? 'all' : 'none';
-    const pg = pcGame.current;
-    pg.on = monOp > 0.05;
-    if (pg.on && !pg.running) {
-      pg.running = true;
-      pg.last = performance.now();
-      pcRafRef.current = requestAnimationFrame(pcStep);
+    // 게임에 빠진 시절: PC방에서 나와 걸어가는 동안 헤드셋을 쓰고, 게임 아이콘이 머리 위로 계속 떠오르고, 낮과 밤(해와 달)이 번갈아 하늘을 지나간다
+    const gOn = r === 0 ? trap(q, qv(984), qv(992), qv(1126), qv(1136)) : 0;
+    headsetRef.current?.setAttribute('transform', `translate(${emoteX} ${-rise})`);
+    if (headsetRef.current) headsetRef.current.style.opacity = `${gOn}`;
+    gameIconRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const t = (((q - qv(984)) / qv(12) + i / 4) % 1 + 1) % 1;
+      el.setAttribute('transform', `translate(${(-72 + i * 48 + 8 * Math.sin(t * 6.28)).toFixed(1)} ${(425 - 120 * t).toFixed(1)}) scale(1.3)`);
+      el.style.opacity = `${gOn * Math.sin(Math.PI * t)}`;
+    });
+    // 해와 달이 번갈아 하늘을 지나간다(낮 -> 밤 -> 낮 -> 밤)
+    ([[sunRef, [986, 1066]], [moonRef, [1026, 1106]]] as const).forEach(([ref, starts], k) => {
+      const g = ref.current;
+      if (!g) return;
+      const a0 = starts.find((st) => q >= qv(st) && q <= qv(st + 40));
+      const t = a0 === undefined ? 0 : clamp01((q - qv(a0)) / qv(40));
+      g.setAttribute('transform', `translate(${(250 + 1100 * t).toFixed(1)} ${(284 - 26 * Math.sin(Math.PI * t)).toFixed(1)}) rotate(${k === 0 ? t * 360 : 0})`);
+      g.style.opacity = r === 0 && a0 !== undefined ? `${Math.min(1, t * 8, (1 - t) * 8)}` : '0';
+    });
+    // 대한민국 버스: 왼쪽에서 들어와 오른쪽으로 지나간다(한국으로 돌아왔다는 뜻). 차가 달리는 동안 뒤로 방귀가 나온다
+    const busOn = r === 0 && q >= BUS_GO[0];
+    const stopOp = r === 0 && q >= Q_RESET ? clamp01((q - qv(1334)) / qv(14)) * (1 - clamp01((q - qv(1506)) / qv(18))) : 0; // 정류장 표지판
+    if (stopRef.current) stopRef.current.style.opacity = `${stopOp}`;
+    if (busRef.current) {
+      busRef.current.style.opacity = busOn ? `${clamp01((q - BUS_GO[0]) / qv(30)) * (1 - clamp01((q - Q_KDOOR) / qv(30)))}` : '0';
+      busRef.current.setAttribute('transform', `translate(${(busScreen(q) - (BUS.w * BUS.k) / 2).toFixed(1)} ${(GROUND - BUS.base * BUS.k + (q < BUS_GO[1] - qv(10) ? Math.sin(q * 9000) * 1.4 : 0)).toFixed(1)}) scale(${BUS.k})`);
     }
-    if (!pg.on && pg.score > 0 && monOp === 0) pg.score = 0; // 다시 들어오면 처음부터
+    puffRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const age = ((((q - J2_GO[0]) / qv(30) + i / 2) % 1) + 1) % 1;
+      const rear = r === 0 ? rearAt(q - age * qv(30)) : null;
+      if (rear === null) {
+        el.style.opacity = '0';
+        return;
+      }
+      const qe = q - age * qv(30);
+      el.setAttribute('transform', `translate(${(rear - (kPan(q) - kPan(qe)) - age * 30).toFixed(1)} ${(GROUND - 52 - age * 36).toFixed(1)}) scale(${(0.3 + 0.22 * age).toFixed(3)})`);
+      el.style.opacity = `${0.95 * (1 - age)}`;
+    });
     if (coverRef.current) coverRef.current.style.opacity = `${q > 0 ? 1 - clamp01(q / qv(24)) : clamp01((f - 0.88) / 0.1)}`;
     // PC방 장면: 학교로 들어간 뒤 잠깐 PC방이 나오고, 그동안 학교는 한국의 학교로 바뀐다
     const pcOn = clamp01((q - Q_PC[0]) / qv(16)) * (1 - clamp01((q - (Q_PC[1] - qv(16))) / qv(16)));
     if (pcRef.current) pcRef.current.style.opacity = `${pcOn}`;
+    const toKr = clamp01((q - qv(1298)) / qv(14)) * (1 - clamp01((q - Q_RESET) / qv(12))); // 풍경이 한국 쪽으로 바뀌는 순간, 풀만 잠깐 가린다(땅선과 차는 그대로 보인다)
+    if (krCoverRef.current) krCoverRef.current.style.opacity = `${toKr}`;
     if (pcCoverRef.current) pcCoverRef.current.style.opacity = `${pcOn}`;
     // 농구 장면: 골대와 친구들이 나타나고, 캐릭터가 슛을 한다
     const bbOp = q > 0 && q < Q_RESET ? `${clamp01((q - (Q_BB[0] - qv(30))) / qv(20))}` : '0';
@@ -1228,14 +1246,14 @@ export default function LineScene() {
       else root.style.setProperty('--l-bg', mixHex(mixHex(pal.base, pal.ph, toPh), pal.kr, flagSwap));
     }
     // 필리핀 학교 그림이 먼저 사라지고, 그다음 한국 학교(태극기, 중·고등학교)가 나타난다
-    const phShow = 1 - clamp01(flagSwap * 2);
-    const krShow = clamp01(flagSwap * 2 - 1);
+    const phShow = q >= Q_RESET ? 0 : 1; // 한국에 돌아온 뒤에는 필리핀 학교가 다시 나오지 않는다
+    const krShow = q >= Q_RESET ? 1 : 0;
     if (phFlagRef.current) phFlagRef.current.style.opacity = `${phShow}`;
     if (oldSchoolRef.current) oldSchoolRef.current.style.opacity = `${krShow}`;
     if (tgFlagRef.current) tgFlagRef.current.style.opacity = '1';
-    const doorOp = r > 0 ? 1 - clamp01(r / R_OUT[0]) : q >= Q_RESET ? 1 : clamp01((q - (Q_DOOR - qv(8))) / qv(8)) * (1 - clamp01((q - (Q_BACK + DOOR_FADE * 0.5)) / qv(16))); // 들어가고 나오는 동안 문 안쪽이 어두워지고, 한국 학교에서는 교복 입은 캐릭터가 나올 때까지 어둡다
-    if (doorFillRef.current) doorFillRef.current.style.opacity = `${doorOp * (flagSwap >= 0.5 ? 1 : 0)}`;
-    if (doorFillPhRef.current) doorFillPhRef.current.style.opacity = `${doorOp * (flagSwap < 0.5 ? 1 : 0)}`;
+    const doorOp = r > 0 ? 1 - clamp01(r / R_OUT[0]) : q >= Q_RESET ? clamp01((q - (Q_KDOOR - qv(8))) / qv(8)) : clamp01((q - (Q_DOOR - qv(8))) / qv(8)) * (1 - clamp01((q - (Q_BACK + DOOR_FADE * 0.5)) / qv(16))); // 들어가고 나오는 동안 문 안쪽이 어두워지고, 한국 학교에서는 교복 입은 캐릭터가 나올 때까지 어둡다
+    if (doorFillRef.current) doorFillRef.current.style.opacity = `${doorOp * (krShow > 0 ? 1 : 0)}`;
+    if (doorFillPhRef.current) doorFillPhRef.current.style.opacity = `${doorOp * (krShow > 0 ? 0 : 1)}`;
 
     // 세 번째 장면: 졸업모 -> 노트북 -> 싸피 간판을 손이 그리고, 위의 글이 차례로 바뀐다
     let tip3: { x: number; y: number } | null = null;
@@ -1406,7 +1424,7 @@ export default function LineScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[2678vh] select-none" aria-label="소개 장면">
+    <section ref={sectionRef} className="relative h-[3146vh] select-none" aria-label="소개 장면">
       <div className="sticky top-0 h-screen overflow-hidden">
         <svg ref={svgRef} viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" className="h-full w-full" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--l-ink, #1c1b19)', pointerEvents: 'none' }}>
           {/* 서명: 처음엔 크게 가운데에 있다가 스크롤에 따라 땅 선으로 내려앉는다 */}
@@ -1422,8 +1440,8 @@ export default function LineScene() {
           <path ref={lineRef} d={`M${SIG_X - SIG_HALF} ${GROUND} H${GROUND_START}`} stroke={INK} strokeWidth={LINE_W} opacity="0" />
 
           <defs>
-            <mask id="ground-hole" maskUnits="userSpaceOnUse" x="-500" y="0" width="9500" height="900">
-              <rect x="-500" y="0" width="9500" height="900" fill="#fff" />
+            <mask id="ground-hole" maskUnits="userSpaceOnUse" x="-500" y="0" width="12000" height="900">
+              <rect x="-500" y="0" width="12000" height="900" fill="#fff" />
               <rect ref={holeRef} x={gx(BODY_LEFT_X) + HOLE_INSET} y="0" width={gx(BODY_RIGHT_X) - gx(BODY_LEFT_X) - 2 * HOLE_INSET} height="900" fill="#000" />
             </mask>
           </defs>
@@ -1447,7 +1465,7 @@ export default function LineScene() {
           <path ref={gapRef} d={`M${gx(BODY_LEFT_X)} ${GROUND} H${gx(BODY_RIGHT_X)}`} stroke={INK} strokeWidth={LINE_W} pathLength="1" strokeDasharray="1" strokeDashoffset="1" />
 
           {/* 걷기가 끝난 뒤 이어지는 땅 */}
-          <path ref={extRef} d={`M1700 ${GROUND} H${Math.max(SCHOOL_X, PLANE_X) + 4600}`} stroke={INK} strokeWidth={LINE_W} opacity="0" />
+          <path ref={extRef} d={`M1700 ${GROUND} H${Math.max(SCHOOL_X, PLANE_X) + 4600 + PWALK_PAN}`} stroke={INK} strokeWidth={LINE_W} opacity="0" />
           <clipPath id="tuft-clip">
             <rect ref={tuftClipRef} x="-3000" y="0" width="0" height="900" />
           </clipPath>
@@ -1718,6 +1736,38 @@ export default function LineScene() {
             />
           </g>
 
+          <rect ref={krCoverRef} x="-3000" y="540" width="8000" height="170" opacity="0" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+          <mask id="bus-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={BUS.w} height={BUS.h} style={{ maskType: 'alpha' }}>
+            <image href="/%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%EC%B0%A8.png" x="0" y="0" width={BUS.w} height={BUS.h} />
+          </mask>
+          <mask id="puff-mask" maskUnits="userSpaceOnUse" x={-PUFF.w / 2} y={-PUFF.h / 2} width={PUFF.w} height={PUFF.h} style={{ maskType: 'alpha' }}>
+            <image href="/%EC%B0%A8%EB%B0%A9%EA%B5%AC.png" x={-PUFF.w / 2} y={-PUFF.h / 2} width={PUFF.w} height={PUFF.h} />
+          </mask>
+          <g ref={busRef} opacity="0" style={{ pointerEvents: 'none' }}>
+            <rect x="0" y="0" width={BUS.w} height={BUS.h} mask="url(#bus-mask)" stroke="none" fill="currentColor" />
+          </g>
+          {[0, 1].map((i) => (
+            <g
+              key={i}
+              ref={(el) => {
+                puffRefs.current[i] = el;
+              }}
+              opacity="0"
+              style={{ pointerEvents: 'none' }}
+            >
+              <rect x={-PUFF.w / 2} y={-PUFF.h / 2} width={PUFF.w} height={PUFF.h} mask="url(#puff-mask)" stroke="none" fill="currentColor" />
+            </g>
+          ))}
+          <g ref={stopRef} opacity="0" stroke={INK} strokeWidth={LINE_W} strokeLinecap="round" style={{ pointerEvents: 'none' }}>
+            <path d={`M${STOP_X} ${GROUND} V${GROUND - 215}`} fill="none" />
+            <rect x={STOP_X - 66} y={GROUND - 290} width="132" height="76" rx="10" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+            <text x={STOP_X} y={GROUND - 258} fill={INK} stroke="none" fontSize="22" textAnchor="middle" style={{ fontFamily: 'var(--font-hand)' }}>
+              중·고등학교
+            </text>
+            <text x={STOP_X} y={GROUND - 228} fill={INK} stroke="none" fontSize="16" textAnchor="middle" opacity="0.7" style={{ fontFamily: 'var(--font-hand)' }}>
+              정류장
+            </text>
+          </g>
           {/* 캐릭터: 몸과 팔과 얼굴. 다 그린 뒤에는 통째로 옆으로 걸어간다 */}
           <g ref={emoteRef} style={{ pointerEvents: 'none' }}>
             <g ref={thinkRef} opacity="0">
@@ -1746,6 +1796,35 @@ export default function LineScene() {
                     {tk2.ko}
                   </text>
                 </g>
+              </g>
+            ))}
+            {[0, 1, 2, 3].map((i) => (
+              <g
+                key={i}
+                ref={(el) => {
+                  gameIconRefs.current[i] = el;
+                }}
+                opacity="0"
+                stroke={INK}
+                strokeWidth="2.2"
+                strokeLinejoin="round"
+              >
+                {i === 0 && (
+                  <>
+                    <rect x="-15" y="-9" width="30" height="18" rx="7" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+                    <path d="M -9 0 H -3 M -6 -3 V 3" fill="none" />
+                    <circle cx="6" cy="-2" r="1.6" fill={INK} stroke="none" />
+                    <circle cx="10" cy="2" r="1.6" fill={INK} stroke="none" />
+                  </>
+                )}
+                {i === 1 && (
+                  <>
+                    <circle r="10" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+                    <path d="M 0 -5 V 5" fill="none" />
+                  </>
+                )}
+                {i === 2 && <path d="M0 9 C-15 -2 -9 -13 0 -5 C9 -13 15 -2 0 9 Z" style={{ fill: 'var(--l-bg, #ffffff)' }} />}
+                {i === 3 && <path d="M0 -11 L3 -3 L11 0 L3 3 L0 11 L-3 3 L-11 0 L-3 -3 Z" style={{ fill: 'var(--l-bg, #ffffff)' }} />}
               </g>
             ))}
             <g ref={surpriseRef} opacity="0" stroke={INK} strokeWidth={LINE_W - 0.5}>
@@ -1902,6 +1981,12 @@ export default function LineScene() {
           </g>
           </g>
 
+          {/* 헤드셋: 게임에 빠진 시절, 캐릭터가 머리에 쓰고 걷는다 */}
+          <g ref={headsetRef} opacity="0" stroke={INK} strokeWidth={LINE_W - 0.5} strokeLinecap="round" style={{ pointerEvents: 'none' }}>
+            <path d="M -54 518 C -56 444 56 444 54 518" fill="none" />
+            <rect x="-66" y="500" width="20" height="38" rx="10" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+            <rect x="46" y="500" width="20" height="38" rx="10" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+          </g>
           {/* 몸을 그리는 동안 하는 말 */}
           <g fill={INK} stroke="none" fontSize="46" style={{ fontFamily: 'var(--font-hand)' }}>
             {SPEECH.map((sp, i) => (
@@ -1924,46 +2009,13 @@ export default function LineScene() {
           <g ref={handRef} opacity="0">
             <image className="hand-img" href="/hand-pen.png" x="0" y="0" width="1400" height="2600" />
           </g>
-          {/* PC방: 나란히 놓인 모니터 두 대와 그 뒤로 보이는 나와 친구 */}
+          {/* PC방 안: 사용자가 준 그림(레트로 PC방의 추억)이 가운데에 나타난다 */}
           <rect ref={pcCoverRef} x="-3000" y="200" width="8000" height="800" opacity="0" style={{ fill: 'var(--l-bg, #ffffff)' }} />
-          <g ref={pcRef} opacity="0" stroke={INK} strokeWidth={LINE_W} style={{ fill: 'var(--l-bg, #ffffff)' }}>
-            <path d={`M-3000 ${GROUND} H5000`} fill="none" />
-            <path d="M330 600 H1270 M370 600 V714 M1230 600 V714" fill="none" />
-            {/* 얼굴(모니터 뒤에서 위로 보인다): 왼쪽이 나, 오른쪽이 친구 */}
-            {PC_X.map((cx, i) => (
-              <g key={cx}>
-                <ellipse cx={cx} cy={396} rx="50" ry="58" />
-                <path d={`M${cx - 15} 392 L${cx - 14.8} 392 M${cx + 15} 392 L${cx + 15.2} 392`} fill="none" />
-                <path d={`M${cx - 14} 412 Q${cx} 424 ${cx + 14} 412`} fill="none" />
-                {i === 0 ? (
-                  <path d={`M${cx - 48} 378 C${cx - 42} 336 ${cx + 30} 328 ${cx + 49} 372 C${cx + 20} 352 ${cx - 20} 358 ${cx - 48} 378 Z`} style={{ fill: 'currentColor' }} />
-                ) : (
-                  <path d={`M${cx - 4} 340 C${cx - 12} 318 ${cx + 14} 312 ${cx + 16} 328`} fill="none" />
-                )}
-              </g>
-            ))}
-            {/* 모니터와 화면 속 게임 */}
-            {PC_X.map((cx, i) => (
-              <g key={cx}>
-                <rect x={cx - 95} y={430} width="190" height="130" rx="8" />
-                <rect x={cx - 85} y={440} width="170" height="110" strokeWidth="2.5" />
-                <path d={`M${cx - 12} 560 V592 M${cx - 42} 592 H${cx + 42}`} fill="none" />
-                {i === 0 ? (
-                  <g strokeWidth="2.5">
-                    <path d={`M${cx} 504 L${cx - 16} 538 L${cx + 16} 538 Z`} />
-                    <path d={`M${cx} 486 V470 M${cx - 40} 460 H${cx - 24} M${cx + 24} 466 H${cx + 40}`} fill="none" />
-                    <rect x={cx - 52} y={452} width="9" height="9" style={{ fill: 'currentColor' }} />
-                    <rect x={cx + 44} y={474} width="9" height="9" style={{ fill: 'currentColor' }} />
-                  </g>
-                ) : (
-                  <g strokeWidth="2.5" fill="none">
-                    <path d={`M${cx - 70} 470 H${cx + 20} V500 H${cx - 40} V530 H${cx + 70}`} />
-                    <path d={`M${cx - 70} 520 H${cx - 54} M${cx + 40} 462 V490`} />
-                    <circle cx={cx + 56} cy={492} r="9" style={{ fill: 'currentColor' }} />
-                  </g>
-                )}
-              </g>
-            ))}
+          <g ref={pcRef} opacity="0">
+            <clipPath id="pc-room-clip">
+              <rect x={800 - PC_ROOM.w / 2} y={PC_ROOM.y} width={PC_ROOM.w} height={PC_ROOM.h} rx="26" />
+            </clipPath>
+            <image href="/%EB%A0%88%ED%8A%B8%EB%A1%9C%20PC%EB%B0%A9%EC%9D%98%20%EC%B6%94%EC%96%B5.png" x={800 - PC_ROOM.w / 2} y={PC_ROOM.y} width={PC_ROOM.w} height={PC_ROOM.h} clipPath="url(#pc-room-clip)" preserveAspectRatio="xMidYMid slice" />
           </g>
 
           {/* 화면 전환: 위쪽의 글은 남기고 아래 장면만 배경색으로 덮었다가 걷는다 */}
@@ -1987,52 +2039,12 @@ export default function LineScene() {
             );
           })}
 
-          <g ref={pcMonRef} opacity="0" transform="translate(800 462) scale(2.2)" stroke={INK} strokeWidth={(LINE_W - 0.5) / 2.2} strokeLinejoin="round" strokeLinecap="round">
-            <path d="M -28 90 L -40 128 H 40 L 28 90" fill="none" />
-            <rect x="-150" y="-100" width="300" height="190" rx="14" style={{ fill: 'var(--l-bg, #ffffff)' }} />
-            <rect x="-132" y="-84" width="264" height="150" rx="6" fill={INK} stroke="none" />
-            <path d="M -132 48 H 132" stroke="var(--l-bg, #ffffff)" strokeWidth="1.5" fill="none" />
-            {[0, 1, 2, 3].map((i) => (
-              <circle
-                key={i}
-                ref={(el) => {
-                  pcCoinRefs.current[i] = el;
-                }}
-                cx="0"
-                cy="-90"
-                r="6"
-                stroke="none"
-                style={{ fill: 'var(--l-bg, #ffffff)' }}
-              />
-            ))}
-            <g ref={pcHeroRef} transform="translate(0 48)">
-              <rect x="-9" y="-24" width="18" height="24" rx="8" stroke="none" style={{ fill: 'var(--l-bg, #ffffff)' }} />
-              <circle cx="-3" cy="-15" r="1.6" stroke="none" fill={INK} />
-              <circle cx="3" cy="-15" r="1.6" stroke="none" fill={INK} />
-            </g>
-            <g stroke="none" style={{ fill: 'var(--l-bg, #ffffff)', fontFamily: 'var(--font-hand)' }}>
-              <text ref={pcScoreRef} x="-124" y="-68" fontSize="11">
-                COIN 0 / 5
-              </text>
-              <text ref={pcHintRef} x="0" y="-30" fontSize="12" textAnchor="middle">
-                마우스를 움직여 동전을 먹어 보세요
-              </text>
-              <text ref={pcClearRef} x="0" y="-10" fontSize="22" textAnchor="middle" opacity="0">
-                CLEAR!
-              </text>
-            </g>
-            <rect
-              ref={pcHitRef}
-              x="-132"
-              y="-84"
-              width="264"
-              height="150"
-              fill="transparent"
-              stroke="none"
-              onPointerMove={pcPoint}
-              onPointerDown={pcPoint}
-              style={{ pointerEvents: 'none', touchAction: 'pan-y', cursor: 'none' }}
-            />
+          <g ref={sunRef} opacity="0" stroke={INK} strokeWidth="3" strokeLinecap="round" style={{ pointerEvents: 'none' }}>
+            <circle r="14" style={{ fill: 'var(--l-bg, #ffffff)' }} />
+            <path d="M0 -24 V-19 M0 24 V19 M-24 0 H-19 M24 0 H19 M-17 -17 L-14 -14 M17 17 L14 14 M-17 17 L-14 14 M17 -17 L14 -14" fill="none" />
+          </g>
+          <g ref={moonRef} opacity="0" stroke={INK} strokeWidth="3" strokeLinejoin="round" style={{ pointerEvents: 'none' }}>
+            <path d="M 4 -17 A 17 17 0 1 0 4 17 A 21 21 0 0 1 4 -17 Z" fill={INK} />
           </g>
           <rect ref={coverRef} x="-3000" y="200" width="8000" height="800" opacity="0" style={{ fill: 'var(--l-bg, #ffffff)' }} />
         </svg>
