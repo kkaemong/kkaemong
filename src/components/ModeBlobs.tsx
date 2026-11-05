@@ -19,6 +19,7 @@ export type BlobItem = {
   content?: React.ReactNode; // 덩어리 위쪽에 보이는 그림
   tint?: string; // 덩어리의 종이색
   onSelect?: () => void; // 있으면 페이지를 옮기지 않고 이것을 실행한다
+  wip?: boolean; // 아직 개발 중인 화면(이름 옆에 '개발중' 표시와 안내가 붙는다)
 };
 
 // 덩어리마다 자리(퍼센트)와 크기를 다르게 줘서 한 줄로 늘어서지 않게 한다. 크게 잡아서 서로 조금 겹친다.
@@ -211,11 +212,19 @@ export default function ModeBlobs({ items, ready }: { items: BlobItem[]; ready: 
                   <ArrowUpRight size={30} strokeWidth={1.8} className={`text-[#1c1b19] transition-transform duration-500 ${on ? '-translate-y-0.5 translate-x-0.5' : ''}`} />
                 </span>
                 <span className={`mt-1 block whitespace-nowrap text-[clamp(1.2rem,1.9vw,2.25rem)] font-extralight uppercase leading-none tracking-[0.08em] ${SERIF}`}>{it.title}</span>
-                <span className={`mt-2 block text-[clamp(0.95rem,1.15vw,1.3rem)] font-light ${SERIF}`}>{it.label}</span>
+                <span className={`mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[clamp(0.95rem,1.15vw,1.3rem)] font-light ${SERIF}`}>
+                  <span className="whitespace-nowrap">{it.label}</span>
+                  {it.wip && (
+                    <span className="shrink-0 whitespace-nowrap rounded-full border border-[#e4572e] px-2 py-0.5 text-[0.7em] leading-none tracking-wide" style={{ color: '#e4572e' }}>
+                      개발중
+                    </span>
+                  )}
+                </span>
                 <span
-                  className={`absolute left-0 top-full z-20 mt-2 block w-max whitespace-nowrap rounded-xl bg-white/90 px-3.5 py-2.5 text-[clamp(0.85rem,1vw,1.1rem)] leading-relaxed text-[#4a4843] shadow-[0_8px_24px_-10px_rgba(0,0,0,0.3)] transition-all duration-500 ${on ? 'translate-y-0 opacity-100' : 'translate-y-1.5 opacity-0'}`}
+                  className={`absolute left-0 top-full z-20 mt-2 block w-max whitespace-nowrap rounded-xl bg-[#ffffff]/95 px-3.5 py-2.5 text-[clamp(0.85rem,1vw,1.1rem)] leading-relaxed text-[#45443f] shadow-[0_8px_24px_-10px_rgba(0,0,0,0.3)] transition-all duration-500 ${on ? 'translate-y-0 opacity-100' : 'translate-y-1.5 opacity-0'}`}
                 >
                   {it.desc}
+                  {it.wip && <span className="mt-1 block text-[0.9em] text-[#e4572e]">아직 개발 중이라 중간에 끝나거나 일부가 비어 있을 수 있어요.</span>}
                 </span>
               </span>
             </div>

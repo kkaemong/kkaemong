@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import SignatureHero, { HERO_POS, markSignatureSeen, useSignatureSeen } from '@/components/SignatureHero';
-import ThemeToggle from '@/components/ThemeToggle';
+import ForceLight from '@/components/ForceLight';
 import ModeBlobs from '@/components/ModeBlobs';
 import StoryView from '@/components/StoryView';
 import { GameArt, InteractiveArt, SimpleArt } from '@/components/BlobArt';
@@ -66,11 +66,12 @@ type Item = {
   content?: React.ReactNode; // 덩어리 위쪽에 보이는 그림이나 글(없으면 종이색 덩어리)
   tint?: string; // 덩어리의 종이색
   onSelect?: () => void;
+  wip?: boolean; // 아직 개발 중인 화면
 };
 
 const ITEMS: Item[] = [
-  { href: '/game', no: '01', title: 'Game', label: '게임 체험하기', desc: '만들고 싶은 게임을 영상과 체험판으로 만나 보세요.', Icon: JoyConIcon, content: <GameArt />, tint: '#f1eee6' },
-  { href: '/interactive', no: '02', title: 'Interactive', label: '인터랙티브 포트폴리오', desc: '움직이고 반응하는 포트폴리오입니다.', Icon: CursorIcon, content: <InteractiveArt />, tint: '#e9edf1' },
+  { href: '/game', no: '01', title: 'Game', label: '게임 체험하기', desc: '만들고 싶은 게임을 영상과 체험판으로 만나 보세요.', Icon: JoyConIcon, content: <GameArt />, tint: '#f1eee6', wip: true },
+  { href: '/interactive', no: '02', title: 'Interactive', label: '인터랙티브 포트폴리오', desc: '움직이고 반응하는 포트폴리오입니다.', Icon: CursorIcon, content: <InteractiveArt />, tint: '#e9edf1', wip: true },
   { href: '/simple', no: '03', title: 'Simple', label: '심플 포트폴리오', desc: '이력과 프로젝트를 한눈에 읽을 수 있게 정리했습니다.', Icon: PaperIcon, content: <SimpleArt />, tint: '#f4ede3' },
 ];
 
@@ -95,8 +96,7 @@ export default function Home() {
 
   return (
     <main className="landing-root relative min-h-screen overflow-hidden" style={{ color: INK, backgroundColor: 'var(--l-bg)', ...HAND_STYLE }}>
-      {/* 맨 위 가운데: 나이트 모드 */}
-      <ThemeToggle className="landing-toggle absolute left-1/2 top-6 z-50 -translate-x-1/2 md:top-7" />
+      <ForceLight />
       {!ready && (
         <button type="button" onClick={skipNow} className="absolute right-[4vw] top-8 z-50 text-sm underline underline-offset-4 md:top-9" style={{ color: MUTED }}>
           건너뛰기
@@ -132,7 +132,10 @@ export default function Home() {
               <div>
                 <span className={`text-xs font-light tracking-[0.4em] ${SERIF}`} style={{ color: MUTED }}>{it.no}</span>
                 <h2 className={`mt-0.5 text-xl font-extralight uppercase tracking-[0.12em] ${SERIF}`}>{it.title}</h2>
-                <p className={`text-sm font-light ${SERIF}`}>{it.label}</p>
+                <p className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-light ${SERIF}`}>
+                  <span className="whitespace-nowrap">{it.label}</span>
+                  {it.wip && <span className="shrink-0 whitespace-nowrap rounded-full border border-[#e4572e] px-2 py-0.5 text-[11px] leading-none text-[#e4572e]">개발중</span>}
+                </p>
               </div>
             </Link>
           );

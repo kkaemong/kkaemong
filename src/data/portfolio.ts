@@ -306,7 +306,7 @@ export const portfolioData = {
       image: "/gaesorlay.png",
       github: "https://github.com/gaesorelay/frontend",
       keyResult: [
-        "Figma로 전체 화면 기본 디자인을 잡고, 인트로·방 만들기·로비·채팅과 카드 리빌 → 심사위원 셔플 → 결과 발표로 이어지는 연출 페이즈를 직접 디자인하고 컴포넌트로 구현",
+        "Figma로 전체 화면 기본 디자인을 잡고, 인트로·방 만들기·로비와 카드 리빌 → 심사위원 셔플 → 결과 발표로 이어지는 연출 페이즈를 직접 디자인하고 컴포넌트로 구현",
         "결과 발표를 introPhase 상태값으로 단계화하고, 카드 리빌 씬은 서버 데이터가 없어도 랜덤 폴백으로 돌아가게 설계 — 데이터 유무와 무관하게 연출이 끊기지 않음"
       ],
       troubleshooting: [

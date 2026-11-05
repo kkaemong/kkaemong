@@ -179,3 +179,4 @@ html.dark:has(.landing-root) .hand-img {
 }
 .ball-pulse { transform-box: fill-box; transform-origin: center; animation: ball-pulse 1.4s ease-out infinite; }
 @media (prefers-reduced-motion: reduce) { .ball-pulse { animation: none; } }
+

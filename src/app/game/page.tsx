@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import ThemeToggle from '@/components/ThemeToggle';
+import ForceLight from '@/components/ForceLight';
 
 // 게임 체험하기: 영상 → WebGL 체험판 → 정식판 다운로드 순서. 게임이 완성되면 아래 준비 중 자리를 채운다.
 export const metadata: Metadata = {
@@ -29,18 +29,9 @@ function Slot({ no, title, desc, note }: { no: string; title: string; desc: stri
 export default function GamePage() {
   return (
     <div className="min-h-screen bg-white text-[#111]" style={HAND_STYLE}>
-      <header className="sticky top-0 z-30 border-b border-[#111]/10 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-4">
-          <Link href="/" className="text-sm font-medium tracking-[0.2em]">kkaemong</Link>
-          <nav className="flex items-center gap-5 text-[13px] font-medium tracking-[0.1em] text-[#6b6862]">
-            <Link href="/simple" className="hover:text-[#111]">심플 포트폴리오</Link>
-            <Link href="/interactive" className="hidden hover:text-[#111] sm:inline">인터랙티브</Link>
-            <ThemeToggle />
-          </nav>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-4xl px-6 pb-24 pt-16 sm:pt-24">
+      <ForceLight />
+      <Link href="/" className="fixed left-5 top-5 z-30 rounded-full bg-[#1f1e1c] px-5 py-2.5 text-base text-white shadow-[0_10px_30px_-14px_rgba(0,0,0,0.5)] transition-colors hover:bg-[#e4572e] sm:left-8 sm:top-7">← 메인 페이지로</Link>
+      <main className="mx-auto max-w-4xl px-6 pb-24 pt-20 sm:pt-28">
         <p className="mb-5 text-xs font-medium uppercase tracking-[0.4em] text-[#8a8780]">Game</p>
         <h1 className={`mb-6 text-5xl font-light leading-[1.15] tracking-tight sm:text-6xl ${SERIF}`}>게임 체험하기</h1>
         <p className="mb-16 max-w-2xl break-keep text-base leading-loose text-[#6b6862]">
