@@ -161,17 +161,17 @@ function TroubleSlide({ item, index, total, project }: { item: TroubleShooting; 
 function CodeBlock({ filename, code, hl = [], inset }: ImplCode) {
   const rows = code.split('\n');
   return (
-    <figure className={`relative ${inset ? 'mb-14' : ''}`}>
+    <figure className={`relative ${inset ? 'mb-11' : ''}`}>
       <figcaption className="mb-2 text-base text-[#5a5853]">{filename}</figcaption>
-      <pre className="overflow-x-auto bg-[#14151a] py-4 text-[13px] leading-relaxed text-[#e4e6eb] shadow-[0_14px_34px_-20px_rgba(0,0,0,0.5)] lg:text-sm">
+      <pre className="overflow-x-auto bg-[#14151a] py-4 text-[13px] leading-[1.5] text-[#e4e6eb] shadow-[0_14px_34px_-20px_rgba(0,0,0,0.5)] lg:text-sm">
         {rows.map((row, i) => (
-          <span key={i} className={`block whitespace-pre px-5 ${hl.includes(i + 1) ? 'bg-[#e4572e]/25' : ''}`}>
+          <span key={i} className={`block whitespace-pre-wrap break-words px-5 ${hl.includes(i + 1) ? 'bg-[#e4572e]/25' : ''}`}>
             {row || ' '}
           </span>
         ))}
       </pre>
       {inset && (
-        <div className="absolute -bottom-12 right-5 max-w-[46%] shadow-[0_18px_40px_-12px_rgba(0,0,0,0.75)] ring-1 ring-white/25">
+        <div className="absolute -bottom-9 right-5 max-w-[46%] shadow-[0_18px_40px_-12px_rgba(0,0,0,0.75)] ring-1 ring-white/25">
           {inset.src ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={inset.src} alt={inset.alt ?? filename} className="block max-h-[200px] w-auto max-w-full" />
@@ -199,6 +199,102 @@ function stripSteps(media: ImplMedia[]) {
 function ImplSlide({ data, index, counter }: { data: ImplSlideData; index: number; counter: string }) {
   return (
     <DetailSlide title={`${index}. ${data.title}`} counter={counter}>
+      {data.pairs ? (
+        <>
+          <Point heading="구현 사항" lines={data.lines} />
+          <div className="mt-6">
+            <div className="grid items-start gap-x-14 gap-y-10 lg:grid-cols-2">
+              {data.pairs.map((pr) => (
+                <div key={pr.title} className="min-w-0">
+                  <p className="mb-3 text-sm tracking-[0.2em] text-[#8a8780]">{pr.title}</p>
+                  <div className="mb-3 flex gap-4">
+                    {pr.items.map((it) => (
+                      <figure key={it.src} className="flex flex-col items-center">
+                        <div className={`relative overflow-hidden rounded-lg bg-[#f4f2ee] ring-[3px] ${it.ok ? 'ring-[#2f7d57]' : 'ring-[#c2412d]'}`}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={encodeURI(it.src)} alt={it.caption ?? pr.title} className="block h-[230px] w-auto lg:h-[270px]" />
+                          <span
+                            aria-label={it.ok ? '성공' : '실패'}
+                            className={`absolute left-2 top-2 flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold text-white shadow ${it.ok ? 'bg-[#2f7d57]' : 'bg-[#c2412d]'}`}
+                          >
+                            {it.ok ? '✓' : '✕'}
+                          </span>
+                        </div>
+                        <figcaption className="mt-2 whitespace-nowrap text-center text-base leading-snug text-[#34322e]">{it.caption}</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                  <CodeBlock {...pr.code} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      ) : data.flow ? (
+        <>
+          <div className={`grid items-start gap-x-14 gap-y-6 ${data.table ? 'lg:grid-cols-[1.05fr_0.95fr]' : ''}`}>
+            <Point heading="구현 사항" lines={data.lines} />
+            {data.table && (
+              <table className="w-full border-collapse overflow-hidden rounded-lg text-left shadow-[0_14px_34px_-24px_rgba(0,0,0,0.35)] ring-1 ring-[#111]/15">
+                <thead>
+                  <tr className="bg-[#14151a] text-sm tracking-wide text-white">
+                    <th className="w-[38%] px-5 py-3 font-medium">{data.table.head[0]}</th>
+                    <th className="px-5 py-3 font-medium">{data.table.head[1]}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.table.rows.map((r) => {
+                    const m = r[1].match(/^(.*?)\s*\((.*)\)\s*$/);
+                    const main = m ? m[1] : r[1];
+                    const sub = m ? m[2] : '';
+                    return (
+                      <tr key={r[0]} className="border-t border-[#111]/10 bg-white align-top">
+                        <td className="px-5 py-4 text-lg font-semibold text-[#1f1e1c]">{r[0]}</td>
+                        <td className="px-5 py-4">
+                          <p className="font-mono text-lg font-semibold text-[#e4572e]">{main}</p>
+                          {sub && <p className="mt-1 text-sm leading-snug text-[#5a5853]">{sub}</p>}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+          <div className="mt-6">
+            <ol className="flex items-start gap-1 overflow-x-auto pb-2">
+              {data.flow.steps.map((st, i) => (
+                <li key={st.label} className="flex min-w-[150px] flex-1 items-start gap-1">
+                  <div className="flex-1">
+                    <div className={`rounded-xl border-2 px-3 py-4 text-center text-lg leading-snug ${st.mine ? 'border-[#e4572e] bg-[#e4572e]/[0.07] font-semibold' : 'border-[#111]/15 bg-white'}`}>
+                      <span className="mb-1 block text-sm font-normal text-[#e4572e]">{i + 1}</span>
+                      {st.label}
+                    </div>
+                    {st.reject && (
+                      <p className="mt-2 text-center text-sm leading-snug text-[#c2412d]">
+                        <span className="mr-1">✕</span>
+                        {st.reject}
+                      </p>
+                    )}
+                  </div>
+                  <span aria-hidden className="shrink-0 pt-[2.4rem] text-xl text-[#5a5853]">→</span>
+                </li>
+              ))}
+              <li className="min-w-[130px] flex-1">
+                <div className="rounded-xl bg-[#1f1e1c] px-3 py-4 text-center text-lg font-semibold leading-snug text-white">
+                  <span className="mb-1 block text-sm font-normal text-[#ffd8a8]">✓</span>
+                  {data.flow.result}
+                </div>
+              </li>
+            </ol>
+          </div>
+          <div className="mt-8 grid items-start gap-8 lg:grid-cols-2">
+            {data.codes.map((c) => (
+              <CodeBlock key={c.filename} {...c} />
+            ))}
+          </div>
+        </>
+      ) : (
       <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
         <div className="space-y-6">
           <Point heading="구현 사항" lines={data.lines} />
@@ -217,8 +313,9 @@ function ImplSlide({ data, index, counter }: { data: ImplSlideData; index: numbe
           ))}
         </div>
       </div>
+      )}
       {data.media && data.media.length > 0 && data.strip && (
-        <div className="mt-8 lg:-mx-10">
+        <div className="mt-3 lg:-mx-10">
           {[stripSteps(data.media)].map((row, ri) => (
             <ol key={ri} className="flex items-center gap-1 overflow-x-auto pb-4">
               {row.map((step, si) => {
@@ -272,6 +369,34 @@ function ImplSlide({ data, index, counter }: { data: ImplSlideData; index: numbe
               })}
             </ol>
           ))}
+        </div>
+      )}
+      {data.compare && data.compare.length > 0 && (
+        <div className="mt-8">
+          {data.compareTitle && <p className="mb-4 text-xl font-semibold text-[#1f1e1c]"><span className="mr-2 text-[#e4572e]">▸</span>{data.compareTitle}</p>}
+          <div className="flex flex-wrap gap-x-16 gap-y-8">
+          {data.compare.map((g) => (
+            <div key={g.title}>
+              <p className="mb-3 text-sm tracking-[0.2em] text-[#8a8780]">{g.title}</p>
+              <div className="flex gap-4">
+                {g.items.map((it) => (
+                  <figure key={it.src} className="w-[150px] lg:w-[170px]">
+                    <div className={`relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-[#f4f2ee] ring-[3px] ${it.ok ? 'ring-[#2f7d57]' : 'ring-[#c2412d]'}`}>
+                      <Image src={encodeURI(it.src)} alt={it.caption ?? g.title} fill sizes="170px" quality={88} className="object-cover" />
+                      <span
+                        aria-label={it.ok ? '성공' : '실패'}
+                        className={`absolute left-2 top-2 flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold text-white shadow ${it.ok ? 'bg-[#2f7d57]' : 'bg-[#c2412d]'}`}
+                      >
+                        {it.ok ? '✓' : '✕'}
+                      </span>
+                    </div>
+                    <figcaption className="mt-2 text-center text-base leading-snug text-[#34322e]">{it.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          ))}
+          </div>
         </div>
       )}
       {data.media && data.media.length > 0 && !data.strip && (
