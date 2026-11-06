@@ -6,6 +6,7 @@ import { portfolioData, type Project, type TroubleShooting } from '@/data/portfo
 import ForceLight from '@/components/ForceLight';
 import { GameArt, InteractiveArt } from '@/components/BlobArt';
 import ProjectNav from '@/components/ProjectNav';
+import { IMPL_SLIDES, type ImplSlideData, type ImplCode, type ImplMedia } from '@/data/implSlides';
 
 // 제출용 심플 버전: 장식 없이 한눈에 읽히게 정리한 정적 페이지. 내용은 인터랙티브 버전과 같은 데이터(portfolio.ts)를 읽는다.
 // 순서: 소개(Info·학력/교육) -> 기술(Skill) -> 프로젝트마다 [개요 -> 기여 -> 트러블슈팅]
@@ -156,8 +157,147 @@ function TroubleSlide({ item, index, total, project }: { item: TroubleShooting; 
   );
 }
 
+// 코드 발췌 한 덩어리: 어두운 바탕, 강조 줄은 주황 띠
+function CodeBlock({ filename, code, hl = [], inset }: ImplCode) {
+  const rows = code.split('\n');
+  return (
+    <figure className={`relative ${inset ? 'mb-14' : ''}`}>
+      <figcaption className="mb-2 text-base text-[#5a5853]">{filename}</figcaption>
+      <pre className="overflow-x-auto bg-[#14151a] py-4 text-[13px] leading-relaxed text-[#e4e6eb] shadow-[0_14px_34px_-20px_rgba(0,0,0,0.5)] lg:text-sm">
+        {rows.map((row, i) => (
+          <span key={i} className={`block whitespace-pre px-5 ${hl.includes(i + 1) ? 'bg-[#e4572e]/25' : ''}`}>
+            {row || ' '}
+          </span>
+        ))}
+      </pre>
+      {inset && (
+        <div className="absolute -bottom-12 right-5 max-w-[46%] shadow-[0_18px_40px_-12px_rgba(0,0,0,0.75)] ring-1 ring-white/25">
+          {inset.src ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={inset.src} alt={inset.alt ?? filename} className="block max-h-[200px] w-auto max-w-full" />
+          ) : (
+            <pre className="bg-[#0c0d11] px-4 py-3 font-mono text-[12px] leading-5 text-[#e4e6eb]">{inset.code}</pre>
+          )}
+        </div>
+      )}
+    </figure>
+  );
+}
+
+// strip 흐름: group이 같은 연속 사진은 한 칸(위아래)으로 묶고, 번호는 사진마다 차례로 매긴다
+function stripSteps(media: ImplMedia[]) {
+  const steps: { m: ImplMedia; n: number }[][] = [];
+  media.forEach((m, i) => {
+    const last = steps[steps.length - 1];
+    if (m.group != null && last && last[0].m.group === m.group) last.push({ m, n: i + 1 });
+    else steps.push([{ m, n: i + 1 }]);
+  });
+  return steps;
+}
+
+// 구현 슬라이드: 큰 소제목 → 구현 사항(최대 3줄) → 코드 발췌 → 필요한 곳만 이미지/영상
+function ImplSlide({ data, index, counter }: { data: ImplSlideData; index: number; counter: string }) {
+  return (
+    <DetailSlide title={`${index}. ${data.title}`} counter={counter}>
+      <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+        <div className="space-y-6">
+          <Point heading="구현 사항" lines={data.lines} />
+          {data.leftCode && <CodeBlock {...data.leftCode} />}
+          {data.leftImage && (
+            <figure>
+              {data.leftImage.caption && <figcaption className="mb-2 text-base text-[#5a5853]">{data.leftImage.caption}</figcaption>}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={data.leftImage.src} alt={data.leftImage.caption ?? data.title} className="max-h-[210px] w-auto max-w-full shadow-[0_14px_34px_-20px_rgba(0,0,0,0.5)]" />
+            </figure>
+          )}
+        </div>
+        <div className="space-y-6">
+          {data.codes.map((c) => (
+            <CodeBlock key={c.filename} {...c} />
+          ))}
+        </div>
+      </div>
+      {data.media && data.media.length > 0 && data.strip && (
+        <div className="mt-8 lg:-mx-10">
+          {[stripSteps(data.media)].map((row, ri) => (
+            <ol key={ri} className="flex items-center gap-1 overflow-x-auto pb-4">
+              {row.map((step, si) => {
+                const grouped = step.length > 1;
+                const hideArrow = si === row.length - 1; // 마지막 칸은 화살표 없이 자리만 맞춘다
+                const figure = ({ m, n }: { m: ImplMedia; n: number }) => (
+                  <figure key={m.src}>
+                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-[#f4f2ee] shadow-[0_12px_28px_-18px_rgba(0,0,0,0.45)]">
+                      <Image src={m.src} alt={m.caption ?? data.title} fill sizes="(min-width: 1024px) 300px, 45vw" quality={88} unoptimized={m.src.endsWith('.gif')} className="object-cover" />
+                    </div>
+                    <figcaption className="mt-2 text-center text-base leading-snug text-[#34322e]">
+                      <span className="mr-1.5 text-sm text-[#e4572e]">{n}</span>
+                      {m.caption}
+                    </figcaption>
+                    {m.state && (
+                      <p className="mt-1 text-center">
+                        <span className="inline-block rounded bg-[#14151a] px-2 py-0.5 font-mono text-[11px] leading-5 text-[#ffd8a8]">{m.state}</span>
+                      </p>
+                    )}
+                  </figure>
+                );
+                return (
+                  <li
+                    key={step[0].m.src}
+                    style={{ flexBasis: `calc((100% - ${(row.length - 1) * 0.25}rem) / ${row.length})` }}
+                    className={`flex min-w-[130px] flex-none gap-1 ${grouped ? 'items-stretch' : 'items-center'}`}
+                  >
+                    <div className="flex-1">
+                      {grouped ? (
+                        <div className="flex flex-col gap-1">
+                          {step.map((it, k) => (
+                            <div key={it.m.src}>
+                              {figure(it)}
+                              {k < step.length - 1 && <p aria-hidden className="text-center text-xl leading-6 text-[#e4572e]/70">↓</p>}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        figure(step[0])
+                      )}
+                    </div>
+                    {/* 일렬 흐름 →. 묶음에서는 아래쪽 사진(4번)에서 다음 칸으로 올라가며 이어진다 */}
+                    <span
+                      aria-hidden
+                      className={`w-5 shrink-0 text-center text-xl text-[#e4572e]/70 ${grouped ? 'self-end pb-[4.5rem]' : 'self-center'} ${hideArrow ? 'invisible' : ''}`}
+                    >
+                      {grouped ? '↗' : '→'}
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          ))}
+        </div>
+      )}
+      {data.media && data.media.length > 0 && !data.strip && (
+        <div className={`mt-10 grid gap-6 ${data.media.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+          {data.media.map((m) => (
+            <figure key={m.src}>
+              {m.caption && <figcaption className="mb-2 text-base text-[#5a5853]">{m.caption}</figcaption>}
+              {m.kind === 'video' ? (
+                <video src={m.src} autoPlay loop muted playsInline className="w-full bg-white shadow-[0_14px_34px_-20px_rgba(0,0,0,0.4)]" />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={m.src} alt={m.caption ?? data.title} className="w-full bg-white shadow-[0_14px_34px_-20px_rgba(0,0,0,0.4)]" />
+              )}
+            </figure>
+          ))}
+        </div>
+      )}
+    </DetailSlide>
+  );
+}
+
 function ProjectBlock({ project, index }: { project: Project; index: number }) {
-  const studies = project.troubleshooting ?? [];
+  const impl = IMPL_SLIDES[project.id] ?? [];
+  // 구현 슬라이드가 있는 프로젝트는 그것을, 없으면 트러블슈팅 슬라이드를 보여 준다
+  const studies = impl.length > 0 ? [] : project.troubleshooting ?? [];
+  const total = impl.length + studies.length + 1;
   const links: { label: string; href: string }[] = [];
   if (project.github) links.push({ label: 'GitHub', href: project.github });
   if (project.downloadUrl) links.push({ label: '플레이 빌드 다운로드', href: project.downloadUrl });
@@ -165,7 +305,7 @@ function ProjectBlock({ project, index }: { project: Project; index: number }) {
   return (
     <article id={`project-${project.id}`} className="scroll-mt-6 space-y-6">
       {/* 1장: 개요 */}
-      <Slide label={['Project', String(index + 1).padStart(2, '0')]} counter={`${project.title} · 1 / ${studies.length + 1}`}>
+      <Slide label={['Project', String(index + 1).padStart(2, '0')]} counter={`${project.title} · 1 / ${total}`}>
         <div className={`grid gap-10 pt-14 lg:flex-1 lg:gap-16 lg:pt-0 ${project.image ? 'lg:grid-cols-[1fr_0.95fr]' : ''}`}>
           <div className="flex flex-col justify-between gap-12">
             <div className="lg:mt-[clamp(40px,11vh,120px)]">
@@ -224,9 +364,12 @@ function ProjectBlock({ project, index }: { project: Project; index: number }) {
         </div>
       </Slide>
 
-      {/* 2장부터: 트러블슈팅(한 가지씩) */}
+      {/* 2장부터: 구현 슬라이드 또는 트러블슈팅(한 가지씩) */}
+      {impl.map((d, i) => (
+        <ImplSlide key={d.title} data={d} index={i + 1} counter={`${project.title} · ${i + 2} / ${total}`} />
+      ))}
       {studies.map((st, i) => (
-        <TroubleSlide key={st.title} item={st} index={i} total={studies.length + 1} project={project} />
+        <TroubleSlide key={st.title} item={st} index={i} total={total} project={project} />
       ))}
     </article>
   );
