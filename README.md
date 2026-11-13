@@ -70,7 +70,7 @@
     <td width="50%" align="center" valign="top"><img src="https://raw.githubusercontent.com/kkaemong/kkaemong/main/public/readme/zabonzooet.jpg?v=2" width="100%" alt="zabonzooET cover" /></td>
   </tr>
   <tr>
-    <td align="center" valign="middle"><a href="https://portpolio-ruddy-beta.vercel.app/"><b>GIFTED</b></a> <sub>(Private repo)</sub></td>
+    <td align="center" valign="middle"><b>GIFTED</b> <sub>(Private repo)</sub></td>
     <td align="center" valign="middle"><a href="https://github.com/kkaemong/zabonzooET"><b>자본주 E.T. (zabonzooET)</b></a></td>
   </tr>
   <tr>
@@ -112,5 +112,4 @@
 ## Contact
 * Email: **junemay31@naver.com**
 * Blog: **[Velog](https://velog.io/@junemay31/posts)**
-* GitHub: **[github.com/kkaemong](https://github.com/kkaemong)**
 * Portfolio: **https://portpolio-ruddy-beta.vercel.app/**
